@@ -776,6 +776,7 @@ header p {
   margin-left: 10px;
 }
 #banner ul li {
+  font-family: monospace;
   display: inline;
 }
 #banner ul li a.button {
