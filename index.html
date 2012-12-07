@@ -1,82 +1,89 @@
-<!doctype html>
+
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>YGOPRO Automatic Dueling System</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/main.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<head>
+<script type="text/javascript" src="javascripts/index.js"></script>
+<script type="text/javascript" src="javascripts/jquery.js"></script>
 
-  </head>
-  <body>
+<!-- paste this code into your webpage -->
+<link href="stylesheets/tablecloth.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="stylesheets/style.css" rel="stylesheet" type="text/css" media="screen" />
+<script type="text/javascript" src="javascripts/tablecloth.js"></script>
+<script src="javascripts/jquery.min.js"></script>
+<script src="javascripts/main.js"></script>
+<!-- end -->
 
-      <header>
-        <h1>ygopro</h1>
-        <p>圆神力量全开！</p>
-      </header>
+<style>
+body{
+	margin:0;
+	padding:0;
+	background:#f1f1f1;
+	font:80% Arial, Helvetica, sans-serif; 
+	color:#555;
+	line-height:150%;
+	text-align:center;
+}
+#container{
+	margin:0 auto;
+	width:800px;
+	background:#fff;
+	padding-bottom:20px;
+}
+#content{
+	margin:0 80px;
+}
+</style>
 
-      <div id="banner">
-        <span id="logo"></span>
+<script type="text/javascript">
 
-        <a href="https://github.com/Fluorohydride/ygopro" class="button fork"><strong>项目主页</strong></a>
+$(document).ready(function(){
+  $("button").click(function(){
+	var name = document.getElementById("card_name").value; 
+	var url = "https://api.mongolab.com/api/1/databases/mycard/collections/lang_zh?apiKey=508e5726e4b0c54ca4492ead"
+	var q = JSON.stringify( {name: {$regex: name.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), $options: 'i'}});
+	var url2=url + '&q=' + q;
+    $.getJSON(url2,function(result){
+		var div=document.getElementById("result");  
+		if(div){
+			div.parentNode.removeChild(div);
+		}
+		var html;
+		html = "<div id='result'>";
+	    html = html + "<table >";
+		html = html + "<tr>";
+		html = html + "<th width='45px'>卡图</th>";
+		html = html + "<th width='60px'>密码</th>";
+		html = html + "<th width='120px'>卡名</th>";
+		html = html + "<th>效果</th>";
+		html = html + "</tr>";
 		
-        <div class="downloads">
-          <span>下载地址:</span>
-          <ul>
-            <li><a href="http://www.baidupcs.com/file/bin-102f.7z?fid=1863396134-250528-1090387401&time=1354707179&sign=FPDTAE-DCb740ccc5511e5e8fedcff06b081203-ZyEb5EkEylF%2FcOzQNqgJ9u1nM7o%3D&expires=8h&digest=3528335b9104d7d65d0b9d5b15a919e4&sh=1&response-cache-control=private" class="button">102f更新</a></li>
-            <li><a href="http://www.baidupcs.com/file/%E6%88%91%E7%9A%84%E6%B8%B8%E6%88%8F/ygocore/ygocore_0x102f.7z?fid=402738915-250528-1489306015&time=1354707211&sign=FPDTAE-DCb740ccc5511e5e8fedcff06b081203-b6n7QKzjtYk3uIJVHonsrlM3K8I%3D&expires=8h&digest=8f93d4552cb3da33ca7f7d20c1dc815f&sh=1&response-cache-control=private" class="button">102f整合版</a></li>
-          </ul>
-        </div>
-      </div><!-- end banner -->
+		$.each(result, function(i, card){
+		html = html + "<tr>";
+		html = html + "<td><img src='" + "https://raw.github.com/zh99998/ygopro-images/master/thumbnail/" + card._id + ".jpg'>" + "</td>";
+		html = html + "<td>" + card._id + "</td>";
+		html = html + "<td noWrap>" + card.name + "</td>";
+		html = html + "<td>" + card.desc + "</td>";
+		html = html + "</tr>";
+      });
+	  html = html + "</table>";
+	  html = html + "</div>";
+	  $(html).appendTo("#content");
+    });
+  });
+});
+</script>
 
+</head>
+
+<body>
+	<header>
+		<h1>网页卡查</h1>
+	</header>
+	<div id="banner">
+		<input id="card_name" type="text" value="甜点"/>
+		<button class="button">查询</button>
+	</div>
     <div class="wrapper">
-      <nav>
-        <ul></ul>
-      </nav>
-      <section>
-        <h3>Welcome to GitHub Pages.</h3>
-
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-
-
-<p><a href="https://raw.github.com/luffySAMA/test/gh-pages/images/screenshot-1.jpg" target=_blank><img src="https://raw.github.com/luffySAMA/test/gh-pages/images/screenshot-1.jpg"></a></p>
-      </section>
-      <footer>
-        <p>Project maintained by <a href="https://github.com/luffySAMA">luffySAMA</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
-      </footer>
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
-  </body>
+	<div id="content"></div>
+	</div>
+</body>
 </html>

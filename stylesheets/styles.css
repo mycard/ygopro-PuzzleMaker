@@ -791,7 +791,24 @@ header p {
   display: block;
   background: url(../images/octocat-logo.png);
 }
-
+#yinmou {
+  position: absolute;
+  height: 120px;
+  width: 280px;
+  left: 50px;
+  top: 2px;
+  display: block;
+  background: url(../images/yinmou.jpg);
+}
+#gandong {
+  position: absolute;
+  height: 180px;
+  width: 289px;
+  right: 40px;
+  top: 2px;
+  display: block;
+  background: url(../images/gandong.jpg);
+}
 section {
   width: 590px;
   padding: 30px 30px 50px 30px;
