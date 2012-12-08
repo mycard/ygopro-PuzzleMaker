@@ -7,7 +7,6 @@
 */
 
 this.tablecloth = function(){
-	
 	// CONFIG 
 	
 	// if set to true then mouseover a table cell will highlight entire column (except sibling headings)
@@ -179,6 +178,3 @@ this.tablecloth = function(){
 	start();
 	
 };
-
-/* script initiates on page load. */
-window.onload = tablecloth;

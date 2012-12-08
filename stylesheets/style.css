@@ -24,7 +24,7 @@ header {
   box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.75);
   z-index: 99;
   -webkit-font-smoothing: antialiased;
-  min-height: 76px;
+  min-height: 56px;
 }
 header h1 {
   font: 40px/48px "Copse", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -46,93 +46,12 @@ header p {
 
 #banner {
   z-index: 100;
-  left: 10%;
-  right: 10%;
-  height: 50px;
+  left: 70%;
+  right: 5%;
   position: fixed;
-  top: 115px;
-  background: #ffcc00;
+  top: 55px;
+  background: #ffff00;
   border: 1px solid #f0b500;
-  -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
-  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
-  -o-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
-  -moz-border-radius: 0px 2px 2px 0px;
-  -webkit-border-radius: 0px 2px 2px 0px;
-  -o-border-radius: 0px 2px 2px 0px;
-  -ms-border-radius: 0px 2px 2px 0px;
-  -khtml-border-radius: 0px 2px 2px 0px;
-  border-radius: 0px 2px 2px 0px;
-  padding-right: 10px;
-}
-#banner .button {
-  border: 1px solid #dba500;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffe788), color-stop(100%, #ffce38));
-  background: -webkit-linear-gradient(#ffe788, #ffce38);
-  background: -moz-linear-gradient(#ffe788, #ffce38);
-  background: -o-linear-gradient(#ffe788, #ffce38);
-  background: -ms-linear-gradient(#ffe788, #ffce38);
-  background: linear-gradient(#ffe788, #ffce38);
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  -o-border-radius: 2px;
-  -ms-border-radius: 2px;
-  -khtml-border-radius: 2px;
-  border-radius: 2px;
-  -moz-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 1px rgba(0, 0, 0, 0.1);
-  -webkit-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 1px rgba(0, 0, 0, 0.1);
-  -o-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 1px rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 1px rgba(0, 0, 0, 0.1);
-  background-color: #FFE788;
-  margin-left: 5px;
-  padding: 10px 12px;
-  margin-top: 6px;
-  line-height: 14px;
-  font-size: 14px;
-  color: #333;
-  font-weight: bold;
-  display: inline-block;
-  text-align: center;
-}
-
-
-.wrapper {
-  top: 190px;
-  margin: 0 auto;
-  position: relative;
-}
-
-section img {
-  max-width: 100%;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th {
-  text-align: left;
-  padding: 5px 10px;
-  border-bottom: 1px solid #e5e5e5;
-  color: #444;
-}
-
-th, td {
-  text-align: left;
-  padding: 5px 10px;
-  border-left: 1px solid #4276b6;
-  border-right: 1px solid #4276b6;
-  border-top: 1px solid #4276b6;
-  border-bottom: 1px solid #4276b6;
-}
-
-#content{
-  padding: 30px 30px 30px 30px;
-  margin: 20px auto;
-  margin-top: 190px;
-  position: relative;
-  background: #fbfbfb;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   -o-border-radius: 3px;
@@ -140,8 +59,128 @@ th, td {
   -khtml-border-radius: 3px;
   border-radius: 3px;
   border: 1px solid #cbcbcb;
+  -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), inset 0px 0px 2px 2px rgba(255, 255, 0, 1);
+  -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), inset 0px 0px 2px 2px rgba(255, 255, 0, 1);
+  -o-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), inset 0px 0px 2px 2px rgba(255, 255, 0, 1);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), inset 0px 0px 2px 2px rgba(255, 255, 0, 1);
+  padding-right: 10px;
+}
+#banner .button {
+  border: 1px solid #dddddd;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
+  background: -webkit-linear-gradient(#ffffff, #dddddd);
+  background: -moz-linear-gradient(#ffffff, #dddddd);
+  background: -o-linear-gradient(#ffffff, #dddddd);
+  background: -ms-linear-gradient(#ffffff, #dddddd);
+  background: linear-gradient(#ffffff, #dddddd);
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -o-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -khtml-border-radius: 2px;
+  border-radius: 2px;
+  background-color: #dddddd;
+  margin-left: 5px;
+  padding: 10px 12px;
+  margin-top: 6px;
+  line-height: 14px;
+  font-size: 18px;
+  color: #333333;
+  font-weight: bold;
+  display: inline-block;
+  text-align: center;
+  width: 80px;
+}
+#banner .button:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #3678b9), color-stop(100%, #3678b9));
+  background: -webkit-linear-gradient(#3678b9, #3678b9);
+  background: -moz-linear-gradient(#3678b9, #3678b9);
+  background: -o-linear-gradient(#3678b9, #3678b9);
+  background: -ms-linear-gradient(#3678b9, #3678b9);
+  background: linear-gradient(#3678b9, #3678b9);
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -o-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -khtml-border-radius: 2px;
+  border-radius: 2px;
+  border: 1px solid #dddddd;
+  -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.09), inset 0 0 2px 2px rgba(255, 255, 255, 0.4);
+  -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.09), inset 0 0 2px 2px rgba(255, 255, 255, 0.4);
+  -o-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.09), inset 0 0 2px 2px rgba(255, 255, 255, 0.4);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.09), inset 0 0 2px 2px rgba(255, 255, 255, 0.4);
+  background-color: #3678b9;
+  color: #ffffff;
+}
+#banner .textfield {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 1px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 1px rgba(0, 0, 0, 0.1);
+  -o-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 1px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  margin-left: 5px;
+  padding: 5px 8px;
+  margin-top: 6px;
+  line-height: 14px;
+  font-size: 18px;
+  color: #333333;
+  display: inline-block;
+  text-align: left;
+  width: 60%;
+}
+
+.wrapper {
+  top: 190px;
+  margin: 0 auto;
+  position: relative;
+}
+
+body{
+	text-align:center;
+}
+#content{
+  margin: 20px 10%;
+  position: relative;
+  background: #64c8c8;
   -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.09), inset 0px 0px 2px 2px rgba(255, 255, 255, 0.5), inset 0 0 5px 5px rgba(255, 255, 255, 0.4);
   -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.09), inset 0px 0px 2px 2px rgba(255, 255, 255, 0.5), inset 0 0 5px 5px rgba(255, 255, 255, 0.4);
   -o-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.09), inset 0px 0px 2px 2px rgba(255, 255, 255, 0.5), inset 0 0 5px 5px rgba(255, 255, 255, 0.4);
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.09), inset 0px 0px 2px 2px rgba(255, 255, 255, 0.5), inset 0 0 5px 5px rgba(255, 255, 255, 0.4);
 }
+
+
+table, td{
+	font:100% Arial, Helvetica, sans-serif; 
+}
+table{width:100%;border-collapse:collapse;margin:0 0;}
+th{background:#328aa4 url(tr_back.gif) repeat-x;color:#fff;}
+td{background:#e5f1f4;}
+th, td {
+  text-align: left;
+  border-left: 1px solid #4276b6;
+  border-right: 1px solid #4276b6;
+  border-top: 1px solid #4276b6;
+  border-bottom: 1px solid #4276b6;
+}
+
+/* tablecloth styles */
+
+tr.even td{background:#e5f1f4;}
+tr.odd td{background:#f8fbfc;}
+
+th.over, tr.even th.over, tr.odd th.over{background:#4a98af;}
+th.down, tr.even th.down, tr.odd th.down{background:#bce774;}
+th.selected, tr.even th.selected, tr.odd th.selected{}
+
+td.over, tr.even td.over, tr.odd td.over{background:#ecfbd4;}
+td.down, tr.even td.down, tr.odd td.down{background:#bce774;color:#fff;}
+td.selected, tr.even td.selected, tr.odd td.selected{background:#bce774;color:#555;}
+
+/* use this if you want to apply different styleing to empty table cells*/
+td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
