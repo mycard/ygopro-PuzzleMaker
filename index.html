@@ -5,53 +5,44 @@
 <link href="stylesheets/style.css" rel="stylesheet" type="text/css" media="screen" />
 <script src="javascripts/tablecloth.js" type="text/javascript"></script>
 <script src="javascripts/jquery.min.js" type="text/javascript"></script>
+<script src="javascripts/drag.js" type="text/javascript"></script>
+<script src="javascripts/jquery.tmpl.min.js" type="text/javascript"></script>
 <!-- end -->
 
 <script type="text/javascript">
 
 $(document).ready(function(){
-  $("button").click(function(){
-	var name = document.getElementById("card_name").value; 
+	document.getElementById('keyword').focus();
+	$("button").click(function(){
+	var name = document.getElementById("keyword").value;
+	if(name == "")
+		return false;
 	var url = "https://api.mongolab.com/api/1/databases/mycard/collections/lang_zh?apiKey=508e5726e4b0c54ca4492ead"
 	var q = JSON.stringify( {name: {$regex: name.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), $options: 'i'}});
 	var url2=url + '&q=' + q;
-	var tag = 0;
     $.getJSON(url2,function(result){
-//		var div=document.getElementById("result");  
-//		if(div){
-//			div.parentNode.removeChild(div);
-//		}
+		
 		var html = "";
-//		html = "<div id='result'>";
 	    html = html + "<table >";
 		html = html + "<tr>";
 		html = html + "<th width='45px'>卡图</th>";
-	//	html = html + "<th width='60px'>密码</th>";
 		html = html + "<th >卡名</th>";
-	//	html = html + "<th>效果</th>";
 		html = html + "</tr>";
-		
 		$.each(result, function(i, card){
-		if(i==7) {
-			tag = 1;
-			return false;
-		}
-		html = html + "<tr>";
-		html = html + "<td><img src='" + "https://raw.github.com/zh99998/ygopro-images/master/thumbnail/" + card._id + ".jpg'>" + "</td>";
-	//	html = html + "<td>" + card._id + "</td>";
-		html = html + "<td noWrap>" + card.name + "</td>";
-	//	html = html + "<td>" + card.desc + "</td>";
-		html = html + "</tr>";
-      });
-	  html = html + "</table>";
-	  $("#result").html(html);
-//	  html = html + "</div>";
-//	  $(html).appendTo("#content");
-
-		if(tag==1){
-			alert("数量太多，只显示第一页\n_(:3」∠）_")
-		}
+			if(i==7) {
+				return false;
+			}
+			html = html + "<tr>";
+			html = html + "<td><img class='thumb' src='" + "https://raw.github.com/zh99998/ygopro-images/master/thumbnail/" + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
+			html = html + "<td noWrap>" + card.name + "</td>";
+			html = html + "</tr>";
+        });
+	    html = html+ "</table>";
+	  
+		$("#result").html(html);
+	  //$(html).appendTo("#content");
 		tablecloth();
+		makeDraggable();
     });
   });
 });
@@ -61,18 +52,19 @@ $(document).ready(function(){
 
 <body>
 	<header>
-		<h1>网页卡查</h1>
+		<h1>残局编辑器</h1>
 	</header>
-	<div id="banner">
-		<input class="textfield" id="card_name" type="text" value="甜点"/>
+
+	<div id="search_bar">
+		<input class="textfield" id="keyword" type="text" placeholder="输入关键字" value="甜点">
 		<button class="button">搜索</button>
 		<div id="content">
-		<div id="result"></div>
+			<div id="result"></div>
+		</div>
 	</div>
-	</div>
-    <div class="wrapper">
 	
-	</div>
 		
+		<img src="" id="DragImage" style="cursor:pointer;">
+
 </body>
 </html>
