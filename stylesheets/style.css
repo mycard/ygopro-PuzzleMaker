@@ -22,7 +22,7 @@ header {
   -webkit-box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.75);
   -o-box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.75);
   box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.75);
-  z-index: 99;
+  z-index: 10;
   -webkit-font-smoothing: antialiased;
   min-height: 56px;
 }
@@ -45,19 +45,19 @@ header p {
 }
 
 #detail_bar {
-  z-index: 100;
+  z-index: 20;
   left: 2%;
   right: 70%;
   position: fixed;
   top: 55px;
   background: #ffff00;
   border: 1px solid #f0b500;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -o-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -khtml-border-radius: 3px;
-  border-radius: 3px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -o-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -khtml-border-radius: 20px;
+  border-radius: 20px;
   border: 1px solid #cbcbcb;
   -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), inset 0px 0px 2px 2px rgba(255, 255, 0, 1);
   -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), inset 0px 0px 2px 2px rgba(255, 255, 0, 1);
@@ -77,9 +77,7 @@ header p {
   text-align: left; 
 }
 #detail_bar .card_img {
-  margin: 10px 0 0 10px;
-  height: auto;
-  width: auto;
+  margin: 10px 10px 10px 10px;
 }
 #detail_bar .card_info {
   width: 135px;
@@ -150,16 +148,16 @@ header p {
   z-index: 100;
   left: 75%;
   right: 2%;
-  position: fixed;
+  position: relative;
   top: 65px;
   background: #ffff00;
   border: 1px solid #f0b500;
-  -moz-border-radius: 20px;
-  -webkit-border-radius: 20px;
-  -o-border-radius: 20px;
-  -ms-border-radius: 20px;
-  -khtml-border-radius: 20px;
-  border-radius: 20px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
   border: 1px solid #cbcbcb;
   padding-right: 10px;
   width: 300px;
@@ -208,50 +206,55 @@ header p {
   color: #ffffff;
 }
 #search_bar .textfield {
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -o-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -khtml-border-radius: 5px;
-  border-radius: 5px;
-  -moz-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 1px rgba(0, 0, 0, 0.1);
-  -webkit-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 1px rgba(0, 0, 0, 0.1);
-  -o-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 1px rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.4), 0px 1px 1px rgba(0, 0, 0, 0.1);
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -o-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -khtml-border-radius: 20px;
+  border-radius: 20px;
   background-color: #ffffff;
   margin-left: 5px;
-  padding: 5px 8px;
-  margin-top: 6px;
+  padding: 10px 12px;
+  margin-top: 12px;
   line-height: 14px;
   font-size: 18px;
   color: #333333;
   display: inline-block;
   text-align: left;
   width: 60%;
+  height: 35px;
 }
-
+#dragImage {
+	border: 2px solid #4276b6;
+	z-index: 100;
+}
 
 body{
 	text-align:center;
 }
 #content{
-  margin: 5px 10%;
+  margin: 5px 30px 5px 30px;
   position: relative;
-  background: #64c8c8;
+}
+
+table{
+	width:100%;
+	border-collapse:collapse;
+	margin:5px 5px;
+	padding: 5px 5px;
 }
 
 
 table, td{
 	font:100% Arial, Helvetica, sans-serif; 
 }
-table{width:100%;border-collapse:collapse;margin:0 0;padding: 5px 5px;}
-
 th, td {
   text-align: left;
   border-left: 1px solid #4276b6;
   border-right: 1px solid #4276b6;
   border-top: 1px solid #4276b6;
   border-bottom: 1px solid #4276b6;
+  background: #64c8c8;
 }
 
 /* tablecloth styles */
@@ -259,9 +262,8 @@ th, td {
 tr.even td{background:#e5f1f4;}
 tr.odd td{background:#f8fbfc;}
 
-td.over, tr.even td.over, tr.odd td.over{background:#ecfbd4;}
+td.over, tr.even td.over, tr.odd td.over{background:#bce774;}
 td.down, tr.even td.down, tr.odd td.down{background:#bce774;color:#fff;}
-td.selected, tr.even td.selected, tr.odd td.selected{background:#bce774;color:#555;}
 
 /* use this if you want to apply different styleing to empty table cells*/
 td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}

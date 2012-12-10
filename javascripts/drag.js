@@ -1,46 +1,47 @@
 
 Number.prototype.NaN0=function(){return isNaN(this)?0:this;}
-var md = false;
+var dragging = false;
+
+function makeDraggable(){
+	var dragImage  = document.getElementById('DragImage');
+	dragImage.style.display = "none";
+	var thumbs = document.getElementsByClassName("thumb");
+	for (var i in thumbs){
+		thumbs[i].onmousedown = function(ev){
+			dragImage.src  = this.src;
+			dragging=true;
+		}
+	}
+}
+
 function mouseDown(ev){
 	ev         = ev || window.event;
 	var target = ev.target || ev.srcElement;
 	if(target.onmousedown){
-		md=true;
 		return false;
 	}
 }
 function mouseUp(ev){
 	var dragImage  = document.getElementById('DragImage');
-	if(md){
+	if(dragging){
+		dragging = false;
 		dragImage.style.display = "none";
 	}
-	md=false;
 }
 function mouseMove(ev){
 	ev         = ev || window.event;
 
 	var target   = ev.target || ev.srcElement;
-	var mousePos = mouseCoords(ev);
+	var mousePos = getMousePos(ev);
 	var dragImage  = document.getElementById('DragImage');
-	if(md){
+	if(dragging){
 		dragImage.style.position = 'absolute';
 		dragImage.style.left     = mousePos.x - 22;
 		dragImage.style.top      = mousePos.y - 32;
+		dragImage.style.display  = "block";
 	}
 }
-function getPosition(e){
-	var left = 0;
-	var top  = 0;
-	while (e.offsetParent){
-		left += e.offsetLeft + (e.currentStyle?(parseInt(e.currentStyle.borderLeftWidth)).NaN0():0);
-		top  += e.offsetTop  + (e.currentStyle?(parseInt(e.currentStyle.borderTopWidth)).NaN0():0);
-		e     = e.offsetParent;
-	}
-	left += e.offsetLeft + (e.currentStyle?(parseInt(e.currentStyle.borderLeftWidth)).NaN0():0);
-	top  += e.offsetTop  + (e.currentStyle?(parseInt(e.currentStyle.borderTopWidth)).NaN0():0);
-	return {x:left, y:top};
-}
-function mouseCoords(ev){
+function getMousePos(ev){
 	if(ev.pageX || ev.pageY){
 		return {x:ev.pageX, y:ev.pageY};
 	}
@@ -52,14 +53,3 @@ function mouseCoords(ev){
 document.onmousemove = mouseMove;
 document.onmousedown = mouseDown;
 document.onmouseup   = mouseUp;
-
-function makeDraggable(){
-	var dragImage  = document.getElementById('DragImage');
-	var thumbs = document.getElementsByClassName("thumb");
-	for (var i=0;i<thumbs.length;i++){
-		thumbs[i].onmousedown = function(ev){
-			dragImage.src  = this.src;
-			dragImage.style.display = "block";
-		}
-	}
-}

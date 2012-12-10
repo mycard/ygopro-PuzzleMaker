@@ -2,7 +2,9 @@
 <html>
 <head>
 <!-- paste this code into your webpage -->
+<html lang="zh"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="stylesheets/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
 <script src="javascripts/tablecloth.js" type="text/javascript"></script>
 <script src="javascripts/jquery.min.js" type="text/javascript"></script>
 <script src="javascripts/drag.js" type="text/javascript"></script>
@@ -11,9 +13,13 @@
 
 <script type="text/javascript">
 
+var page_index = 0;
+var page_num = 1;
 $(document).ready(function(){
+	updatePage(0, 0);
 	document.getElementById('keyword').focus();
-	$("button").click(function(){
+});
+function search(){
 	var name = document.getElementById("keyword").value;
 	if(name == "")
 		return false;
@@ -21,50 +27,100 @@ $(document).ready(function(){
 	var q = JSON.stringify( {name: {$regex: name.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), $options: 'i'}});
 	var url2=url + '&q=' + q;
     $.getJSON(url2,function(result){
-		
 		var html = "";
-	    html = html + "<table >";
-		html = html + "<tr>";
-		html = html + "<th width='45px'>卡图</th>";
-		html = html + "<th >卡名</th>";
-		html = html + "</tr>";
+		if(result.length == 0){
+			$("#result").html(html);
+			return false;
+		}
+		page_index = 1;
+		page_num = 0;
 		$.each(result, function(i, card){
-			if(i==7) {
-				return false;
+			if(i%6==0){
+				page_num ++;
+				html = html + "<table class='page'>";
+				html = html + "<tr>";
+				html = html + "<th width='45px'>卡图</th>";
+				html = html + "<th >卡名</th>";
+				html = html + "</tr>";
 			}
 			html = html + "<tr>";
-			html = html + "<td><img class='thumb' src='" + "https://raw.github.com/zh99998/ygopro-images/master/thumbnail/" + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
+			html = html + "<td><img class='thumb' src='" + "http://my-card.in/images/cards/ygocore/thumbnail/" + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
 			html = html + "<td noWrap>" + card.name + "</td>";
 			html = html + "</tr>";
+			if((i%6==5) || (i==result.length)){
+				html = html+ "</table>";
+			}
         });
-	    html = html+ "</table>";
-	  
 		$("#result").html(html);
-	  //$(html).appendTo("#content");
 		tablecloth();
 		makeDraggable();
+		updatePage(page_index, page_num);
+		showPage(1);
     });
-  });
-});
+ }
+function prePage(){
+	if(page_index == 1) return false;
+	page_index--;
+	updatePage(page_index, page_num);
+	showPage(page_index);
+}
+
+function nextPage(){
+	if(page_index == page_num) return false;
+	page_index++;
+	updatePage(page_index, page_num);
+	showPage(page_index)
+}
+
+function showPage(page_index){
+	var tables = document.getElementsByTagName('table');
+	for(var i in tables){
+		if(i == page_index -1)
+			tables[i].style.display = "block";
+		else 
+			tables[i].style.display = "none";
+	}
+	
+}
+function updatePage(page_index, page_num) {
+			var page_label = $('.page_label');
+			var built = $('#page-tmpl').tmpl({
+				page_index: page_index,
+				page_num: page_num,
+			});
+			page_label.html(built);
+}
 </script>
 
+<script type="text/x-jquery-tmpl" id="page-tmpl">
+	第 ${page_index} 页 / 共 ${page_num} 页
+</script>
+	
 </head>
 
 <body>
 	<header>
 		<h1>残局编辑器</h1>
 	</header>
-
+<!--
+	<div id="detail_bar">
+		<img class="card_img" src="images/unknow.jpg">
+	</div>
+-->
 	<div id="search_bar">
 		<input class="textfield" id="keyword" type="text" placeholder="输入关键字" value="甜点">
-		<button class="button">搜索</button>
+		<button class="button" id="search" onclick="search()">搜索</button>
 		<div id="content">
 			<div id="result"></div>
 		</div>
+		<div id="select_page">
+			<label class="page_label"></label>
+			<button class="btn" type="button" id="prePage" onclick="prePage()">上一页</button>
+			<button class="btn" type="button" id="nextPage" onclick="nextPage()">下一页</button>
+		</div>
 	</div>
 	
-		
-		<img src="" id="DragImage" style="cursor:pointer;">
-
+	<img src="" id="DragImage" style="cursor:pointer;">
+	
 </body>
 </html>
