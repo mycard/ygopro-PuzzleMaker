@@ -77,11 +77,9 @@ header p {
 }
 #main .location_hand{
   position: absolute;
-  display: inline-block;
-  border: 2px solid #ff0000;
+  display: inline-block;s
   width: 327px;
   height: 72px;
-  background: #dddddd;
 }
 #search_bar {
   z-index: 100;
