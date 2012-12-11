@@ -1,7 +1,7 @@
 
 Number.prototype.NaN0=function(){return isNaN(this)?0:this;}
 var dragging = false;
-
+var putting = false;
 function makeDraggable(){
 	var dragImage  = document.getElementById('DragImage');
 	dragImage.style.display = "none";
@@ -25,6 +25,7 @@ function mouseUp(ev){
 	var dragImage  = document.getElementById('DragImage');
 	if(dragging){
 		dragging = false;
+		putting = true;
 		dragImage.style.display = "none";
 	}
 }
@@ -40,6 +41,7 @@ function mouseMove(ev){
 		dragImage.style.top      = mousePos.y - 32;
 		dragImage.style.display  = "block";
 	}
+	putting = false;
 }
 function getMousePos(ev){
 	if(ev.pageX || ev.pageY){

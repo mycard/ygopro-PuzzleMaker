@@ -62,7 +62,7 @@ header p {
 #main .location_mzone ,.location_szone{
   position: absolute;
   display: inline-block;
-  border: 2px solid #ff0000;
+  border: 1px solid #00ffff;
   width: 63px;
   height: 72px;
   background: #bbbbbb;
@@ -70,7 +70,7 @@ header p {
 #main .location_deck ,.location_extra,.location_grave,.location_removed,.location_field{
   position: absolute;
   display: inline-block;
-  border: 2px solid #ff0000;
+  border: 1px solid #00ffff;
   width: 52px;
   height: 72px;
   background: #555555;
