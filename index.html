@@ -8,19 +8,70 @@
 <script src="javascripts/tablecloth.js" type="text/javascript"></script>
 <script src="javascripts/jquery.min.js" type="text/javascript"></script>
 <script src="javascripts/drag.js" type="text/javascript"></script>
+<script src="javascripts/window.js" type="text/javascript"></script>
 <script src="javascripts/jquery.tmpl.min.js" type="text/javascript"></script>
 <!-- end -->
 
 <script type="text/javascript">
 
-var page_index = 0;
-var page_num = 1;
+var page_index ;
+var page_num;
+var table_row = Math.floor((getFullSize().h-350)/64);
+var MZONE = 0;
+var SZONE = 1;
+var FIELD = 2;
+var DECK = 3;
+var HAND = 4;
+var GRAVE = 5;
+var EXTRA = 6;
+var REMOVED = 7;
+var LOCATION_STRING = ['mzone','szone','field','deck','hand','grave','extra','removed'];
+var PLAYER_0 = [
+{"top": 138, "left": 71}, //mzone
+{"top": 64, "left": 71},  //szone
+{"top": 99, "left": 408}, //field
+{"top": 20, "left": 8},   //deck
+{"top": 0, "left": 71},   //hand
+{"top": 99, "left": 8},   //grave
+{"top": 20, "left": 408}, //extra
+{"top": 178, "left": 8},  //removed
+];
+var PLAYER_1 = [
+{"top": 265, "left": 71}, //mzone
+{"top": 339, "left": 71}, //szone
+{"top": 302, "left": 8},  //field
+{"top": 382, "left": 408},//deck
+{"top": 420, "left": 71}, //hand
+{"top": 302, "left": 408},//grave
+{"top": 382, "left": 8},  //extra
+{"top": 222, "left": 408},//removed
+];
+var COORDINATE = [PLAYER_0,PLAYER_1];
+function getViewSize(){
+return {w: window['innerWidth'] || document.documentElement.clientWidth,
+h: window['innerHeight'] || document.documentElement.clientHeight}
+}
+function getFullSize(){
+return {w: window.screen.width, h: window.screen.height}
+}
 $(document).ready(function(){
-	updatePage(0, 0);
+	var player, place;
+	for(player=0;player<2;player++){
+		for(place=0;place<5;place++)addField(player,SZONE,place);
+		for(place=0;place<5;place++)addField(player,MZONE,place);
+		addField(player,FIELD,0);
+		addField(player,DECK,0);
+		addField(player,HAND,0);
+		addField(player,GRAVE,0);
+		addField(player,EXTRA,0);
+		addField(player,REMOVED,0);
+	}
+	setPage();
 	document.getElementById('keyword').focus();
 });
 function search(){
 	var name = document.getElementById("keyword").value;
+	var select_page = document.getElementById("select_page");
 	if(name == "")
 		return false;
 	var url = "https://api.mongolab.com/api/1/databases/mycard/collections/lang_zh?apiKey=508e5726e4b0c54ca4492ead"
@@ -29,13 +80,15 @@ function search(){
     $.getJSON(url2,function(result){
 		var html = "";
 		if(result.length == 0){
+			setPage();
+			select_page.style.display = 'none';
 			$("#result").html(html);
 			return false;
 		}
 		page_index = 1;
 		page_num = 0;
 		$.each(result, function(i, card){
-			if(i%6==0){
+			if(i%table_row==0){
 				page_num ++;
 				html = html + "<table class='page'>";
 				html = html + "<tr>";
@@ -47,28 +100,29 @@ function search(){
 			html = html + "<td><img class='thumb' src='" + "http://my-card.in/images/cards/ygocore/thumbnail/" + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
 			html = html + "<td noWrap>" + card.name + "</td>";
 			html = html + "</tr>";
-			if((i%6==5) || (i==result.length)){
+			if(((i+1)%table_row==0) || (i==result.length)){
 				html = html+ "</table>";
 			}
         });
 		$("#result").html(html);
 		tablecloth();
 		makeDraggable();
-		updatePage(page_index, page_num);
+		select_page.style.display = 'block';
+		setPage(page_index, page_num);
 		showPage(1);
     });
  }
 function prePage(){
 	if(page_index == 1) return false;
 	page_index--;
-	updatePage(page_index, page_num);
+	setPage(page_index, page_num);
 	showPage(page_index);
 }
 
 function nextPage(){
 	if(page_index == page_num) return false;
 	page_index++;
-	updatePage(page_index, page_num);
+	setPage(page_index, page_num);
 	showPage(page_index)
 }
 
@@ -82,44 +136,64 @@ function showPage(page_index){
 	}
 	
 }
-function updatePage(page_index, page_num) {
-			var page_label = $('.page_label');
-			var built = $('#page-tmpl').tmpl({
-				page_index: page_index,
-				page_num: page_num,
-			});
-			page_label.html(built);
+function setPage(page_index, page_num) {
+	var page_label = $('.page_label');
+	var built = $('#page-tmpl').tmpl({
+		page_index: page_index || 0,
+		page_num: page_num || 0,
+	});
+	page_label.html(built);
+}
+function addField(player, location, place) {
+
+	var top = COORDINATE[player][location].top;
+	var left = COORDINATE[player][location].left + 66*place;
+	
+	var built = $('#field-tmpl').tmpl({
+		player: player || 0,
+		location: LOCATION_STRING[location] || 0,
+		place: place || 0,
+		top: top,
+		left: left,
+	});
+	$('#fields').append(built);
 }
 </script>
 
 <script type="text/x-jquery-tmpl" id="page-tmpl">
 	第 ${page_index} 页 / 共 ${page_num} 页
 </script>
-	
+<script type="text/x-jquery-tmpl" id="field-tmpl">
+
+	<div class="location_${location}" style="top:${top}px; left:${left}px;" id="${player}_location_${location}_${place}"></div>
+
+</script>
 </head>
 
 <body>
+
 	<header>
 		<h1>残局编辑器</h1>
 	</header>
-<!--
-	<div id="detail_bar">
-		<img class="card_img" src="images/unknow.jpg">
-	</div>
--->
-	<div id="search_bar">
-		<input class="textfield" id="keyword" type="text" placeholder="输入关键字" value="甜点">
-		<button class="button" id="search" onclick="search()">搜索</button>
-		<div id="content">
-			<div id="result"></div>
+	<div id="main">
+		<div id="fields">
+		
 		</div>
-		<div id="select_page">
-			<label class="page_label"></label>
-			<button class="btn" type="button" id="prePage" onclick="prePage()">上一页</button>
-			<button class="btn" type="button" id="nextPage" onclick="nextPage()">下一页</button>
-		</div>
+		
 	</div>
 	
+	<div id="search_bar">
+			<input class="textfield" id="keyword" type="text" placeholder="输入关键字" value="甜点">
+			<button class="button" id="search" onmouseup="search()">搜索</button>
+			<div id="content">
+				<div id="result"></div>
+			</div>
+			<label class="page_label"></label>
+			<div id="select_page" style="display:none">
+				<button class="btn" type="button" id="prePage" onclick="prePage()">上一页</button>
+				<button class="btn" type="button" id="nextPage" onclick="nextPage()">下一页</button>
+			</div>
+		</div>
 	<img src="" id="DragImage" style="cursor:pointer;">
 	
 </body>

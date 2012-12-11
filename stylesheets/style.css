@@ -9,7 +9,7 @@ input[type="submit"] {
 }
 
 header {
-  padding: 25px 20px 40px 20px;
+  padding: 25px 20px 20px 20px;
   margin: 0;
   position: fixed;
   top: 0;
@@ -44,114 +44,42 @@ header p {
   margin: 0px;
 }
 
-#detail_bar {
-  z-index: 20;
-  left: 2%;
-  right: 70%;
+#main {
+  border: 2px solid #333333;
+  z-index: 100;
+  left: 30%;
+  right: 75%;
   position: fixed;
-  top: 55px;
-  background: #ffff00;
-  border: 1px solid #f0b500;
-  -moz-border-radius: 20px;
-  -webkit-border-radius: 20px;
-  -o-border-radius: 20px;
-  -ms-border-radius: 20px;
-  -khtml-border-radius: 20px;
-  border-radius: 20px;
-  border: 1px solid #cbcbcb;
-  -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), inset 0px 0px 2px 2px rgba(255, 255, 0, 1);
-  -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), inset 0px 0px 2px 2px rgba(255, 255, 0, 1);
-  -o-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), inset 0px 0px 2px 2px rgba(255, 255, 0, 1);
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), inset 0px 0px 2px 2px rgba(255, 255, 0, 1);
-  padding-right: 10px;
-  width:300px;
+  top: 135px;
+  width: 478px;
+  height: 478px;
 }
-#detail_bar .name{
-  margin-left: 5px;
-  padding: 5px 8px;
-  margin-top: 6px;
-  line-height: 14px;
-  font-size: 18px;
-  color: #333333;
+#main .field {
+  border: 1px solid #333333;
+}
+#main .location_mzone ,.location_szone{
+  position: absolute;
   display: inline-block;
-  text-align: left; 
+  border: 2px solid #ff0000;
+  width: 63px;
+  height: 72px;
+  background: #bbbbbb;
 }
-#detail_bar .card_img {
-  margin: 10px 10px 10px 10px;
-}
-#detail_bar .card_info {
-  width: 135px;
-  height: 180px;
-  padding: 15px 5px 5px 5px;
-  margin: 7px 0 0 10px;
-}
-#detail_bar .card_name {
-  width: 300px;
-  height: auto;
-  padding: 8px 0;
-  margin: 0;
-  font-weight: bold;
-  color: #999999;
-  text-shadow: 1px 1px 2px #cccccc;
-  font-size: 24px;
-  text-align: center;
-  background: #eeeeee;
-  border: 1px solid #cccccc;
-  border-radius: 5px 0 0 0;
-  margin: 0 0 0 -1px;
-}
-#detail_bar .attr_name {
-  width: 60px;
-  height: 14px;
-  padding: 0 0 5px 0;
-  margin: 0 0 10px 0;
-  color: #FFAD6E;
-  font-size: 12px;
-  text-shadow: 1px 1px 2px #eeeeee;
-  border-bottom: 1px dashed #cccccc;
-}
-#detail_bar .attr_real {
-  width: 75px;
-  height: 14px;
-  padding: 0 0 5px 0;
-  margin: 0 0 10px 0;
-  color: thead_bg#999999;
-  font-size: 12px;
-  text-shadow: 1px 1px 2px #eeeeee;
-  border-bottom: 1px dashed #cccccc;
-}
-#detail_bar .bottom_button_active {
-  height: auto;
-  width: auto;
-  padding: 8px 10px;
-  margin: -1px 0 0 10px;
-  border-left: 1px solid #CCCCCC;
-  border-top: 1px solid #ffffff;
-  border-right: 1px solid #CCCCCC;
-  border-bottom: 1px solid #CCCCCC;
-  font-size: 12px;
-  border-radius: 0 0 5px 5px;
-  background: #ffffff;
-}
-#detail_bar .card_frame {
-  border-top: 1px solid #cccccc;
-  border-bottom: 1px solid #cccccc;
-  padding: 10px;
-  margin: 15px 0 0 0;
-  width: 280px;
-  height: 370px;
-}
-#detail_bar .card_frame .card_frame_focus {
-  display: block;
+#main .location_deck ,.location_extra,.location_grave,.location_removed,.location_field{
+  position: absolute;
+  display: inline-block;
+  border: 2px solid #ff0000;
+  width: 52px;
+  height: 72px;
+  background: #555555;
 }
 #search_bar {
   z-index: 100;
-  left: 75%;
-  right: 2%;
-  position: relative;
+  left: 70%;
+  right: 10%;
+  position: fixed;
   top: 65px;
-  background: #ffff00;
-  border: 1px solid #f0b500;
+  background: #bbbbbb;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -o-border-radius: 5px;
@@ -225,7 +153,7 @@ header p {
   height: 35px;
 }
 #dragImage {
-	border: 2px solid #4276b6;
+	border: 1px solid #4276b6;
 	z-index: 100;
 }
 
