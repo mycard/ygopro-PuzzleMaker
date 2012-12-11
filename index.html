@@ -14,7 +14,7 @@
 
 <script type="text/javascript">
 
-var page_index ;
+var current_page ;
 var page_num;
 var table_row = Math.floor((getFullSize().h-350)/64);
 var MZONE = 0;
@@ -31,7 +31,7 @@ var PLAYER_0 = [
 {"top": 64, "left": 71},  //szone
 {"top": 99, "left": 408}, //field
 {"top": 20, "left": 8},   //deck
-{"top": 0, "left": 71},   //hand
+{"top": -13, "left": 71},   //hand
 {"top": 99, "left": 8},   //grave
 {"top": 20, "left": 408}, //extra
 {"top": 178, "left": 8},  //removed
@@ -41,7 +41,7 @@ var PLAYER_1 = [
 {"top": 339, "left": 71}, //szone
 {"top": 302, "left": 8},  //field
 {"top": 382, "left": 408},//deck
-{"top": 420, "left": 71}, //hand
+{"top": 416, "left": 71}, //hand
 {"top": 302, "left": 408},//grave
 {"top": 382, "left": 8},  //extra
 {"top": 222, "left": 408},//removed
@@ -66,12 +66,12 @@ $(document).ready(function(){
 		addField(player,EXTRA,0);
 		addField(player,REMOVED,0);
 	}
-	setPage();
+	setPageLabel();
 	document.getElementById('keyword').focus();
 });
 function search(){
 	var name = document.getElementById("keyword").value;
-	var select_page = document.getElementById("select_page");
+	var page_button = document.getElementById("page_button");
 	if(name == "")
 		return false;
 	var url = "https://api.mongolab.com/api/1/databases/mycard/collections/lang_zh?apiKey=508e5726e4b0c54ca4492ead"
@@ -80,12 +80,12 @@ function search(){
     $.getJSON(url2,function(result){
 		var html = "";
 		if(result.length == 0){
-			setPage();
-			select_page.style.display = 'none';
+			setPageLabel();
+			page_button.style.display = 'none';
 			$("#result").html(html);
 			return false;
 		}
-		page_index = 1;
+		current_page = 1;
 		page_num = 0;
 		$.each(result, function(i, card){
 			if(i%table_row==0){
@@ -98,7 +98,7 @@ function search(){
 			}
 			html = html + "<tr>";
 			html = html + "<td><img class='thumb' src='" + "http://my-card.in/images/cards/ygocore/thumbnail/" + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
-			html = html + "<td noWrap>" + card.name + "</td>";
+			html = html + "<td>" + card.name + "</td>";
 			html = html + "</tr>";
 			if(((i+1)%table_row==0) || (i==result.length)){
 				html = html+ "</table>";
@@ -107,39 +107,39 @@ function search(){
 		$("#result").html(html);
 		tablecloth();
 		makeDraggable();
-		select_page.style.display = 'block';
-		setPage(page_index, page_num);
-		showPage(1);
+		page_button.style.display = 'block';
+		setPageLabel(current_page, page_num);
+		showPage(current_page);
     });
  }
 function prePage(){
-	if(page_index == 1) return false;
-	page_index--;
-	setPage(page_index, page_num);
-	showPage(page_index);
+	if(current_page == 1) return false;
+	current_page--;
+	setPageLabel(current_page, page_num);
+	showPage(current_page);
 }
 
 function nextPage(){
-	if(page_index == page_num) return false;
-	page_index++;
-	setPage(page_index, page_num);
-	showPage(page_index)
+	if(current_page == page_num) return false;
+	current_page++;
+	setPageLabel(current_page, page_num);
+	showPage(current_page)
 }
 
-function showPage(page_index){
+function showPage(current_page){
 	var tables = document.getElementsByTagName('table');
 	for(var i in tables){
-		if(i == page_index -1)
+		if(i == current_page -1)
 			tables[i].style.display = "block";
 		else 
 			tables[i].style.display = "none";
 	}
 	
 }
-function setPage(page_index, page_num) {
+function setPageLabel(current_page, page_num) {
 	var page_label = $('.page_label');
 	var built = $('#page-tmpl').tmpl({
-		page_index: page_index || 0,
+		current_page: current_page || 0,
 		page_num: page_num || 0,
 	});
 	page_label.html(built);
@@ -161,12 +161,10 @@ function addField(player, location, place) {
 </script>
 
 <script type="text/x-jquery-tmpl" id="page-tmpl">
-	第 ${page_index} 页 / 共 ${page_num} 页
+	第 ${current_page} 页 / 共 ${page_num} 页
 </script>
 <script type="text/x-jquery-tmpl" id="field-tmpl">
-
 	<div class="location_${location}" style="top:${top}px; left:${left}px;" id="${player}_location_${location}_${place}"></div>
-
 </script>
 </head>
 
@@ -179,21 +177,21 @@ function addField(player, location, place) {
 		<div id="fields">
 		
 		</div>
-		
-	</div>
-	
-	<div id="search_bar">
-			<input class="textfield" id="keyword" type="text" placeholder="输入关键字" value="甜点">
+		<div id="search_bar">
+			<input class="textfield" id="keyword" type="text" placeholder="输入关键字" value="黑羽">
 			<button class="button" id="search" onmouseup="search()">搜索</button>
 			<div id="content">
 				<div id="result"></div>
 			</div>
 			<label class="page_label"></label>
-			<div id="select_page" style="display:none">
+			<div id="page_button" style="display:none">
 				<button class="btn" type="button" id="prePage" onclick="prePage()">上一页</button>
 				<button class="btn" type="button" id="nextPage" onclick="nextPage()">下一页</button>
 			</div>
 		</div>
+	</div>
+	
+	
 	<img src="" id="DragImage" style="cursor:pointer;">
 	
 </body>

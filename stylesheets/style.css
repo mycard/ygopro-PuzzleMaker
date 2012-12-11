@@ -45,17 +45,19 @@ header p {
 }
 
 #main {
-  border: 2px solid #333333;
   z-index: 100;
   left: 30%;
-  right: 75%;
+  position: fixed;
+  top: 55px;
+  width: 900px;
+  height: 600px;
+}
+#fields{
+  z-index: 100;
   position: fixed;
   top: 135px;
   width: 478px;
   height: 478px;
-}
-#main .field {
-  border: 1px solid #333333;
 }
 #main .location_mzone ,.location_szone{
   position: absolute;
@@ -73,12 +75,20 @@ header p {
   height: 72px;
   background: #555555;
 }
+#main .location_hand{
+  position: absolute;
+  display: inline-block;
+  border: 2px solid #ff0000;
+  width: 327px;
+  height: 72px;
+  background: #dddddd;
+}
 #search_bar {
   z-index: 100;
-  left: 70%;
+  left: 60%;
   right: 10%;
-  position: fixed;
-  top: 65px;
+  position: relative;
+  top: 5px;
   background: #bbbbbb;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
