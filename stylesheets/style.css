@@ -52,6 +52,12 @@ header p {
   width: 900px;
   height: 600px;
 }
+#detail{
+  z-index: 100;
+  position: fixed;
+  top: 120px;
+  left: 120px;
+}
 #fields{
   z-index: 100;
   position: fixed;
@@ -67,7 +73,7 @@ header p {
   height: 72px;
   background: #888888;
 }
-#main .location_deck ,.location_extra,.location_grave,.location_removed,.location_field{
+#fields .location_deck ,.location_extra,.location_grave,.location_removed,.location_field{
   position: absolute;
   display: inline-block;
   border: 1px solid #00ffff;
@@ -75,11 +81,16 @@ header p {
   height: 72px;
   background: #555555;
 }
-#main .location_hand{
+#fields .location_hand{
   position: absolute;
   display: inline-block;
   width: 327px;
   height: 72px;
+}
+#fields .thumb {
+  z-index: 300;
+  position: absolute;
+  display: inline-block;
 }
 #search_bar {
   z-index: 100;
@@ -150,7 +161,7 @@ header p {
   border-radius: 20px;
   background-color: #ffffff;
   margin-left: 5px;
-  padding: 10px 12px;
+  padding: 5px 12px;
   margin-top: 12px;
   line-height: 14px;
   font-size: 18px;

@@ -16,7 +16,7 @@ var PLAYER_1 = [
 {"top": 64, "left": 71},  //szone
 {"top": 99, "left": 408}, //field
 {"top": 20, "left": 8},   //deck
-{"top": -13, "left": 71},   //hand
+{"top": -13, "left": 71}, //hand
 {"top": 99, "left": 8},   //grave
 {"top": 20, "left": 408}, //extra
 {"top": 178, "left": 8},  //removed
@@ -62,7 +62,7 @@ function search(){
 			}
 			html = html + "<tr>";
 			html = html + "<td><img class='thumb' src='" + "http://my-card.in/images/cards/ygocore/thumbnail/" + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
-			html = html + "<td>" + card.name + "</td>";
+			html = html + "<td width=200px>" + card.name + "</td>";
 			html = html + "</tr>";
 			if(((i+1)%table_row==0) || (i==result.length)){
 				html = html+ "</table>";
@@ -132,4 +132,12 @@ h: window['innerHeight'] || document.documentElement.clientHeight}
 }
 function getFullSize(){
 return {w: window.screen.width, h: window.screen.height}
+}
+function del(array,n){
+	var result = [];
+	for(var i in array){
+		if(i != n)
+			result.push(array[i]);
+	}
+　　return result;
 }

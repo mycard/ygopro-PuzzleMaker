@@ -19,7 +19,7 @@
 <script type="text/javascript">
 
 
-$(document).ready(function(){
+$(document).ready(function(){	
 	setPageLabel();
 	document.getElementById('keyword').focus();
 	var dragImage  = document.getElementById('DragImage');
@@ -55,25 +55,41 @@ $(document).ready(function(){
 	}
 });
 
-function addCard(obj, card_id){
-//	var card_list = $.data(obj, 'card_list');
-///	card_list.push(card_id);
-//	$.data(obj, 'card_list', card_list);
-//	var html = "";
-//	for(var i in card_list){
-//		html = html + "<img class='thumb' src='" + "http://my-card.in/images/cards/ygocore/thumbnail/" + card_list[i] + ".jpg' style='cursor:pointer;'>"
-//	}
-//	$(obj).html(html);
-//	
-//	var thumbs = obj.getElementsByClassName("thumb");
-//	for (var i in thumbs){
-//		makeDraggable(thumbs[i]);
-//	}
-	var html = "<img class='thumb' src='" + "http://my-card.in/images/cards/ygocore/thumbnail/" + card_id + ".jpg' style='cursor:pointer;'>"
-	$(obj).html(html);
-	var thumbs = obj.getElementsByClassName("thumb");
+function addCard(field, card_id){
+	var card_list = $.data(field, 'card_list');
+	card_list.push(card_id);
+	$.data(field, 'card_list', card_list);
+	updateImg(field);
+}
+
+function updateImg(field){
+	var card_list = $.data(field, 'card_list');
+	$(field).empty();
+	for(var i in card_list){
+		var top, left, right, bottom;
+		var width = $(field).width();
+		var tmp = width / card_list.length;
+		if(45 < tmp) left = 45;
+		else left = (width-45)/(card_list.length-1);
+		var data = $(field).tmplItem().data;
+		//if(data.location == HAND){
+			top = 3;
+			left = i *left;
+		//}
+	
+	
+		$("#thumb-tmpl").tmpl({
+		card_id:card_list[i],
+		index: i,
+		top: top || 0,
+		left: left || 0,
+		right: right || 0,
+		bottom: bottom || 0
+		}).appendTo(field);
+	}
+	var thumbs = field.getElementsByClassName("thumb");
 	for (var i in thumbs){
-		makeMoveable(thumbs[i]);
+		makeMoveable(thumbs[i],field);
 	}
 }
 </script>
@@ -82,7 +98,10 @@ function addCard(obj, card_id){
 	第 ${current_page} 页 / 共 ${page_num} 页
 </script>
 <script type="text/x-jquery-tmpl" id="field-tmpl">
-	<div class="location_${location}" style="top:${top}px; left:${left}px;""></div>
+	<div class="location_${location}" style="top:${top}px; left:${left}px;"></div>
+</script>
+<script type="text/x-jquery-tmpl" id="thumb-tmpl">
+	<img class='thumb' style="top:${top}px; left:${left}px; right:${right}px; bottom:${bottom}px;" src='http://my-card.in/images/cards/ygocore/thumbnail/${card_id}.jpg' style='cursor:pointer;'>
 </script>
 </head>
 
@@ -92,6 +111,9 @@ function addCard(obj, card_id){
 		<h1>残局编辑器</h1>
 	</header>
 	<div id="main">
+		<div id="detail">
+			<img id="big_image" height="254px" width="177px" src="images/unknow.jpg">
+		</div>
 		<div id="fields">
 		
 		</div>
@@ -111,6 +133,6 @@ function addCard(obj, card_id){
 	
 	
 	<img src="" id="DragImage" style="cursor:pointer;">
-	
+
 </body>
 </html>

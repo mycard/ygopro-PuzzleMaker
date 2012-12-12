@@ -2,25 +2,42 @@
 Number.prototype.NaN0=function(){return isNaN(this)?0:this;}
 var dragging = false;
 var putting = false;
-function makeDraggable(obj){
+function makeDraggable(thumb){
 	var dragImage  = document.getElementById('DragImage');
-	obj.onmousedown = function(ev){
+	thumb.onmousedown = function(){
 		dragImage.src  = this.src;
 		var x = this.src.lastIndexOf('.');
 		var card_id = parseInt(this.src.substring(49,x));
 		$.data(dragImage, 'card_id', card_id);
 		dragging=true;
 	}
+	thumb.onmouseover = function(){
+		var img = document.getElementById("big_image");
+		var x = this.src.lastIndexOf('.');
+		var card_id = parseInt(this.src.substring(49,x));
+		img.src = "http://my-card.in/images/cards/ygocore/" + card_id + ".jpg";
+	}
 }
-function makeMoveable(obj){
-	var dragImage  = document.getElementById('DragImage');
-	obj.onmousedown = function(ev){
+function makeMoveable(thumb,parent){
+	thumb.onmousedown = function(){
+		var dragImage  = document.getElementById('DragImage');
 		dragImage.src  = this.src;
 		var x = this.src.lastIndexOf('.');
 		var card_id = parseInt(this.src.substring(49,x));
 		$.data(dragImage, 'card_id', card_id);
 		dragging=true;
-		this.parentNode.removeChild(this);
+		var card_list = $.data(parent, 'card_list');
+		var i = $(this).tmplItem().data.index;
+		var list = del(card_list,i);
+		$.data(parent, 'card_list', list);
+		parent.removeChild(this);
+		updateImg(parent);
+	}
+	thumb.onmouseover = function(){
+		var img = document.getElementById("big_image");
+		var x = this.src.lastIndexOf('.');
+		var card_id = parseInt(this.src.substring(49,x));
+		img.src = "http://my-card.in/images/cards/ygocore/" + card_id + ".jpg";
 	}
 }
 function mouseDown(ev){
