@@ -2,18 +2,27 @@
 Number.prototype.NaN0=function(){return isNaN(this)?0:this;}
 var dragging = false;
 var putting = false;
-function makeDraggable(){
+function makeDraggable(obj){
 	var dragImage  = document.getElementById('DragImage');
-	dragImage.style.display = "none";
-	var thumbs = document.getElementsByClassName("thumb");
-	for (var i in thumbs){
-		thumbs[i].onmousedown = function(ev){
-			dragImage.src  = this.src;
-			dragging=true;
-		}
+	obj.onmousedown = function(ev){
+		dragImage.src  = this.src;
+		var x = this.src.lastIndexOf('.');
+		var card_id = parseInt(this.src.substring(49,x));
+		$.data(dragImage, 'card_id', card_id);
+		dragging=true;
 	}
 }
-
+function makeMoveable(obj){
+	var dragImage  = document.getElementById('DragImage');
+	obj.onmousedown = function(ev){
+		dragImage.src  = this.src;
+		var x = this.src.lastIndexOf('.');
+		var card_id = parseInt(this.src.substring(49,x));
+		$.data(dragImage, 'card_id', card_id);
+		dragging=true;
+		this.parentNode.removeChild(this);
+	}
+}
 function mouseDown(ev){
 	ev         = ev || window.event;
 	var target = ev.target || ev.srcElement;

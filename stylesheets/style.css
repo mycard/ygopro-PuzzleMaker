@@ -65,7 +65,7 @@ header p {
   border: 1px solid #00ffff;
   width: 63px;
   height: 72px;
-  background: #bbbbbb;
+  background: #888888;
 }
 #main .location_deck ,.location_extra,.location_grave,.location_removed,.location_field{
   position: absolute;
