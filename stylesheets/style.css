@@ -46,7 +46,7 @@ header p {
 
 #main {
   z-index: 100;
-  left: 30%;
+  left: 100px;
   position: fixed;
   top: 55px;
   width: 900px;
@@ -55,12 +55,21 @@ header p {
 #detail{
   z-index: 100;
   position: fixed;
+  left: 100px;
   top: 120px;
+}
+#big_image{
+  z-index: 100;
+  position: fixed;
   left: 120px;
+  top: 120px;
+  height: 254px;
+  width: 177px;
 }
 #fields{
   z-index: 100;
   position: fixed;
+  left: 400px;
   top: 135px;
   width: 478px;
   height: 478px;
@@ -94,7 +103,7 @@ header p {
 }
 #search_bar {
   z-index: 100;
-  left: 60%;
+  left: 800px;
   right: 10%;
   position: relative;
   top: 5px;

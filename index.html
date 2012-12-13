@@ -65,16 +65,16 @@ function addCard(field, card_id){
 function updateImg(field){
 	var card_list = $.data(field, 'card_list');
 	$(field).empty();
+	var width = $(field).width();
+	var length = card_list.length;
+	var start = width/2 - 22.5*length;
 	for(var i in card_list){
 		var top, left, right, bottom;
-		var width = $(field).width();
-		var tmp = width / card_list.length;
-		if(45 < tmp) left = 45;
-		else left = (width-45)/(card_list.length-1);
-		var data = $(field).tmplItem().data;
+		//var data = $(field).tmplItem().data;
 		//if(data.location == HAND){
 			top = 3;
-			left = i *left;
+			if(45 < (width / length)) left = start + 45*i ;
+			else left = (width-45)/(length-1)*i;
 		//}
 	
 	
@@ -112,7 +112,7 @@ function updateImg(field){
 	</header>
 	<div id="main">
 		<div id="detail">
-			<img id="big_image" height="254px" width="177px" src="images/unknow.jpg">
+			<img id="big_image" src="images/unknow.jpg">
 		</div>
 		<div id="fields">
 		
