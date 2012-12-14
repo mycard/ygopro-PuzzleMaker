@@ -8,14 +8,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <html>
 <head>
+<title>残局编辑器</title>
 <!-- paste this code into your webpage -->
-<html lang="zh"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="zh"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="stylesheets/style.css" rel="stylesheet" type="text/css">
 <link href="stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
 <script src="javascripts/tablecloth.js"></script>
 <script src="javascripts/jquery.min.js"></script>
 <script src="javascripts/drag.js"></script>
 <script src="javascripts/main.js"></script>
+<script src="javascripts/ygo.js"></script>
 <script src="javascripts/jquery.tmpl.min.js"></script>
 <!-- end -->
 
@@ -60,10 +62,11 @@ $(document).ready(function(){
 
 </script>
 <script type="text/x-jquery-tmpl" id="detail-tmpl">
-	<center>${name}[${_id}]</center></br>
-	[${type}] ${race}/${attribute}</br>
-	[${level}] ${atk}/${def}<br>
-	${desc}
+	<b><center>${detail.name}[${detail._id}]</center>
+	[${detail.type}] ${detail.race}/${detail.attribute}</br>
+	[${detail.level}] ${detail.atk}/${detail.def}<br>
+	${detail.desc}
+	</b>
 </script>
 <script type="text/x-jquery-tmpl" id="page-tmpl">
 	第 ${current_page} 页 / 共 ${page_num} 页

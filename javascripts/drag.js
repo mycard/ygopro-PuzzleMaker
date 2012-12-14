@@ -21,6 +21,14 @@ function makeDraggable(thumb){
 		var x = this.src.lastIndexOf('.');
 		var card_id = parseInt(this.src.substring(49,x));
 		img.src = "http://my-card.in/images/cards/ygocore/" + card_id + ".jpg";
+		for(var i in details){
+			if(details[i]._id == card_id){
+				//$("#detail_label").html(JSON.stringify(details[i]));
+				var detail_label = $('#detail_label');
+				var built = $('#detail-tmpl').tmpl({detail: details[i]});	
+				detail_label.html(built);
+			}
+		}
 	}
 }
 function makeMoveable(thumb,parent){
@@ -42,7 +50,7 @@ function makeMoveable(thumb,parent){
 		var list = del(card_list,i);
 		$.data(parent, 'card_list', list);
 		parent.removeChild(this);
-		updateImg(parent);
+		updateField(parent);
 	}
 	thumb.onmouseover = function(){
 		var img = document.getElementById("detail_image");

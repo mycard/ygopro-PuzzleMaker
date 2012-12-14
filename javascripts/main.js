@@ -36,7 +36,7 @@ var COORDINATE = [PLAYER_0,PLAYER_1];
 var locale = 'zh';
 var cards_url = "http://my-card.in/cards";
 var locale_url = "http://my-card.in/cards_" + locale;
-
+var details = [];
 function search(){
 	var name = document.getElementById("keyword").value;
 	var page_button = document.getElementById("page_button");
@@ -45,6 +45,7 @@ function search(){
 	var url = "https://api.mongolab.com/api/1/databases/mycard/collections/lang_zh?apiKey=508e5726e4b0c54ca4492ead"
 	var q = JSON.stringify( {name: {$regex: name.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), $options: 'i'}});
 	var url2 = locale_url + '?q=' + q;
+	//$("#detail_label").html(url2);
     $.getJSON(url2,function(result){
 		var html = "";
 		if(result.length == 0){
@@ -57,63 +58,82 @@ function search(){
 		for (var _i in result) {
 			cards_id.push(result[_i]._id);
 		}
-		
-		//$("#detail_label").html(url2);
-		current_page = 1;
-		page_num = 0;
-		$.each(result, function(i, card){
-			if(i%table_row==0){
-				page_num ++;
-				html = html + "<table class='page'>";
+		$.getJSON(cards_url + "?q=" + (JSON.stringify({_id: {$in: cards_id}})), function(cards) {
+			for(var i in cards){
+				var card = cards[i];
+				var level = "";
+				for(var j=0;j<card.level;j++){
+					level = level + "★";
+				}
+				var data = {
+					"_id": card._id,
+					"name": result[i].name,
+					"type": getType(card),
+					"atk": card.atk,
+					"def": card.def,
+					"level": level,
+					"race": getRace(card),
+					"attribute": getAttribute(card),
+					"desc": result[i].desc
+				};
+				details.push(data);
+			}
+			//alert(JSON.stringify(details));
+			
+			//$("#detail_label").html(JSON.stringify(details));
+			current_page = 1;
+			page_num = 0;
+			$.each(result, function(i, card){
+				if(i%table_row==0){
+					page_num ++;
+					html = html + "<table class='page'>";
+					html = html + "<tr>";
+					html = html + "<th width='45px'>卡图</th>";
+					html = html + "<th >卡名</th>";
+					html = html + "</tr>";
+				}
 				html = html + "<tr>";
-				html = html + "<th width='45px'>卡图</th>";
-				html = html + "<th >卡名</th>";
+				html = html + "<td><img class='thumb' src='" + "http://my-card.in/images/cards/ygocore/thumbnail/" + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
+				html = html + "<td width=200px>" + card.name + "</td>";
 				html = html + "</tr>";
+				if(((i+1)%table_row==0) || (i==result.length)){
+					html = html+ "</table>";
+				}
+			});
+			$("#result").html(html);
+			tablecloth();
+			var thumbs = document.getElementsByClassName("thumb");
+			for (var i in thumbs){
+				makeDraggable(thumbs[i]);
 			}
-			html = html + "<tr>";
-			html = html + "<td><img class='thumb' src='" + "http://my-card.in/images/cards/ygocore/thumbnail/" + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
-			html = html + "<td width=200px>" + card.name + "</td>";
-			html = html + "</tr>";
-			if(((i+1)%table_row==0) || (i==result.length)){
-				html = html+ "</table>";
-			}
-        });
-		$("#result").html(html);
-		tablecloth();
-		var thumbs = document.getElementsByClassName("thumb");
-		for (var i in thumbs){
-			makeDraggable(thumbs[i]);
-		}
-		page_button.style.display = 'block';
-		setPageLabel(current_page, page_num);
-		showPage(current_page);
-    });
+			page_button.style.display = 'block';
+			setPageLabel(current_page, page_num);
+			showPage(current_page);
+		});
+	});
  }
-function prePage(){
+function prePage(){ //上一页
 	if(current_page == 1) return false;
 	current_page--;
 	setPageLabel(current_page, page_num);
 	showPage(current_page);
 }
-
-function nextPage(){
+function nextPage(){//下一页
 	if(current_page == page_num) return false;
 	current_page++;
 	setPageLabel(current_page, page_num);
 	showPage(current_page)
 }
-
-function showPage(current_page){
+function showPage(current_page){//显示current页
 	var tables = document.getElementsByTagName('table');
 	for(var i in tables){
-		if(i == current_page -1)
+		if(i == current_page -1) //current为1时显示table[0]
 			tables[i].style.display = "block";
 		else 
 			tables[i].style.display = "none";
 	}
-	
 }
-function setPageLabel(current_page, page_num) {
+function setPageLabel(current_page, page_num) {//显示第X页/共X页
 	var page_label = $('.page_label');
 	var built = $('#page-tmpl').tmpl({
 		current_page: current_page || 0,
@@ -121,7 +141,7 @@ function setPageLabel(current_page, page_num) {
 	});
 	page_label.html(built);
 }
-function addField(player, location, place) {
+function addField(player, location, place) {//画场地
 
 	var top = COORDINATE[player][location].top;
 	var left = COORDINATE[player][location].left + 66*place;
@@ -136,14 +156,14 @@ function addField(player, location, place) {
 	$('#fields').append(built);
 }
 
-function addCard(field, card_id){
+function addCard(field, card_id){//
 	var card_list = $.data(field, 'card_list');
 	card_list.push(card_id);
 	$.data(field, 'card_list', card_list);
-	updateImg(field);
+	updateField(field);
 }
 
-function updateImg(field){
+function updateField(field){
 	var card_list = $.data(field, 'card_list');
 	$(field).empty();
 	var width = $(field).width();
