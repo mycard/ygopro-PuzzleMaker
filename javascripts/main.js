@@ -33,6 +33,10 @@ var PLAYER_0 = [
 ];
 var COORDINATE = [PLAYER_0,PLAYER_1];
 
+var locale = 'zh';
+var cards_url = "http://my-card.in/cards";
+var locale_url = "http://my-card.in/cards_" + locale;
+
 function search(){
 	var name = document.getElementById("keyword").value;
 	var page_button = document.getElementById("page_button");
@@ -40,7 +44,7 @@ function search(){
 		return false;
 	var url = "https://api.mongolab.com/api/1/databases/mycard/collections/lang_zh?apiKey=508e5726e4b0c54ca4492ead"
 	var q = JSON.stringify( {name: {$regex: name.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), $options: 'i'}});
-	var url2=url + '&q=' + q;
+	var url2 = locale_url + '?q=' + q;
     $.getJSON(url2,function(result){
 		var html = "";
 		if(result.length == 0){
@@ -49,6 +53,12 @@ function search(){
 			$("#result").html(html);
 			return false;
 		}
+		var cards_id = [];
+		for (var _i in result) {
+			cards_id.push(result[_i]._id);
+		}
+		
+		//$("#detail_label").html(url2);
 		current_page = 1;
 		page_num = 0;
 		$.each(result, function(i, card){
@@ -126,6 +136,43 @@ function addField(player, location, place) {
 	$('#fields').append(built);
 }
 
+function addCard(field, card_id){
+	var card_list = $.data(field, 'card_list');
+	card_list.push(card_id);
+	$.data(field, 'card_list', card_list);
+	updateImg(field);
+}
+
+function updateImg(field){
+	var card_list = $.data(field, 'card_list');
+	$(field).empty();
+	var width = $(field).width();
+	var length = card_list.length;
+	var start = width/2 - 22.5*length;
+	for(var i in card_list){
+		var top, left, right, bottom;
+		//var data = $(field).tmplItem().data;
+		//if(data.location == HAND){
+			top = 3;
+			if(45 < (width / length)) left = start + 45*i ;
+			else left = (width-45)/(length-1)*i;
+		//}
+	
+	
+		$("#thumb-tmpl").tmpl({
+		card_id:card_list[i],
+		index: i,
+		top: top || 0,
+		left: left || 0,
+		right: right || 0,
+		bottom: bottom || 0
+		}).appendTo(field);
+	}
+	var thumbs = field.getElementsByClassName("thumb");
+	for (var i in thumbs){
+		makeMoveable(thumbs[i],field);
+	}
+}
 function getViewSize(){
 return {w: window['innerWidth'] || document.documentElement.clientWidth,
 h: window['innerHeight'] || document.documentElement.clientHeight}

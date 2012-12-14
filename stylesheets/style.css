@@ -58,13 +58,22 @@ header p {
   left: 100px;
   top: 120px;
 }
-#big_image{
+#detail_image{
   z-index: 100;
   position: fixed;
   left: 120px;
-  top: 120px;
+  top: 80px;
   height: 254px;
   width: 177px;
+}
+#detail_label{
+  z-index: 100;
+  position: fixed;
+  left: 120px;
+  top: 340px;
+  width: 200px;
+  height: 250px;
+  border: 1px solid #00ffff;
 }
 #fields{
   z-index: 100;

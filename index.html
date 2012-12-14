@@ -1,7 +1,10 @@
 <!--[if lt IE 9]>
 <p class="chromeframe">浏览器太旧了亲~. 请 <a href="http://browsehappy.com/">升级/更换您的浏览器</a> 或者 <a href="http://www.google.com/chromeframe/?redirect=true">激活 Google Chrome 浏览器内嵌框架</a>.</p>
 <![endif]-->
-
+<!--[if IE 9]>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<![endif]-->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <html>
 <head>
@@ -55,45 +58,13 @@ $(document).ready(function(){
 	}
 });
 
-function addCard(field, card_id){
-	var card_list = $.data(field, 'card_list');
-	card_list.push(card_id);
-	$.data(field, 'card_list', card_list);
-	updateImg(field);
-}
-
-function updateImg(field){
-	var card_list = $.data(field, 'card_list');
-	$(field).empty();
-	var width = $(field).width();
-	var length = card_list.length;
-	var start = width/2 - 22.5*length;
-	for(var i in card_list){
-		var top, left, right, bottom;
-		//var data = $(field).tmplItem().data;
-		//if(data.location == HAND){
-			top = 3;
-			if(45 < (width / length)) left = start + 45*i ;
-			else left = (width-45)/(length-1)*i;
-		//}
-	
-	
-		$("#thumb-tmpl").tmpl({
-		card_id:card_list[i],
-		index: i,
-		top: top || 0,
-		left: left || 0,
-		right: right || 0,
-		bottom: bottom || 0
-		}).appendTo(field);
-	}
-	var thumbs = field.getElementsByClassName("thumb");
-	for (var i in thumbs){
-		makeMoveable(thumbs[i],field);
-	}
-}
 </script>
-
+<script type="text/x-jquery-tmpl" id="detail-tmpl">
+	<center>${name}[${_id}]</center></br>
+	[${type}] ${race}/${attribute}</br>
+	[${level}] ${atk}/${def}<br>
+	${desc}
+</script>
 <script type="text/x-jquery-tmpl" id="page-tmpl">
 	第 ${current_page} 页 / 共 ${page_num} 页
 </script>
@@ -112,7 +83,8 @@ function updateImg(field){
 	</header>
 	<div id="main">
 		<div id="detail">
-			<img id="big_image" src="images/unknow.jpg">
+			<img id="detail_image" src="images/unknow.jpg">
+			<label id="detail_label"></label>
 		</div>
 		<div id="fields">
 		

@@ -4,28 +4,38 @@ var dragging = false;
 var putting = false;
 function makeDraggable(thumb){
 	var dragImage  = document.getElementById('DragImage');
-	thumb.onmousedown = function(){
+	thumb.onmousedown = function(ev){
 		dragImage.src  = this.src;
 		var x = this.src.lastIndexOf('.');
 		var card_id = parseInt(this.src.substring(49,x));
 		$.data(dragImage, 'card_id', card_id);
 		dragging=true;
+		var mousePos = getMousePos(ev);
+		dragImage.style.position = 'absolute';
+		dragImage.style.left     = mousePos.x - 22;
+		dragImage.style.top      = mousePos.y - 32;
+		dragImage.style.display  = "block";
 	}
 	thumb.onmouseover = function(){
-		var img = document.getElementById("big_image");
+		var img = document.getElementById("detail_image");
 		var x = this.src.lastIndexOf('.');
 		var card_id = parseInt(this.src.substring(49,x));
 		img.src = "http://my-card.in/images/cards/ygocore/" + card_id + ".jpg";
 	}
 }
 function makeMoveable(thumb,parent){
-	thumb.onmousedown = function(){
+	thumb.onmousedown = function(ev){
 		var dragImage  = document.getElementById('DragImage');
 		dragImage.src  = this.src;
 		var x = this.src.lastIndexOf('.');
 		var card_id = parseInt(this.src.substring(49,x));
 		$.data(dragImage, 'card_id', card_id);
 		dragging=true;
+		var mousePos = getMousePos(ev);
+		dragImage.style.position = 'absolute';
+		dragImage.style.left     = mousePos.x - 22;
+		dragImage.style.top      = mousePos.y - 32;
+		dragImage.style.display  = "block";
 		var card_list = $.data(parent, 'card_list');
 		var i = $(this).tmplItem().data.index;
 		var list = del(card_list,i);
@@ -34,7 +44,7 @@ function makeMoveable(thumb,parent){
 		updateImg(parent);
 	}
 	thumb.onmouseover = function(){
-		var img = document.getElementById("big_image");
+		var img = document.getElementById("detail_image");
 		var x = this.src.lastIndexOf('.');
 		var card_id = parseInt(this.src.substring(49,x));
 		img.src = "http://my-card.in/images/cards/ygocore/" + card_id + ".jpg";
