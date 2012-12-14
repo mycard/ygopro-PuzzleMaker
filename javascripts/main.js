@@ -1,7 +1,7 @@
 
 var current_page ;
 var page_num;
-var table_row = Math.floor((getFullSize().h-350)/64);
+var table_row = Math.floor((getFullSize().h-370)/64);
 var MZONE = 0;
 var SZONE = 1;
 var FIELD = 2;
@@ -100,9 +100,10 @@ function search(){
 					html = html+ "</table>";
 				}
 			});
-			$("#result").html(html);
+			var tables = document.getElementById("result");
+			$(tables).html(html);
 			tablecloth();
-			var thumbs = document.getElementsByClassName("thumb");
+			var thumbs = tables.getElementsByClassName("thumb");
 			for (var i in thumbs){
 				makeDraggable(thumbs[i]);
 			}
@@ -157,7 +158,12 @@ function addField(player, location, place) {//画场地
 }
 
 function addCard(field, card_id){//
+	var tmplItem = $(field).tmplItem().data;
+	var location = tmplItem.location;
 	var card_list = $.data(field, 'card_list');
+	if(location == "szone" || location == "field"){
+		card_list = [];
+	}
 	card_list.push(card_id);
 	$.data(field, 'card_list', card_list);
 	updateField(field);
