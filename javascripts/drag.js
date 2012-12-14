@@ -36,6 +36,7 @@ function makeMoveable(thumb,parent){
 		dragImage.style.left     = mousePos.x - 22;
 		dragImage.style.top      = mousePos.y - 32;
 		dragImage.style.display  = "block";
+		parent.onmouseout();
 		var card_list = $.data(parent, 'card_list');
 		var i = $(this).tmplItem().data.index;
 		var list = del(card_list,i);
