@@ -17,17 +17,7 @@ function makeDraggable(thumb){
 		dragImage.style.display  = "block";
 	}
 	thumb.onmouseover = function(){
-		var img = document.getElementById("detail_image");
-		var x = this.src.lastIndexOf('.');
-		var card_id = parseInt(this.src.substring(49,x));
-		img.src = "http://my-card.in/images/cards/ygocore/" + card_id + ".jpg";
-		for(var i in details){
-			if(details[i]._id == card_id){
-				var detail_label = $('#detail_label');
-				var built = $('#detail-tmpl').tmpl({detail: details[i]});	
-				detail_label.html(built);
-			}
-		}
+		showDetail(this);
 	}
 }
 function makeMoveable(thumb,parent){
@@ -52,18 +42,19 @@ function makeMoveable(thumb,parent){
 		updateField(parent);
 	}
 	thumb.onmouseover = function(){
-		var img = document.getElementById("detail_image");
-		var x = this.src.lastIndexOf('.');
-		var card_id = parseInt(this.src.substring(49,x));
-		img.src = "http://my-card.in/images/cards/ygocore/" + card_id + ".jpg";
-		for(var i in details){
-			if(details[i]._id == card_id){
-				var detail_label = $('#detail_label');
-				var built = $('#detail-tmpl').tmpl({detail: details[i]});	
-				detail_label.html(built);
-			}
-		}
+		showDetail(this);
 	}
+}
+function showDetail(obj){
+	var img = document.getElementById("detail_image");
+	var x = obj.src.lastIndexOf('.');
+	var card_id = parseInt(obj.src.substring(49,x));
+	img.src = "http://my-card.in/images/cards/ygocore/" + card_id + ".jpg";
+	var data = datas[card_id];
+	//$('#detail_label').html($('#detail-tmpl').tmpl({detail: data}));
+	var area = document.getElementById("detail_textarea");
+	
+	area.value = data.desc;
 }
 function mouseDown(ev){
 	ev         = ev || window.event;

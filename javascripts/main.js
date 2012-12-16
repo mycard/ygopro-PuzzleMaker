@@ -36,7 +36,7 @@ var COORDINATE = [PLAYER_0,PLAYER_1];
 var locale = 'zh';
 var cards_url = "http://my-card.in/cards";
 var locale_url = "http://my-card.in/cards_" + locale;
-var details = [];
+var datas = new Object();
 function search(){
 	var name = document.getElementById("keyword").value;
 	var page_button = document.getElementById("page_button");
@@ -61,26 +61,30 @@ function search(){
 		$.getJSON(cards_url + "?q=" + (JSON.stringify({_id: {$in: cards_id}})), function(cards) {
 			for(var i in cards){
 				var card = cards[i];
-				var level = "";
-				for(var j=0;j<card.level;j++){
-					level = level + "★";
+				var name = '';
+				var desc = '';
+				for(var j in result){
+					if(result[j]._id == card._id){
+						name = result[j].name;
+						desc = result[j].desc;
+						break;
+					}
 				}
 				var data = {
 					"_id": card._id,
-					"name": result[i].name,
+					"name": name,
 					"type": getType(card),
 					"atk": card.atk,
 					"def": card.def,
-					"level": level,
+					"level": card.level,
 					"race": getRace(card),
 					"attribute": getAttribute(card),
-					"desc": result[i].desc
+					"desc": desc
 				};
-				details.push(data);
+				//alert(JSON.stringify(data));
+				datas[card._id]=data;
 			}
-			//alert(JSON.stringify(details));
-			
-			//$("#detail_label").html(JSON.stringify(details));
+			//alert(datas);
 			current_page = 1;
 			page_num = 0;
 			$.each(result, function(i, card){

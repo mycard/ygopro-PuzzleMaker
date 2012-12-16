@@ -74,6 +74,17 @@ header p {
   width: 200px;
   height: 250px;
   border: 1px solid #00ffff;
+  background: #bbbbbb;
+}
+#detail_textarea{
+  z-index: 100;
+  position: fixed;
+  left: 120px;
+  top: 340px;
+  width: 200px;
+  height: 250px;
+  border: 1px solid #00ffff;
+  background: #dddddd;
 }
 #fields{
   z-index: 100;
