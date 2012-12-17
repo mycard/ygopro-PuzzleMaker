@@ -171,9 +171,9 @@ var speed = 1;
 
 var Img = function() {
 	var ua = navigator.userAgent,
-		isIE = /msie/i.test(ua) && !window.opera;
-	var i = 0, sinDeg = 0, cosDeg = 0, timer = null ;
+	isIE = /msie/i.test(ua) && !window.opera;
 	var rotate = function(target, degree) {
+		var i = 0, sinDeg = 0, cosDeg = 0, timer = null ;
 		var deg_begin = $.data(target, "degree");
 		var orginW = target.clientWidth, orginH = target.clientHeight;
 		clearInterval(timer);
