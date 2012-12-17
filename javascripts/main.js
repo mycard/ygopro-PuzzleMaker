@@ -90,15 +90,15 @@ function search(){
 			$.each(result, function(i, card){
 				if(i%table_row==0){
 					page_num ++;
-					html = html + "<table class='page'>";
+					html = html + "<table class='page' style='display:none'>";
 					html = html + "<tr>";
-					html = html + "<th width='45px'>卡图</th>";
+					html = html + "<th width='46px'>卡图</th>";
 					html = html + "<th >卡名</th>";
 					html = html + "</tr>";
 				}
 				html = html + "<tr>";
 				html = html + "<td><img class='thumb' src='" + "http://my-card.in/images/cards/ygocore/thumbnail/" + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
-				html = html + "<td width=200px>" + card.name + "</td>";
+				html = html + "<td width=200px><div class='cardname'>" + card.name + "</div></td>";
 				html = html + "</tr>";
 				if(((i+1)%table_row==0) || (i==result.length)){
 					html = html+ "</table>";
@@ -107,13 +107,13 @@ function search(){
 			var tables = document.getElementById("result");
 			$(tables).html(html);
 			tablecloth();
-			var thumbs = tables.getElementsByClassName("thumb");
-			for (var i in thumbs){
-				makeDraggable(thumbs[i]);
-			}
 			page_button.style.display = 'block';
 			setPageLabel(current_page, page_num);
 			showPage(current_page);
+			var thumbs = tables.getElementsByClassName("thumb");
+			for (var i=0; i< thumbs.length;i++){
+				makeDraggable(thumbs[i]);
+			}
 		});
 	});
  }
@@ -134,8 +134,10 @@ function showPage(current_page){//显示current页
 	for(var i in tables){
 		if(i == current_page -1) //current为1时显示table[0]
 			tables[i].style.display = "block";
-		else 
+		else
 			tables[i].style.display = "none";
+		if(i == tables.length-1)
+			return false;
 	}
 }
 function setPageLabel(current_page, page_num) {//显示第X页/共X页
@@ -150,7 +152,7 @@ function addField(player, location, place) {//画场地
 
 	var top = COORDINATE[player][location].top;
 	var left = COORDINATE[player][location].left + 66*place;
-	
+
 	var built = $('#field-tmpl').tmpl({
 		player: player || 0,
 		location: LOCATION_STRING[location] || 0,
@@ -187,8 +189,8 @@ function updateField(field){
 			if(45 < (width / length)) left = start + 45*i ;
 			else left = (width-45)/(length-1)*i;
 		//}
-	
-	
+
+
 		$("#thumb-tmpl").tmpl({
 		card_id:card_list[i],
 		index: i,
@@ -200,7 +202,7 @@ function updateField(field){
 	}
 	var thumbs = field.getElementsByClassName("thumb");
 	for (var i in thumbs){
-		makeMoveable(thumbs[i],field);
+		makeMoveable(thumbs[i]);
 	}
 }
 function getViewSize(){

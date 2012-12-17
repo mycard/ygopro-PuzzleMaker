@@ -3,11 +3,13 @@ Number.prototype.NaN0=function(){return isNaN(this)?0:this;}
 var dragging = false;
 var putting = false;
 function makeDraggable(thumb){
+	var parent = thumb.parentNode.parentNode;
+	
 	var dragImage  = document.getElementById('DragImage');
 	thumb.onmousedown = function(ev){
-		dragImage.src  = this.src;
-		var x = this.src.lastIndexOf('.');
-		var card_id = parseInt(this.src.substring(49,x));
+		dragImage.src  = thumb.src;
+		var x = thumb.src.lastIndexOf('.');
+		var card_id = parseInt(thumb.src.substring(49,x));
 		$.data(dragImage, 'card_id', card_id);
 		dragging=true;
 		var mousePos = getMousePos(ev);
@@ -17,15 +19,15 @@ function makeDraggable(thumb){
 		dragImage.style.display  = "block";
 	}
 	thumb.onmouseover = function(){
-		showDetail(this);
+		showDetail(thumb);
 	}
-}
-function makeMoveable(thumb,parent){
-	thumb.onmousedown = function(ev){
-		var dragImage  = document.getElementById('DragImage');
-		dragImage.src  = this.src;
-		var x = this.src.lastIndexOf('.');
-		var card_id = parseInt(this.src.substring(49,x));
+	parent.childNodes[1].childNodes[0].onmouseover = function(){
+		showDetail(thumb);
+	}
+	parent.childNodes[1].childNodes[0].onmousedown = function(ev){
+		dragImage.src  = thumb.src;
+		var x = thumb.src.lastIndexOf('.');
+		var card_id = parseInt(thumb.src.substring(49,x));
 		$.data(dragImage, 'card_id', card_id);
 		dragging=true;
 		var mousePos = getMousePos(ev);
@@ -33,16 +35,34 @@ function makeMoveable(thumb,parent){
 		dragImage.style.left     = mousePos.x - 22;
 		dragImage.style.top      = mousePos.y - 32;
 		dragImage.style.display  = "block";
+	}
+}
+function makeMoveable(thumb){
+	var parent = thumb.parentNode;
+	var dragImage  = document.getElementById('DragImage');
+	thumb.onmousedown = function(ev){
+		dragImage.src  = thumb.src;
+		var x = thumb.src.lastIndexOf('.');
+		var card_id = parseInt(thumb.src.substring(49,x));
+		$.data(dragImage, 'card_id', card_id);
+		dragging=true;
+		var mousePos = getMousePos(ev);
+		dragImage.style.position = 'absolute';
+		dragImage.style.left     = mousePos.x - 22;
+		dragImage.style.top      = mousePos.y - 32;
+		dragImage.style.display  = "block";
+		
+		//remove this card forn field
 		parent.onmouseout();
 		var card_list = $.data(parent, 'card_list');
-		var i = $(this).tmplItem().data.index;
+		var i = $(thumb).tmplItem().data.index;
 		var list = del(card_list,i);
 		$.data(parent, 'card_list', list);
-		parent.removeChild(this);
+		parent.removeChild(thumb);
 		updateField(parent);
 	}
 	thumb.onmouseover = function(){
-		showDetail(this);
+		showDetail(thumb);
 	}
 }
 function showDetail(obj){

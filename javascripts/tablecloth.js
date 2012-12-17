@@ -62,15 +62,6 @@ this.tablecloth = function(){
 				arr[j].onmouseout = function(){
 					out(table,this,this.row,this.col);
 				};
-				arr[j].onmousedown = function(){
-					down(table,this,this.row,this.col);
-				};
-				arr[j].onmouseup = function(){
-					up(table,this,this.row,this.col);
-				};				
-				arr[j].onclick = function(){
-					click(table,this,this.row,this.col);
-				};								
 			};
 		};
 	};

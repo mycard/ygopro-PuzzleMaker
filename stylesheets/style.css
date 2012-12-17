@@ -17,7 +17,7 @@ header {
   right: 0;
   width: 100%;
   text-align: center;
-  background: url(images/background.png) #4276b6;
+  background: #4276b6;
   -moz-box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.75);
   -o-box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.75);
@@ -199,6 +199,14 @@ header p {
   text-align: left;
   width: 60%;
   height: 35px;
+}
+#search_bar .cardname {
+  font-size: 14px;
+  color: #333333;
+  text-align: left;
+  height: 64px;
+  line-height: 60px;
+  cursor: pointer;
 }
 #dragImage {
 	border: 1px solid #4276b6;
