@@ -49,7 +49,7 @@ header p {
   left: 100px;
   position: fixed;
   top: 55px;
-  width: 900px;
+  width: 1200px;
   height: 600px;
 }
 #detail{
@@ -123,10 +123,9 @@ header p {
 }
 #search_bar {
   z-index: 100;
-  left: 800px;
-  right: 10%;
-  position: relative;
-  top: 5px;
+  left: 920px;
+  top: 55px;
+  position: fixed;
   background: #bbbbbb;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;

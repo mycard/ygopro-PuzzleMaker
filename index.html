@@ -17,10 +17,13 @@
 <script src="javascripts/main.js"></script>
 <script src="javascripts/ygo.js"></script>
 <script src="javascripts/jquery.tmpl.min.js"></script>
+<script src="javascripts/popmenu.js"></script>
 
 <script type="text/javascript">
 
 
+var dragging = false;
+var putting = false;
 $(document).ready(function(){	
 	setPageLabel();
 	document.getElementById('keyword').focus();
@@ -39,7 +42,7 @@ $(document).ready(function(){
 	}
 	var fields = document.getElementById("fields").getElementsByTagName("div");
 
-	for(var i in fields){
+	for(var i=0; i< fields.length;i++){
 		var card_list = [];
 		$.data(fields[i], 'card_list', card_list);
 		fields[i].onmouseover = function(){
