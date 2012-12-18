@@ -201,16 +201,16 @@ function updateField(field){
 		}).appendTo(field);
 	}
 	var thumbs = field.getElementsByClassName("thumb");
-	for (var i in thumbs){
+	for (var i=0; i<thumbs.length; i++){
 		makeMoveable(thumbs[i]);
 	}
 }
 function getViewSize(){
-return {w: window['innerWidth'] || document.documentElement.clientWidth,
-h: window['innerHeight'] || document.documentElement.clientHeight}
+	return {w: window['innerWidth'] || document.documentElement.clientWidth,
+	h: window['innerHeight'] || document.documentElement.clientHeight}
 }
 function getFullSize(){
-return {w: window.screen.width, h: window.screen.height}
+	return {w: window.screen.width, h: window.screen.height}
 }
 function del(array,n){
 	var result = [];

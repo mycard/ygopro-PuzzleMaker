@@ -1,4 +1,5 @@
 
+var popMenu;
 Number.prototype.NaN0=function(){return isNaN(this)?0:this;}
 function makeDraggable(thumb){
 	var parent = thumb.parentNode.parentNode;
@@ -71,7 +72,7 @@ function makeMoveable(thumb){
 	var i = 0;
 	$.data(thumb, "degree", 0);
 	thumb.oncontextmenu = function(ev){
-		//*
+		/*
 		if(ev.button == 2){
 			if((i++)%2==0)
 				Img.rotate(thumb, -90);
@@ -79,38 +80,7 @@ function makeMoveable(thumb){
 				Img.rotate(thumb, 0);
 		}
 		//*/
-		/*	
-			var menu    = new ContextMenu();
-			menu.addItem(
-				"表侧攻击表示",
-				"images/pos_faceup_attack.png",
-				function(){
-                    return function(){thumb.innerHTML = "表侧攻击表示";}
-                }
-			);
-			menu.addItem(
-				"表侧守备表示",
-				"images/pos_faceup_defence.png",
-				function(){
-                    return function(){thumb.innerHTML = "表侧守备表示";}
-                }
-			);
-			menu.addItem(
-				"里侧守备表示",
-				"images/pos_facedown_defence.png",
-				function(){
-                    return function(){thumb.innerHTML = "里侧守备表示";}
-                }
-			);
-			menu.addItem(
-				"里侧攻击表示",
-				"images/pos_facedown_attack.png",
-				function(){
-                    return function(){thumb.innerHTML = "里侧攻击表示";}
-                }
-			);
-			menu.addMenuTo(thumb);
-		//*/
+		popMenu.show();
 	}
 }
 function showDetail(obj){

@@ -24,7 +24,7 @@
 
 var dragging = false;
 var putting = false;
-$(document).ready(function(){	
+$(document).ready(function(){
 	setPageLabel();
 	document.getElementById('keyword').focus();
 	var dragImage  = document.getElementById('DragImage');
@@ -58,6 +58,7 @@ $(document).ready(function(){
 			this.style.border = "1px solid #00ffff";
 		}
 	}
+	popMenu = new PopMenu;
 });
 
 </script>
@@ -76,6 +77,35 @@ $(document).ready(function(){
 </script>
 <script type="text/x-jquery-tmpl" id="thumb-tmpl">
 	<img class='thumb' style="top:${top}px; left:${left}px; right:${right}px; bottom:${bottom}px;cursor:pointer;" src='http://my-card.in/images/cards/ygocore/thumbnail/${card_id}.jpg'>
+</script>
+<script type="text/x-jquery-tmpl" id="menu-tmpl">
+		<ul>
+			<li>
+				更改表示形式
+				<ul>
+					<li>表侧攻击表示</li>
+					<li>表侧守备表示</li>
+					<li>里侧守备表示</li>
+					<li>里侧攻击表示</li>
+				</ul>
+			</li>
+			<li>
+				解除苏生限制
+				<ul>
+					<li>是</li>
+					<li>否</li>
+				</ul>
+			</li>
+			<li>
+				设置效果对象
+			</li>
+			<li>
+				设置装备对象
+			</li>
+			<li>
+				增加指示物
+			</li>
+		</ul>
 </script>
 </head>
 
@@ -109,6 +139,34 @@ $(document).ready(function(){
 	
 	
 	<img src="" id="DragImage" style="cursor:pointer;">
-
+	<div id="popMenu">
+			<ul>
+			<li>
+				更改表示形式
+				<ul>
+					<li>表侧攻击表示</li>
+					<li>表侧守备表示</li>
+					<li>里侧守备表示</li>
+					<li>里侧攻击表示</li>
+				</ul>
+			</li>
+			<li>
+				解除苏生限制
+				<ul>
+					<li>是</li>
+					<li>否</li>
+				</ul>
+			</li>
+			<li>
+				设置效果对象
+			</li>
+			<li>
+				设置装备对象
+			</li>
+			<li>
+				增加指示物
+			</li>
+		</ul>
+	</div>
 </body>
 </html>

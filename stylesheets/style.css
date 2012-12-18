@@ -136,6 +136,7 @@ header p {
   border: 1px solid #cbcbcb;
   padding-right: 10px;
   width: 300px;
+  text-align:center;
 }
 #search_bar .button {
   border: 1px solid #dddddd;
@@ -212,9 +213,6 @@ header p {
 	z-index: 100;
 }
 
-body{
-	text-align:center;
-}
 #content{
   margin: 5px 30px 5px 30px;
   position: relative;
@@ -250,3 +248,50 @@ td.down, tr.even td.down, tr.odd td.down{background:#bce774;color:#fff;}
 
 /* use this if you want to apply different styleing to empty table cells*/
 td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
+
+html,body{
+  height:100%;
+  overflow:hidden;
+}
+#popMenu{
+  position:absolute;
+  top:-9999px;
+  left:-9999px;
+  z-index:1000;
+}
+#popMenu ul{
+  float:left;
+  margin: 0;
+  border:1px solid #979797;
+  background:#f1f1f1;
+  padding:2px;
+  box-shadow:2px 2px 2px rgba(0,0,0,.6);
+  list-style-type:none;
+}
+#popMenu ul li{
+  float:left;
+  clear:both;
+  height:24px;
+  cursor:pointer;
+  line-height:24px;
+  white-space:nowrap;
+  padding:0 30px;
+}
+#popMenu ul li.sub{
+  background-repeat:no-repeat;
+  background-position:right 9px;
+  background-image:url(../images/arrow.png);
+}
+#popMenu ul li.active{
+  background-color:#f1f3f6;
+  border-radius:3px;
+  border:1px solid #aecff7;
+  height:22px;
+  line-height:22px;
+  background-position:right -8px;
+  padding:0 29px;
+}
+#popMenu ul ul{
+  display:none;
+  position:absolute;
+}
