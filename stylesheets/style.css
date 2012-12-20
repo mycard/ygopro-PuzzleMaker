@@ -118,6 +118,8 @@ header p {
 }
 #fields .thumb {
   z-index: 300;
+  height: 64px;
+  width: 44px;
   position: absolute;
   display: inline-block;
 }
@@ -253,6 +255,7 @@ html,body{
   height:100%;
   overflow:hidden;
 }
+body{font:12px/1.5 \5fae\8f6f\96c5\9ed1;}
 #popMenu{
   position:absolute;
   top:-9999px;

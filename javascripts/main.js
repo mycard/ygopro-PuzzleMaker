@@ -36,17 +36,20 @@ var COORDINATE = [PLAYER_0,PLAYER_1];
 var locale = 'zh';
 var cards_url = "http://my-card.in/cards";
 var locale_url = "http://my-card.in/cards_" + locale;
+
+var card_img_url = "http://my-card.in/images/cards/ygocore/";
+var card_img_thumb_url = "http://my-card.in/images/cards/ygocore/thumbnail/";
+
 var datas = new Object();
 function search(){
 	var name = document.getElementById("keyword").value;
 	var page_button = document.getElementById("page_button");
 	if(name == "")
 		return false;
-	var url = "https://api.mongolab.com/api/1/databases/mycard/collections/lang_zh?apiKey=508e5726e4b0c54ca4492ead"
 	var q = JSON.stringify( {name: {$regex: name.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), $options: 'i'}});
-	var url2 = locale_url + '?q=' + q;
-	//$("#detail_label").html(url2);
-    $.getJSON(url2,function(result){
+	var url = locale_url + '?q=' + q;
+	//$("#detail_label").html(url);
+    $.getJSON(url,function(result){
 		var html = "";
 		if(result.length == 0){
 			setPageLabel();
@@ -97,7 +100,7 @@ function search(){
 					html = html + "</tr>";
 				}
 				html = html + "<tr>";
-				html = html + "<td><img class='thumb' src='" + "http://my-card.in/images/cards/ygocore/thumbnail/" + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
+				html = html + "<td><img class='thumb' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
 				html = html + "<td width=200px><div class='cardname'>" + card.name + "</div></td>";
 				html = html + "</tr>";
 				if(((i+1)%table_row==0) || (i==result.length)){
@@ -220,3 +223,67 @@ function del(array,n){
 	}
 　　return result;
 }
+function showDetail(obj){
+	var img = document.getElementById("detail_image");
+	var x = obj.src.lastIndexOf('.');
+	var card_id = parseInt(obj.src.substring(49,x));
+	if(isNaN(card_id)){
+		var tmplItem = $(obj).tmplItem().data;
+		card_id = tmplItem.card_id;
+	}
+	img.src = card_img_url + card_id + ".jpg";
+	var data = datas[card_id];
+	//$('#detail_label').html($('#detail-tmpl').tmpl({detail: data}));
+	var textarea = document.getElementById("detail_textarea");
+	
+	textarea.value = data.desc;
+}
+function mouseDown(ev){
+	ev         = ev || window.event;
+	var target = ev.target || ev.srcElement;
+	_popmenu.hide();
+	if(target.onmousedown){
+		return false;
+	}
+}
+function mouseUp(ev){
+	if(ev.button == 0){
+		var dragImage  = document.getElementById('DragImage');
+		if(dragging){
+			dragging = false;
+			putting = true;
+			dragImage.style.display = "none";
+		}
+	}
+	if(ev.target.oncontextmenu){
+		return false;
+	}
+}
+function mouseMove(ev){
+	ev         = ev || window.event;
+
+	var target   = ev.target || ev.srcElement;
+	var mousePos = getMousePos(ev);
+	var dragImage  = document.getElementById('DragImage');
+	if(dragging){
+		dragImage.style.position = 'absolute';
+		dragImage.style.left     = mousePos.x - 22;
+		dragImage.style.top      = mousePos.y - 32;
+		dragImage.style.display  = "block";
+	}
+	putting = false;
+}
+function getMousePos(ev){
+	if(ev.pageX || ev.pageY){
+		return {x:ev.pageX, y:ev.pageY};
+	}
+	return {
+		x:ev.clientX + document.body.scrollLeft - document.body.clientLeft,
+		y:ev.clientY + document.body.scrollTop  - document.body.clientTop
+	};
+}
+
+document.onmousemove = mouseMove;
+document.onmousedown = mouseDown;
+document.onmouseup   = mouseUp;
+document.oncontextmenu = mouseUp;
