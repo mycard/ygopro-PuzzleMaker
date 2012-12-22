@@ -179,6 +179,8 @@ function addCard(field, card_id){//
 }
 
 function updateField(field){
+	var tmplItem = $(field).tmplItem().data;
+	var location = tmplItem.location;
 	var card_list = $.data(field, 'card_list');
 	$(field).empty();
 	var width = $(field).width();
@@ -187,7 +189,7 @@ function updateField(field){
 	for(var i in card_list){
 		var top, left, right, bottom;
 		//var data = $(field).tmplItem().data;
-		//if(data.location == HAND){
+		//if(data.location == "hand"){
 			top = 3;
 			if(45 < (width / length)) left = start + 45*i ;
 			else left = (width-45)/(length-1)*i;
@@ -196,6 +198,7 @@ function updateField(field){
 
 		$("#thumb-tmpl").tmpl({
 		card_id:card_list[i],
+		location: location,
 		index: i,
 		top: top || 0,
 		left: left || 0,

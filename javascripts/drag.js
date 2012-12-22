@@ -71,14 +71,6 @@ function makeMoveable(thumb){
 	var i = 0;
 	$.data(thumb, "degree", 0);
 	thumb.oncontextmenu = function(ev){
-		/*
-		if(ev.button == 2){
-			if((i++)%2==0)
-				Img.rotate(thumb, -90);
-			else 
-				Img.rotate(thumb, 0);
-		}
-		//*/
 		_popmenu.show();
 	}
 }
