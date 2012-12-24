@@ -41,24 +41,7 @@ $(document).ready(function(){
 		addField(player,EXTRA,0);
 		addField(player,REMOVED,0);
 	}
-	var fields = document.getElementById("fields").getElementsByTagName("div");
-
-	for(var i=0; i< fields.length;i++){
-		var card_list = [];
-		$.data(fields[i], 'card_list', card_list);
-		fields[i].onmouseover = function(){
-			this.style.border = "1px solid #ff0000";
-			if(dragging == false && putting == true){
-				putting = false;
-				var dragImage  = document.getElementById('DragImage');
-				var card_id = $.data(dragImage, 'card_id');
-				addCard(this, card_id);
-			}
-		}
-		fields[i].onmouseout = function(){
-			this.style.border = "1px solid #00ffff";
-		}
-	}
+	initField();
 	_popmenu = new PopMenu;
 	
 });
@@ -78,37 +61,9 @@ $(document).ready(function(){
 	<div class="location_${location}" style="top:${top}px; left:${left}px;"></div>
 </script>
 <script type="text/x-jquery-tmpl" id="thumb-tmpl">
-	<img class='thumb' style="top:${top}px; left:${left}px; right:${right}px; bottom:${bottom}px;cursor:pointer;" src='http://my-card.in/images/cards/ygocore/thumbnail/${card_id}.jpg'>
+	<img class='thumb' style="top:${top}px; left:${left}px; right:${right}px; bottom:${bottom}px;cursor:pointer;" src='http://my-card.in/images/cards/ygocore/thumbnail/${card_info.card_id}.jpg'>
 </script>
-<script type="text/x-jquery-tmpl" id="menu-tmpl">
-		<ul>
-			<li>
-				更改表示形式
-				<ul>
-					<li>表侧攻击表示</li>
-					<li>表侧守备表示</li>
-					<li>里侧守备表示</li>
-					<li>里侧攻击表示</li>
-				</ul>
-			</li>
-			<li>
-				苏生限制
-				<ul>
-					<li>不解除苏生限制</li>
-					<li>解除苏生限制</li>
-				</ul>
-			</li>
-			<li>
-				设置永续效果对象
-			</li>
-			<li>
-				设置装备对象
-			</li>
-			<li>
-				增加指示物
-			</li>
-		</ul>
-</script>
+
 </head>
 
 <body>
@@ -165,7 +120,7 @@ $(document).ready(function(){
 			<li>
 				设置装备对象
 			</li>
-			<li class="menu">
+			<li>
 				增加指示物
 			</li>
 		</ul>

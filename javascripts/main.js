@@ -165,22 +165,40 @@ function addField(player, location, place) {//画场地
 	});
 	$('#fields').append(built);
 }
+function initField(){
+	var fields = document.getElementById("fields").getElementsByTagName("div");
+	for(var i=0; i< fields.length;i++){
+		var card_list = [];
+		$.data(fields[i], 'card_list', card_list);
+		fields[i].onmouseover = function(){
+			this.style.border = "1px solid #ff0000";
+			if(dragging == false && putting == true){
+				putting = false;
+				var dragImage  = document.getElementById('DragImage');
+				var card_info = $.data(dragImage, 'card_info');
+				addCard(this, card_info);
+			}
+		}
+		fields[i].onmouseout = function(){
+			this.style.border = "1px solid #00ffff";
+		}
+	}
+}
 
-function addCard(field, card_id){//
+function addCard(field, card_info){
 	var tmplItem = $(field).tmplItem().data;
 	var location = tmplItem.location;
 	var card_list = $.data(field, 'card_list');
-	if(location == "szone" || location == "field"){
+	if(location == "szone" || location == "field"){ //魔陷区和场地区最多只能有1张卡
 		card_list = [];
 	}
-	card_list.push(card_id);
+	card_list.push(card_info);
 	$.data(field, 'card_list', card_list);
 	updateField(field);
 }
 
 function updateField(field){
 	var tmplItem = $(field).tmplItem().data;
-	var location = tmplItem.location;
 	var card_list = $.data(field, 'card_list');
 	$(field).empty();
 	var width = $(field).width();
@@ -188,29 +206,75 @@ function updateField(field){
 	var start = width/2 - 22.5*length;
 	for(var i in card_list){
 		var top, left, right, bottom;
-		//var data = $(field).tmplItem().data;
-		//if(data.location == "hand"){
-			top = 3;
-			if(45 < (width / length)) left = start + 45*i ;
-			else left = (width-45)/(length-1)*i;
-		//}
-
-
+		if(45 < (width / length)) 
+			left = start + 45*i ;
+		else 
+			left = (width-45)/(length-1)*i;
+			
+		var card_info = card_list[i];
+		card_info.location = tmplItem.location;
+		card_info.player = tmplItem.player;
+		card_info.place = tmplItem.place;
+		card_info.index = i;
 		$("#thumb-tmpl").tmpl({
-		card_id:card_list[i],
-		location: location,
-		index: i,
-		top: top || 0,
-		left: left || 0,
-		right: right || 0,
-		bottom: bottom || 0
+			card_info: card_info,
+			top: top || 3,
+			left: left || 0,
+			right: right || 0,
+			bottom: bottom || 0
 		}).appendTo(field);
 	}
 	var thumbs = field.getElementsByClassName("thumb");
 	for (var i=0; i<thumbs.length; i++){
 		makeMoveable(thumbs[i]);
 	}
+	updateCards(thumbs);
 }
+function updateCards(thumbs){	
+	for (var i=0; i<thumbs.length; i++){
+		var thumb = thumbs[i];
+		var tmplItem = $(thumb).tmplItem().data;
+		var card_info = tmplItem.card_info;
+		var location = card_info.location;
+		var card_id = card_info.card_id;
+		if(location == "szone" || location == "field"){ //魔陷区和场地区只分表侧和里侧
+			if(card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENCE")
+				tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
+			else 	//card_info.position == "POS_FACEUP_ATTACK" || card_info.position == "POS_FACEUP_DEFENCE"
+				tmplItem.card_info.position = "POS_FACEUP_ATTACK";
+		}
+		else if(location == "mzone"){
+			if(1 < thumbs.length && i < thumbs.length-1){//超量素材
+				tmplItem.card_info.position = "POS_FACEUP_ATTACK";
+				tmplItem.card_info.IsXYZmaterial = true;
+			}
+			else {
+				tmplItem.card_info.IsXYZmaterial = false;
+			}
+		}
+		else if(location != "mzone"){//除魔陷和怪兽区
+			tmplItem.card_info.position = "POS_FACEUP_ATTACK";
+		}
+		if(tmplItem.card_info.position == "POS_FACEUP_ATTACK"){
+			thumb.src = card_img_thumb_url + card_id + ".jpg";
+			Img.rotate(thumb, 0, true);
+		}
+		else if(tmplItem.card_info.position == "POS_FACEUP_DEFENCE"){
+			thumb.src = card_img_thumb_url + card_id + ".jpg";
+			Img.rotate(thumb, -90, true);
+		}
+		else if(tmplItem.card_info.position == "POS_FACEDOWN_DEFENCE"){
+			thumb.src = "images/unknow.jpg";
+			Img.rotate(thumb, -90, true);
+		}
+		else if(tmplItem.card_info.position == "POS_FACEDOWN_ATTACK"){
+			thumb.src = "images/unknow.jpg";
+			Img.rotate(thumb, 0, true);
+		}
+	}
+}
+
+
 function getViewSize(){
 	return {w: window['innerWidth'] || document.documentElement.clientWidth,
 	h: window['innerHeight'] || document.documentElement.clientHeight}
@@ -228,11 +292,13 @@ function del(array,n){
 }
 function showDetail(obj){
 	var img = document.getElementById("detail_image");
+	//搜索框中的图片没有tpmlItem
 	var x = obj.src.lastIndexOf('.');
 	var card_id = parseInt(obj.src.substring(49,x));
+	//卡片背面表示时为unknow.jpg
 	if(isNaN(card_id)){
 		var tmplItem = $(obj).tmplItem().data;
-		card_id = tmplItem.card_id;
+		card_id = tmplItem.card_info.card_id;
 	}
 	img.src = card_img_url + card_id + ".jpg";
 	var data = datas[card_id];
