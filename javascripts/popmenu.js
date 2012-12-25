@@ -3,12 +3,11 @@ var menu_pos_faceup_attack = 2;
 var menu_pos_faceup_defence = 4;
 var menu_pos_facedown_defence = 8;
 var menu_pos_facedown_attack = 16;
-var menu_revivelimit = 32;
-var menu_enable_revivelimit = 64;
-var menu_disable_revivelimit = 128;
-var menu_target = 256;
-var menu_equip = 512;
-var menu_counter = 1024;
+var menu_enable_revivelimit = 32;
+var menu_disable_revivelimit = 64;
+var menu_target = 128;
+var menu_equip = 256;
+var menu_counter = 512;
 
 
 var PopMenu = function createPopMenu(){
@@ -31,12 +30,15 @@ var PopMenu = function createPopMenu(){
 		var location = card_info.location;
 		var menuItems = 0;
 		if(location == 'mzone'){
-			if(card_info.IsXYZmaterial){
-				menuItems = menu_revivelimit + menu_enable_revivelimit + menu_disable_revivelimit;
+			if(!card_info.IsXYZmaterial){
+				menuItems = menu_position + menu_pos_faceup_attack + menu_pos_faceup_defence + menu_pos_facedown_defence + menu_pos_facedown_attack
+				+ menu_target + menu_counter;
+			}
+			if(card_info.disable_revivelimit){
+				menuItems += menu_enable_revivelimit;
 			}
 			else {
-				menuItems = menu_position + menu_pos_faceup_attack + menu_pos_faceup_defence + menu_pos_facedown_defence + menu_pos_facedown_attack
-				+ menu_revivelimit + menu_enable_revivelimit + menu_disable_revivelimit + menu_target + menu_counter;
+				menuItems += menu_disable_revivelimit;
 			}
 		}
 		else if(location == 'szone'){
@@ -46,7 +48,12 @@ var PopMenu = function createPopMenu(){
 			menuItems = menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_target + menu_counter;
 		}
 		else if(location == 'grave'){
-			menuItems = menu_revivelimit + menu_enable_revivelimit + menu_disable_revivelimit;
+			if(card_info.disable_revivelimit){
+				menuItems += menu_enable_revivelimit;
+			}
+			else {
+				menuItems += menu_disable_revivelimit;
+			}
 		}
 		else if(location == 'hand'){
 			menuItems = 0;
@@ -63,8 +70,8 @@ var PopMenu = function createPopMenu(){
 		if(menuItems == 0) return false;
 		setMenu(menuItems);
 		popMenu.style.display = "block";
-		popMenu.style.top = event.clientY + "px";
-		popMenu.style.left = event.clientX + "px";
+		popMenu.style.top = getMousePos(event).y + "px";
+		popMenu.style.left = getMousePos(event).x + "px";
 		setWidth(aUl[0]);
 		//最大显示范围
 		maxWidth = aDoc[0] - popMenu.offsetWidth;
@@ -173,6 +180,14 @@ var PopMenu = function createPopMenu(){
 		tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
 		target.src = "images/unknow.jpg";
 		Img.rotate(target, 0);
+	}
+	aLi[5].onmousedown = function(ev){//不解除苏生限制
+		var tmplItem = $(target).tmplItem().data;
+		tmplItem.card_info.disable_revivelimit = false;
+	}
+	aLi[6].onmousedown = function(ev){//解除苏生限制
+		var tmplItem = $(target).tmplItem().data;
+		tmplItem.card_info.disable_revivelimit = true;
 	}
 }
 var getOffset = {

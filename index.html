@@ -30,17 +30,6 @@ $(document).ready(function(){
 	document.getElementById('keyword').focus();
 	var dragImage  = document.getElementById('DragImage');
 	dragImage.style.display = "none";
-	var player, place;
-	for(player=0;player<2;player++){
-		for(place=0;place<5;place++)addField(player,SZONE,place);
-		for(place=0;place<5;place++)addField(player,MZONE,place);
-		addField(player,FIELD,0);
-		addField(player,DECK,0);
-		addField(player,HAND,0);
-		addField(player,GRAVE,0);
-		addField(player,EXTRA,0);
-		addField(player,REMOVED,0);
-	}
 	initField();
 	_popmenu = new PopMenu;
 	
@@ -94,6 +83,7 @@ $(document).ready(function(){
 		</div>
 	</div>
 	
+	<a id="download" href="http://my-card.in/singles/new.lua?name=1234&script=test\r\nrow2" title="下载到本地"><img src="images/download.png" style="cursor: pointer;width:80px; height:80px;"></a>
 	
 	<img src="" id="DragImage" style="cursor:pointer;">
 	<div id="popMenu">
@@ -108,11 +98,10 @@ $(document).ready(function(){
 				</ul>
 			</li>
 			<li>
-				苏生限制
-				<ul>
-					<li>不解除苏生限制</li>
-					<li>解除苏生限制</li>
-				</ul>
+				不解除苏生限制
+			</li>
+			<li>
+				解除苏生限制
 			</li>
 			<li>
 				设置永续效果对象

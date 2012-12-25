@@ -220,16 +220,23 @@ header p {
   position: relative;
 }
 
+#download{
+  z-index: 1000;
+  top: 70px;
+  left: 280px;
+  margin: 5px 30px 5px 30px;
+  position: relative;
+}
 table{
-	width:100%;
-	border-collapse:collapse;
-	margin:5px 5px;
-	padding: 5px 5px;
+  width:100%;
+  border-collapse:collapse;
+  margin:5px 5px;
+  padding: 5px 5px;
 }
 
 
 table, td{
-	font:100% Arial, Helvetica, sans-serif; 
+  font:100% Arial, Helvetica, sans-serif; 
 }
 th, td {
   text-align: left;

@@ -166,6 +166,17 @@ function addField(player, location, place) {//画场地
 	$('#fields').append(built);
 }
 function initField(){
+	var player, place;
+	for(player=0;player<2;player++){
+		for(place=0;place<5;place++)addField(player,SZONE,place);
+		for(place=0;place<5;place++)addField(player,MZONE,place);
+		addField(player,FIELD,0);
+		addField(player,DECK,0);
+		addField(player,HAND,0);
+		addField(player,GRAVE,0);
+		addField(player,EXTRA,0);
+		addField(player,REMOVED,0);
+	}
 	var fields = document.getElementById("fields").getElementsByTagName("div");
 	for(var i=0; i< fields.length;i++){
 		var card_list = [];
@@ -182,6 +193,31 @@ function initField(){
 		fields[i].onmouseout = function(){
 			this.style.border = "1px solid #00ffff";
 		}
+	}
+	var download = document.getElementById('download');
+	download.onmouseover = function(){
+		
+		var str = "";//"--created by ygopro puzzle maker \n";
+		str += "Debug.SetAIName('高性能电子头脑')\n";
+		str += "Debug.ReloadFieldBegin(DUEL_ATTACK_FIRST_TURN)\n";
+		str += "Debug.SetPlayerInfo(0,8000,0,0)\n";
+		str += "Debug.SetPlayerInfo(1,8000,0,0)\n" ;
+		
+		var fields = document.getElementById("fields").getElementsByTagName("div");
+		for(var i=0; i< fields.length;i++){
+			var tmplItem = $(fields[i]).tmplItem().data;
+			var player = tmplItem.player;
+			var location = "LOCATION_" + tmplItem.location.toUpperCase();
+			var place = tmplItem.place;
+			var thumbs = fields[i].getElementsByClassName("thumb");
+			for(var j=0; j < thumbs.length; j++){
+				var card_info = $(thumbs[j]).tmplItem().data.card_info;
+				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")";
+			}
+		}
+		str += "Debug.ReloadFieldEnd()\n" ;
+		str += "aux.BeginPuzzle()\n";
+		this.href = "http://my-card.in/singles/new.lua?name=Untitled&script=" + str;
 	}
 }
 
@@ -216,6 +252,7 @@ function updateField(field){
 		card_info.player = tmplItem.player;
 		card_info.place = tmplItem.place;
 		card_info.index = i;
+		card_info.disable_revivelimit = card_info.disable_revivelimit || false;
 		$("#thumb-tmpl").tmpl({
 			card_info: card_info,
 			top: top || 3,
@@ -240,7 +277,7 @@ function updateCards(thumbs){
 		if(location == "szone" || location == "field"){ //魔陷区和场地区只分表侧和里侧
 			if(card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENCE")
 				tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
-			else 	//card_info.position == "POS_FACEUP_ATTACK" || card_info.position == "POS_FACEUP_DEFENCE"
+			else
 				tmplItem.card_info.position = "POS_FACEUP_ATTACK";
 		}
 		else if(location == "mzone"){
