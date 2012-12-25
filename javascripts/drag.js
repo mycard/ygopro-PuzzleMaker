@@ -10,6 +10,8 @@ function makeDraggable(thumb){
 			var card_info = new Object();
 			var x = thumb.src.lastIndexOf('.');
 			card_info.card_id = parseInt(thumb.src.substring(49,x));
+			card_info.position = "POS_FACEUP_ATTACK";
+			card_info.disable_revivelimit = false;
 			$.data(dragImage, 'card_info', card_info);
 			dragging=true;
 			var mousePos = getMousePos(ev);
@@ -32,6 +34,8 @@ function makeDraggable(thumb){
 			var card_info = new Object();
 			var x = thumb.src.lastIndexOf('.');
 			card_info.card_id = parseInt(thumb.src.substring(49,x));
+			card_info.position = "POS_FACEUP_ATTACK";
+			card_info.disable_revivelimit = false;
 			$.data(dragImage, 'card_info', card_info);
 			dragging=true;
 			var mousePos = getMousePos(ev);

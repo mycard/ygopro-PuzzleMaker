@@ -152,10 +152,19 @@ function setPageLabel(current_page, page_num) {//显示第X页/共X页
 	page_label.html(built);
 }
 function addField(player, location, place) {//画场地
-
-	var top = COORDINATE[player][location].top;
-	var left = COORDINATE[player][location].left + 66*place;
-
+	var top, left;
+	top = COORDINATE[player][location].top;
+	left = COORDINATE[player][location].left + 66*place;
+	if(location == MZONE || location == SZONE){
+		if(player == 0){
+			top = COORDINATE[player][location].top;
+			left = COORDINATE[player][location].left + 66*place;
+		}
+		else {
+			top = COORDINATE[player][location].top;
+			left = COORDINATE[player][location].left + 66*(4-place);
+		}
+	}
 	var built = $('#field-tmpl').tmpl({
 		player: player || 0,
 		location: LOCATION_STRING[location] || 0,
@@ -168,8 +177,10 @@ function addField(player, location, place) {//画场地
 function initField(){
 	var player, place;
 	for(player=0;player<2;player++){
-		for(place=0;place<5;place++)addField(player,SZONE,place);
-		for(place=0;place<5;place++)addField(player,MZONE,place);
+		for(place=0;place<5;place++)
+			addField(player,SZONE,place);
+		for(place=0;place<5;place++)
+			addField(player,MZONE,place);
 		addField(player,FIELD,0);
 		addField(player,DECK,0);
 		addField(player,HAND,0);
@@ -210,9 +221,25 @@ function initField(){
 			var location = "LOCATION_" + tmplItem.location.toUpperCase();
 			var place = tmplItem.place;
 			var thumbs = fields[i].getElementsByClassName("thumb");
-			for(var j=0; j < thumbs.length; j++){
-				var card_info = $(thumbs[j]).tmplItem().data.card_info;
-				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")";
+			if(location == "LOCATION_MZONE"){
+				for(var j=thumbs.length-1; j>=0 ; j--){
+					var card_info = $(thumbs[j]).tmplItem().data.card_info;
+					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")";
+				}
+			}
+			else if(location == "LOCATION_FIELD"){
+				for(var j=0; j < thumbs.length; j++){
+					location = "LOCATION_SZONE"
+					place = 5;
+					var card_info = $(thumbs[j]).tmplItem().data.card_info;
+					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")";
+				}
+			}
+			else {
+				for(var j=0; j < thumbs.length; j++){
+					var card_info = $(thumbs[j]).tmplItem().data.card_info;
+					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")";
+				}
 			}
 		}
 		str += "Debug.ReloadFieldEnd()\n" ;
@@ -252,7 +279,6 @@ function updateField(field){
 		card_info.player = tmplItem.player;
 		card_info.place = tmplItem.place;
 		card_info.index = i;
-		card_info.disable_revivelimit = card_info.disable_revivelimit || false;
 		$("#thumb-tmpl").tmpl({
 			card_info: card_info,
 			top: top || 3,
