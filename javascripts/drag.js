@@ -78,6 +78,6 @@ function makeMoveable(thumb){
 	}
 	$.data(thumb, "degree", 0);
 	thumb.oncontextmenu = function(ev){
-		_popmenu.show();
+		_popmenu.show(ev);
 	}
 }
