@@ -16,8 +16,8 @@ function makeDraggable(thumb){
 			dragging=true;
 			var mousePos = getMousePos(ev);
 			dragImage.style.position = 'absolute';
-			dragImage.style.left     = mousePos.x - 22;
-			dragImage.style.top      = mousePos.y - 32;
+			dragImage.style.left     = mousePos.x - 22 + "px";
+			dragImage.style.top      = mousePos.y - 32 + "px";
 			dragImage.style.display  = "block";
 		}
 	}
@@ -45,8 +45,8 @@ function makeDraggable(thumb){
 			dragging=true;
 			var mousePos = getMousePos(ev);
 			dragImage.style.position = 'absolute';
-			dragImage.style.left     = mousePos.x - 22;
-			dragImage.style.top      = mousePos.y - 32;
+			dragImage.style.left     = mousePos.x - 22 + "px";
+			dragImage.style.top      = mousePos.y - 32 + "px";
 			dragImage.style.display  = "block";
 		}
 	}
@@ -57,16 +57,16 @@ function makeMoveable(thumb){
 	thumb.onmousedown = function(ev){
 		ev = ev || window.event;
 		if(ev.button == 0 || ev.button == 1){
+			dragImage.src = thumb.src;
 			var tmplItem = $(thumb).tmplItem().data;
 			var card_info = tmplItem.card_info;
-			var card_id = card_info.card_id;
-			dragImage.src  = card_img_thumb_url + card_id + ".jpg";
+			var degree = $.data(thumb, "degree");
 			$.data(dragImage, 'card_info', card_info);
 			dragging=true;
 			var mousePos = getMousePos(ev);
 			dragImage.style.position = 'absolute';
-			dragImage.style.left     = mousePos.x - 22;
-			dragImage.style.top      = mousePos.y - 32;
+			dragImage.style.left     = mousePos.x - 22 + "px";
+			dragImage.style.top      = mousePos.y - 32 + "px";
 			dragImage.style.display  = "block";
 			
 			//remove this card forn field
@@ -77,6 +77,8 @@ function makeMoveable(thumb){
 			$.data(parent, 'card_list', list);
 			parent.removeChild(thumb);
 			updateField(parent);
+			//下面这句IE无法执行，所以放最后
+			Img.rotate(dragImage, degree, true);
 		}
 	}
 	thumb.onmouseover = function(){

@@ -251,6 +251,39 @@ function initField(){
 		str += "aux.BeginPuzzle()\r\n";
 		this.href = "http://my-card.in/singles/new.lua?name=Untitled&script=" + encodeURIComponent(str);
 	}
+	current_page = 1;
+	page_num = 0;
+	html = "";
+	for( var i in default_result){
+	
+		var card = default_result[i];
+		datas[card._id]=card;
+		if(i%table_row==0){
+			page_num ++;
+			html = html + "<table class='page' style='display:none'>";
+			html = html + "<tr>";
+			html = html + "<th width='46px'>卡图</th>";
+			html = html + "<th >卡名</th>";
+			html = html + "</tr>";
+		}
+		html = html + "<tr>";
+		html = html + "<td><img class='thumb' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
+		html = html + "<td width=200px><div class='cardname'>" + card.name + "</div></td>";
+		html = html + "</tr>";
+		if(((i+1)%table_row==0) || (i==default_result.length)){
+			html = html+ "</table>";
+		}
+	}
+	var tables = document.getElementById("result");
+	$(tables).html(html);
+	tablecloth();
+	page_button.style.display = 'block';
+	setPageLabel(current_page, page_num);
+	showPage(current_page);
+	var thumbs = tables.getElementsByClassName("thumb");
+	for (var i=0; i< thumbs.length;i++){
+		makeDraggable(thumbs[i]);
+	}
 }
 
 function addCard(field, card_info){
@@ -323,22 +356,22 @@ function updateCards(thumbs){
 			tmplItem.card_info.position = "POS_FACEUP_ATTACK";
 		}
 		if(tmplItem.card_info.position == "POS_FACEUP_ATTACK"){
-			thumb.style.left = tmplItem.left;
+			thumb.style.left = tmplItem.left + "px";
 			thumb.src = card_img_thumb_url + card_id + ".jpg";
 			Img.rotate(thumb, 0, true);
 		}
 		else if(tmplItem.card_info.position == "POS_FACEUP_DEFENCE"){
-			thumb.style.left = 10;
+			thumb.style.left = 10 + "px";
 			thumb.src = card_img_thumb_url + card_id + ".jpg";
 			Img.rotate(thumb, -90, true);
 		}
 		else if(tmplItem.card_info.position == "POS_FACEDOWN_DEFENCE"){
-			thumb.style.left = 10;
+			thumb.style.left = 10 + "px";
 			thumb.src = "images/unknow.jpg";
 			Img.rotate(thumb, -90, true);
 		}
 		else if(tmplItem.card_info.position == "POS_FACEDOWN_ATTACK"){
-			thumb.style.left = tmplItem.left;
+			thumb.style.left = tmplItem.left + "px";
 			thumb.src = "images/unknow.jpg";
 			Img.rotate(thumb, 0, true);
 		}
@@ -380,12 +413,13 @@ function mouseDown(ev){
 function mouseUp(ev){
 	ev         = ev || window.event;
 	var target = ev.target || ev.srcElement;
-	if(ev.button == 0){
+	if(ev.button == 0 || ev.button == 1){
 		var dragImage  = document.getElementById('DragImage');
 		if(dragging){
 			dragging = false;
 			putting = true;
 			dragImage.style.display = "none";
+			Img.rotate(dragImage, 0, true);
 		}
 	}
 	if(ev.target.oncontextmenu){
@@ -396,11 +430,11 @@ function mouseMove(ev){
 	ev         = ev || window.event;
 	var target   = ev.target || ev.srcElement;
 	var mousePos = getMousePos(ev);
-	var dragImage  = document.getElementById('DragImage');
 	if(dragging){
+		var dragImage  = document.getElementById('DragImage');
 		dragImage.style.position = 'absolute';
-		dragImage.style.left     = mousePos.x - 22;
-		dragImage.style.top      = mousePos.y - 32;
+		dragImage.style.left     = mousePos.x - 22 + "px";
+		dragImage.style.top      = mousePos.y - 32 + "px";
 		dragImage.style.display  = "block";
 	}
 	putting = false;

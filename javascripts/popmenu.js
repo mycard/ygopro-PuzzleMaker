@@ -157,7 +157,7 @@ var PopMenu = function createPopMenu(){
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		tmplItem.card_info.position = "POS_FACEUP_ATTACK";
-		thumb.style.left = tmplItem.left;
+		thumb.style.left = tmplItem.left + "px";
 		thumb.src = card_img_thumb_url + card_id + ".jpg";
 		Img.rotate(thumb, 0);
 	}
@@ -166,7 +166,7 @@ var PopMenu = function createPopMenu(){
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		tmplItem.card_info.position = "POS_FACEUP_DEFENCE";
-		thumb.style.left = 10;
+		thumb.style.left = 10 + "px";
 		thumb.src = card_img_thumb_url + card_id + ".jpg";
 		Img.rotate(thumb, -90);
 	}
@@ -175,7 +175,7 @@ var PopMenu = function createPopMenu(){
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		tmplItem.card_info.position = "POS_FACEDOWN_DEFENCE";
-		thumb.style.left = 10;
+		thumb.style.left = 10 + "px";
 		thumb.src = "images/unknow.jpg";
 		Img.rotate(thumb, -90);
 	}
@@ -184,7 +184,7 @@ var PopMenu = function createPopMenu(){
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
-		thumb.style.left = tmplItem.left;
+		thumb.style.left = tmplItem.left + "px";
 		thumb.src = "images/unknow.jpg";
 		Img.rotate(thumb, 0);
 	}
@@ -212,8 +212,7 @@ var getOffset = {
 var speed = 1;
 
 var Img = function() {
-	var ua = navigator.userAgent,
-	isIE = /msie/i.test(ua) && !window.opera;
+	var isIE = /*@cc_on!@*/!1;
 	var rotate = function(thumb, degree, immediately) {
 		if(immediately == true){
 			run(degree);

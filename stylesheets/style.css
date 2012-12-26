@@ -85,6 +85,7 @@ header p {
   height: 250px;
   border: 1px solid #00ffff;
   background: #dddddd;
+  color: #333333;
 }
 #fields{
   z-index: 100;
@@ -192,15 +193,12 @@ header p {
   border-radius: 20px;
   background-color: #ffffff;
   margin-left: 5px;
-  padding: 5px 12px;
   margin-top: 12px;
-  line-height: 14px;
   font-size: 18px;
   color: #333333;
-  display: inline-block;
   text-align: left;
   width: 60%;
-  height: 35px;
+  height: 25px;
 }
 #search_bar .cardname {
   font-size: 14px;
@@ -210,9 +208,11 @@ header p {
   line-height: 60px;
   cursor: pointer;
 }
-#dragImage {
-	border: 1px solid #4276b6;
-	z-index: 100;
+#DragImage {
+  border: 1px solid #4276b6;
+  z-index: 1000;
+  height: 64px;
+  width: 44px;
 }
 
 #content{
