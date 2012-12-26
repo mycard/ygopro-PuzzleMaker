@@ -48,7 +48,6 @@ function search(){
 		return false;
 	var q = JSON.stringify( {name: {$regex: name.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), $options: 'i'}});
 	var url = locale_url + '?q=' + q;
-	//$("#detail_label").html(url);
     $.getJSON(url,function(result){
 		var html = "";
 		if(result.length == 0){
@@ -205,14 +204,20 @@ function initField(){
 			this.style.border = "1px solid #00ffff";
 		}
 	}
+	var dragImage  = document.getElementById('DragImage');
+	dragImage.onmouseover = function(){
+		var card_info = $.data(dragImage, 'card_info');
+		var card_id = card_info.card_id;
+		showDetail(card_id);
+	}
 	var download = document.getElementById('download');
 	download.onmouseover = function(){
 		
-		var str = "";//"--created by ygopro puzzle maker \n";
-		str += "Debug.SetAIName('高性能电子头脑')\n";
-		str += "Debug.ReloadFieldBegin(DUEL_ATTACK_FIRST_TURN)\n";
-		str += "Debug.SetPlayerInfo(0,8000,0,0)\n";
-		str += "Debug.SetPlayerInfo(1,8000,0,0)\n" ;
+		var str = "--created by ygopro puzzle maker \r\n";
+		str += "Debug.SetAIName('高性能电子头脑')\r\n";
+		str += "Debug.ReloadFieldBegin(DUEL_ATTACK_FIRST_TURN+DUEL_SIMPLE_AI)\r\n";
+		str += "Debug.SetPlayerInfo(0,8000,0,0)\r\n";
+		str += "Debug.SetPlayerInfo(1,8000,0,0)\r\n" ;
 		
 		var fields = document.getElementById("fields").getElementsByTagName("div");
 		for(var i=0; i< fields.length;i++){
@@ -224,7 +229,7 @@ function initField(){
 			if(location == "LOCATION_MZONE"){
 				for(var j=thumbs.length-1; j>=0 ; j--){
 					var card_info = $(thumbs[j]).tmplItem().data.card_info;
-					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")";
+					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
 				}
 			}
 			else if(location == "LOCATION_FIELD"){
@@ -232,19 +237,19 @@ function initField(){
 					location = "LOCATION_SZONE"
 					place = 5;
 					var card_info = $(thumbs[j]).tmplItem().data.card_info;
-					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")";
+					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
 				}
 			}
 			else {
 				for(var j=0; j < thumbs.length; j++){
 					var card_info = $(thumbs[j]).tmplItem().data.card_info;
-					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")";
+					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
 				}
 			}
 		}
-		str += "Debug.ReloadFieldEnd()\n" ;
-		str += "aux.BeginPuzzle()\n";
-		this.href = "http://my-card.in/singles/new.lua?name=Untitled&script=" + str;
+		str += "Debug.ReloadFieldEnd()\r\n" ;
+		str += "aux.BeginPuzzle()\r\n";
+		this.href = "http://my-card.in/singles/new.lua?name=Untitled&script=" + encodeURIComponent(str);
 	}
 }
 
@@ -268,17 +273,16 @@ function updateField(field){
 	var length = card_list.length;
 	var start = width/2 - 22.5*length;
 	for(var i in card_list){
-		var top, left, right, bottom;
-		if(45 < (width / length)) 
-			left = start + 45*i ;
-		else 
-			left = (width-45)/(length-1)*i;
-			
 		var card_info = card_list[i];
 		card_info.location = tmplItem.location;
 		card_info.player = tmplItem.player;
 		card_info.place = tmplItem.place;
 		card_info.index = i;
+		var top, left, right, bottom;
+		if(45 < (width / length)) 
+			left = start + 45*i ;
+		else 
+			left = (width-45)/(length-1)*i;
 		$("#thumb-tmpl").tmpl({
 			card_info: card_info,
 			top: top || 3,
@@ -319,18 +323,22 @@ function updateCards(thumbs){
 			tmplItem.card_info.position = "POS_FACEUP_ATTACK";
 		}
 		if(tmplItem.card_info.position == "POS_FACEUP_ATTACK"){
+			thumb.style.left = tmplItem.left;
 			thumb.src = card_img_thumb_url + card_id + ".jpg";
 			Img.rotate(thumb, 0, true);
 		}
 		else if(tmplItem.card_info.position == "POS_FACEUP_DEFENCE"){
+			thumb.style.left = 10;
 			thumb.src = card_img_thumb_url + card_id + ".jpg";
 			Img.rotate(thumb, -90, true);
 		}
 		else if(tmplItem.card_info.position == "POS_FACEDOWN_DEFENCE"){
+			thumb.style.left = 10;
 			thumb.src = "images/unknow.jpg";
 			Img.rotate(thumb, -90, true);
 		}
 		else if(tmplItem.card_info.position == "POS_FACEDOWN_ATTACK"){
+			thumb.style.left = tmplItem.left;
 			thumb.src = "images/unknow.jpg";
 			Img.rotate(thumb, 0, true);
 		}
@@ -353,21 +361,12 @@ function del(array,n){
 	}
 　　return result;
 }
-function showDetail(obj){
+function showDetail(card_id){
 	var img = document.getElementById("detail_image");
-	//搜索框中的图片没有tpmlItem
-	var x = obj.src.lastIndexOf('.');
-	var card_id = parseInt(obj.src.substring(49,x));
-	//卡片背面表示时为unknow.jpg
-	if(isNaN(card_id)){
-		var tmplItem = $(obj).tmplItem().data;
-		card_id = tmplItem.card_info.card_id;
-	}
 	img.src = card_img_url + card_id + ".jpg";
 	var data = datas[card_id];
 	//$('#detail_label').html($('#detail-tmpl').tmpl({detail: data}));
 	var textarea = document.getElementById("detail_textarea");
-	
 	textarea.value = data.desc;
 }
 function mouseDown(ev){
@@ -379,6 +378,8 @@ function mouseDown(ev){
 	}
 }
 function mouseUp(ev){
+	ev         = ev || window.event;
+	var target = ev.target || ev.srcElement;
 	if(ev.button == 0){
 		var dragImage  = document.getElementById('DragImage');
 		if(dragging){
@@ -393,7 +394,6 @@ function mouseUp(ev){
 }
 function mouseMove(ev){
 	ev         = ev || window.event;
-
 	var target   = ev.target || ev.srcElement;
 	var mousePos = getMousePos(ev);
 	var dragImage  = document.getElementById('DragImage');
@@ -406,6 +406,8 @@ function mouseMove(ev){
 	putting = false;
 }
 function getMousePos(ev){
+	ev         = ev || window.event;
+	var target = ev.target || ev.srcElement;
 	if(ev.pageX || ev.pageY){
 		return {x:ev.pageX, y:ev.pageY};
 	}

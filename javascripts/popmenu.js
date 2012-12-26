@@ -18,13 +18,12 @@ var PopMenu = function createPopMenu(){
 	var i = 0;
 	var maxWidth = maxHeight = 0;
 	var aDoc = [document.documentElement.offsetWidth, document.documentElement.offsetHeight];
-	var target;//弹出右键菜单的thumb
+	var thumb;//弹出右键菜单的thumb
 	popMenu.style.display = "none";
 
 	this.show = function (event){
 		var event = event || window.event;
-		target = event.target;
-		var thumb = target;
+		thumb = event.target;
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_info = tmplItem.card_info;
 		var location = card_info.location;
@@ -153,40 +152,50 @@ var PopMenu = function createPopMenu(){
 				obj.children[i].style.width = maxWidth + "px";
 		}
 	}
-	aLi[1].onmousedown = function(ev){//表侧攻击表示
-		var tmplItem = $(target).tmplItem().data;
+	aLi[1].onmousedown = function(event){//表侧攻击表示
+		var event = event || window.event;
+		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		tmplItem.card_info.position = "POS_FACEUP_ATTACK";
-		target.src = card_img_thumb_url + card_id + ".jpg";
-		Img.rotate(target, 0);
+		thumb.style.left = tmplItem.left;
+		thumb.src = card_img_thumb_url + card_id + ".jpg";
+		Img.rotate(thumb, 0);
 	}
-	aLi[2].onmousedown = function(ev){//表侧守备表示
-		var tmplItem = $(target).tmplItem().data;
+	aLi[2].onmousedown = function(event){//表侧守备表示
+		var event = event || window.event;
+		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		tmplItem.card_info.position = "POS_FACEUP_DEFENCE";
-		target.src = card_img_thumb_url + card_id + ".jpg";
-		Img.rotate(target, -90);
+		thumb.style.left = 10;
+		thumb.src = card_img_thumb_url + card_id + ".jpg";
+		Img.rotate(thumb, -90);
 	}
-	aLi[3].onmousedown = function(ev){//里侧守备表示
-		var tmplItem = $(target).tmplItem().data;
+	aLi[3].onmousedown = function(event){//里侧守备表示
+		var event = event || window.event;
+		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		tmplItem.card_info.position = "POS_FACEDOWN_DEFENCE";
-		target.src = "images/unknow.jpg";
-		Img.rotate(target, -90);
+		thumb.style.left = 10;
+		thumb.src = "images/unknow.jpg";
+		Img.rotate(thumb, -90);
 	}
-	aLi[4].onmousedown = function(ev){//里侧攻击表示
-		var tmplItem = $(target).tmplItem().data;
+	aLi[4].onmousedown = function(event){//里侧攻击表示
+		var event = event || window.event;
+		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
-		target.src = "images/unknow.jpg";
-		Img.rotate(target, 0);
+		thumb.style.left = tmplItem.left;
+		thumb.src = "images/unknow.jpg";
+		Img.rotate(thumb, 0);
 	}
-	aLi[5].onmousedown = function(ev){//不解除苏生限制
-		var tmplItem = $(target).tmplItem().data;
+	aLi[5].onmousedown = function(event){//不解除苏生限制
+		var event = event || window.event;
+		var tmplItem = $(thumb).tmplItem().data;
 		tmplItem.card_info.disable_revivelimit = false;
 	}
-	aLi[6].onmousedown = function(ev){//解除苏生限制
-		var tmplItem = $(target).tmplItem().data;
+	aLi[6].onmousedown = function(event){//解除苏生限制
+		var event = event || window.event;
+		var tmplItem = $(thumb).tmplItem().data;
 		tmplItem.card_info.disable_revivelimit = true;
 	}
 }
@@ -205,35 +214,35 @@ var speed = 1;
 var Img = function() {
 	var ua = navigator.userAgent,
 	isIE = /msie/i.test(ua) && !window.opera;
-	var rotate = function(target, degree, immediately) {
+	var rotate = function(thumb, degree, immediately) {
 		if(immediately == true){
 			run(degree);
 			return false;
 		}
 		var i = 0, sinDeg = 0, cosDeg = 0, timer = null ;
-		var deg_begin = $.data(target, "degree");
-		var orginW = target.clientWidth, orginH = target.clientHeight;
+		var deg_begin = $.data(thumb, "degree");
+		var orginW = thumb.clientWidth, orginH = thumb.clientHeight;
 		clearInterval(timer);
 		function run(angle) {
 			if (isIE) { // IE
 				cosDeg = Math.cos(angle * Math.PI / 180);
 				sinDeg = Math.sin(angle * Math.PI / 180);
-				with(target.filters.item(0)) {
+				with(thumb.filters.item(0)) {
 					M11 = M22 = cosDeg; M12 = -(M21 = sinDeg); 
 				}
-				target.style.top = (orginH - target.offsetHeight) / 2 + 'px';
-				target.style.left = (orginW - target.offsetWidth) / 2 + 'px';
-			} else if (target.style.MozTransform !== undefined) {  // Mozilla
-				target.style.MozTransform = 'rotate(' + angle + 'deg)';
-			} else if (target.style.OTransform !== undefined) {   // Opera
-				target.style.OTransform = 'rotate(' + angle + 'deg)';
-			} else if (target.style.webkitTransform !== undefined) { // Chrome Safari
-				target.style.webkitTransform = 'rotate(' + angle + 'deg)';
+				thumb.style.top = (orginH - thumb.offsetHeight) / 2 + 'px';
+				thumb.style.left = (orginW - thumb.offsetWidth) / 2 + 'px';
+			} else if (thumb.style.MozTransform !== undefined) {  // Mozilla
+				thumb.style.MozTransform = 'rotate(' + angle + 'deg)';
+			} else if (thumb.style.OTransform !== undefined) {   // Opera
+				thumb.style.OTransform = 'rotate(' + angle + 'deg)';
+			} else if (thumb.style.webkitTransform !== undefined) { // Chrome Safari
+				thumb.style.webkitTransform = 'rotate(' + angle + 'deg)';
 			} else {
-				target.style.transform = "rotate(" + angle + "deg)";
+				thumb.style.transform = "rotate(" + angle + "deg)";
 			}
 			
-			$.data(target, "degree", angle);
+			$.data(thumb, "degree", angle);
 		}
 		
 		timer = setInterval(function() {
