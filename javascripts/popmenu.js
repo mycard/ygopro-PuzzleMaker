@@ -236,13 +236,32 @@ var Img = function() {
 		clearInterval(timer);
 		function run(angle) {
 			if (isIE) { // IE
-				cosDeg = Math.cos(angle * Math.PI / 180);
-				sinDeg = Math.sin(angle * Math.PI / 180);
-				with(thumb.Matrix){
-					M11 = M22 = cosDeg; M12 = -(M21 = sinDeg); 
+				var Matrix; 
+				for(p in thumb.filters) 
+				{        
+					if(p=="DXImageTransform.Microsoft.Matrix")Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"];   
+				} 
+				if(!Matrix) 
+				{ 
+					thumb.style.filter+="progid:DXImageTransform.Microsoft.Matrix(enabled=true,SizingMethod=clip to original,FilterType=nearest neighbor)"; 
+				} 
+				Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"]; 
+				Matrix.SizingMethod = "auto expand";//Notice this code,it's very important
+				this.equal=function(Matrix2D_x) 
+				{ 
+					if(Matrix2D_x.M11)Matrix.M11 = Matrix2D_x.M11; 
+					if(Matrix2D_x.M12)Matrix.M12 = Matrix2D_x.M12; 
+					if(Matrix2D_x.M21)Matrix.M21 = Matrix2D_x.M21; 
+					if(Matrix2D_x.M22)Matrix.M22 = Matrix2D_x.M22; 
 				}
-				thumb.style.top = (orginH - thumb.offsetHeight) / 2 + 'px';
-				thumb.style.left = (orginW - thumb.offsetWidth) / 2 + 'px';
+				thumb.Matrix=Matrix;
+				var t=Math.PI*angle/180;
+				var c=Math.cos(t);
+				var s=Math.sin(t);
+				with(thumb.Matrix){Dx=0; M11=c; M12=-1*s; M21=s; M22=c;}
+				var orginW = thumb.clientWidth, orginH = thumb.clientHeight;
+			//	thumb.style.top = (orginH - thumb.offsetHeight) / 2 + 'px';
+			//	thumb.style.left = (orginW - thumb.offsetWidth) / 2 + 'px';
 			} else if (thumb.style.MozTransform !== undefined) {  // Mozilla
 				thumb.style.MozTransform = 'rotate(' + angle + 'deg)';
 			} else if (thumb.style.OTransform !== undefined) {   // Opera

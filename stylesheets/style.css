@@ -134,8 +134,12 @@ header p {
 #fields .location_hand{
   position: absolute;
   display: inline-block;
+  border: 1px solid #00ffff;
   width: 327px;
   height: 72px;
+}
+#fields :hover{
+  border: 1px solid #ff0000;
 }
 #fields .thumb {
   z-index: 300;
@@ -143,6 +147,9 @@ header p {
   width: 44px;
   position: absolute;
   display: inline-block;
+}
+#fields .thumb:hover{
+  border: none;
 }
 #search_bar {
   z-index: 100;

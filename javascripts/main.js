@@ -192,16 +192,12 @@ function initField(){
 		var card_list = [];
 		$.data(fields[i], 'card_list', card_list);
 		fields[i].onmouseover = function(){
-			this.style.border = "1px solid #ff0000";
 			if(dragging == false && putting == true){
 				putting = false;
 				var dragImage  = document.getElementById('DragImage');
 				var card_info = $.data(dragImage, 'card_info');
 				addCard(this, card_info);
 			}
-		}
-		fields[i].onmouseout = function(){
-			this.style.border = "1px solid #00ffff";
 		}
 	}
 	var dragImage  = document.getElementById('DragImage');
@@ -375,6 +371,8 @@ function downloadURL(){
 	var fields = document.getElementById("fields").getElementsByTagName("div");
 	for(var i=0; i< fields.length;i++){
 		var tmplItem = $(fields[i]).tmplItem().data;
+		if(!tmplItem.location){
+		}
 		var player = tmplItem.player;
 		var location = "LOCATION_" + tmplItem.location.toUpperCase();
 		var place = tmplItem.place;
@@ -412,6 +410,7 @@ function mouseDown(ev){
 		return false;
 	}
 }
+var up;
 function mouseUp(ev){
 	ev         = ev || window.event;
 	var target = ev.target || ev.srcElement;
@@ -440,6 +439,7 @@ function mouseUp(ev){
 			putting = true;
 			dragImage.style.display = "none";
 			Img.rotate(dragImage, 0, true);
+			up = true;
 		}
 	}
 	if(ev.target.oncontextmenu){
@@ -457,7 +457,10 @@ function mouseMove(ev){
 		dragImage.style.top      = mousePos.y - 32 + "px";
 		dragImage.style.display  = "block";
 	}
-	putting = false;
+	if(!up)
+		putting = false;
+	else 
+		up = false;
 }
 function getMousePos(ev){
 	ev         = ev || window.event;

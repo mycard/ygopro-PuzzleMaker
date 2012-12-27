@@ -70,7 +70,7 @@ function makeMoveable(thumb){
 			dragImage.style.display  = "block";
 			
 			//remove this card forn field
-			parent.onmouseout();
+		//	parent.onmouseout();
 			var card_list = $.data(parent, 'card_list');
 			var i = card_info.index;
 			var list = del(card_list,i);
