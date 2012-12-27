@@ -7,7 +7,6 @@ input[type="submit"] {
   -webkit-appearance: button;
   *overflow: visible;
 }
-
 #header {
   padding: 25px 20px 20px 20px;
   margin: 0;
@@ -27,7 +26,7 @@ input[type="submit"] {
   min-height: 56px;
 }
 #header h1 {
-  font: 40px/48px "Copse", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 30px/36px "Copse", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #f3f3f3;
   text-shadow: 0px 2px 0px #235796;
   margin: 0px;
@@ -43,7 +42,26 @@ header p {
   font-size: 18px;
   margin: 0px;
 }
-
+#LPbar{
+  z-index: 500;
+  position: fixed;
+  left: 450px;
+  top: 65px;
+}
+#Player_LP{
+  position: absolute;
+  left: 20px;
+  width: 120px;
+  color: #ff2222;
+  font-size: 18px;
+}
+#AI_LP{
+  position: absolute;
+  left: 215px;
+  width: 120px;
+  color: #ff2222;
+  font-size: 18px;
+}
 #main {
   z-index: 100;
   left: 100px;
@@ -83,6 +101,8 @@ header p {
   top: 340px;
   width: 200px;
   height: 250px;
+  resize:none;
+  cursor:text;
   border: 1px solid #00ffff;
   background: #dddddd;
   color: #333333;
@@ -213,6 +233,7 @@ header p {
   z-index: 1000;
   height: 64px;
   width: 44px;
+  cursor:pointer;
 }
 
 #content{
@@ -224,8 +245,11 @@ header p {
   z-index: 1000;
   top: 70px;
   left: 280px;
+  cursor: pointer;
+  width:80px;
+  height:80px;
   margin: 5px 30px 5px 30px;
-  position: relative;
+  position: absolute;
 }
 table{
   width:100%;
@@ -292,13 +316,17 @@ body{font:12px/1.5 \5fae\8f6f\96c5\9ed1;}
   background-position:right 9px;
   background-image:url(../images/arrow.png);
 }
+#popMenu ul li.check{
+  background-repeat:no-repeat;
+  background-position:left 3px;
+  background-image:url(../images/check.png);
+}
 #popMenu ul li.active{
   background-color:#f1f3f6;
   border-radius:3px;
   border:1px solid #aecff7;
   height:22px;
   line-height:22px;
-  background-position:right -8px;
   padding:0 29px;
 }
 #popMenu ul ul{

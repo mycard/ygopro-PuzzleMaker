@@ -68,6 +68,22 @@ var PopMenu = function createPopMenu(){
 		}
 		if(menuItems == 0) return false;
 		setMenu(menuItems);
+		for(var i=1;i<5;i++){
+			aLi[i].className = aLi[i].className.replace(/\s?check/,"");
+		}
+		if(card_info.position == "POS_FACEUP_ATTACK"){
+			aLi[1].className += " check";
+		}
+		else if(card_info.position == "POS_FACEUP_DEFENCE"){
+			aLi[2].className += " check";
+		}
+		else if(card_info.position == "POS_FACEDOWN_DEFENCE"){
+			aLi[3].className += " check";
+		}
+		else if(card_info.position == "POS_FACEDOWN_ATTACK"){
+			aLi[4].className += " check";
+		}
+		
 		popMenu.style.display = "block";
 		popMenu.style.top = getMousePos(event).y + "px";
 		popMenu.style.left = getMousePos(event).x + "px";
@@ -207,12 +223,8 @@ var getOffset = {
 		return obj.offsetLeft + (obj.offsetParent ? arguments.callee(obj.offsetParent) : 0) 
 	} 
 };
-
-
 var speed = 1;
-
 var Img = function() {
-	var isIE = /*@cc_on!@*/!1;
 	var rotate = function(thumb, degree, immediately) {
 		if(immediately == true){
 			run(degree);
@@ -226,7 +238,7 @@ var Img = function() {
 			if (isIE) { // IE
 				cosDeg = Math.cos(angle * Math.PI / 180);
 				sinDeg = Math.sin(angle * Math.PI / 180);
-				with(thumb.filters.item(0)) {
+				with(thumb.Matrix){
 					M11 = M22 = cosDeg; M12 = -(M21 = sinDeg); 
 				}
 				thumb.style.top = (orginH - thumb.offsetHeight) / 2 + 'px';

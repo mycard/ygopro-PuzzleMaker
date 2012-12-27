@@ -24,6 +24,7 @@
 var _popmenu;
 var dragging = false;
 var putting = false;
+var isIE = /*@cc_on!@*/!1;
 $(document).ready(function(){
 	setPageLabel();
 	document.getElementById('keyword').focus();
@@ -48,16 +49,21 @@ $(document).ready(function(){
 </head>
 
 <body>
-	<img id="DragImage" src="images/unknow.jpg" style="cursor:pointer;" alt=""/>
+	<img id="DragImage" src="images/unknow.jpg" alt=""/>
 
 	<div id="header">
 		<h1>残局编辑器</h1>
+	</div>
+	<div id="LPbar">
+		<input id="Player_LP" type="text" placeholder="PlayerLP" maxLength=9 value="8000" onkeydown="return checkNums()"/>
+		
+		<input id="AI_LP" type="text" placeholder="AILP" maxLength=9 value="8000"  onkeydown="return checkNums()"/>
 	</div>
 	<div id="main">
 		<div id="detail">
 			<img id="detail_image" src="images/unknow.jpg" alt=""/>
 			<!--<label id="detail_label"></label>-->
-			<textarea id="detail_textarea" disabled="true" style="resize:none;cursor:text;"></textarea>
+			<textarea id="detail_textarea" disabled="true"></textarea>
 		</div>
 		<div id="fields">
 		
@@ -76,7 +82,7 @@ $(document).ready(function(){
 		</div>
 	</div>
 	
-	<a id="download" href="#" title="下载到本地"><img src="images/download.png" style="cursor: pointer;width:80px; height:80px;" alt=""/></a>
+	<a id="download" href="#" title="下载到本地"><img src="images/download.png" alt=""/></a>
 	
 	<div id="popMenu">
 		<ul>
@@ -95,6 +101,7 @@ $(document).ready(function(){
 			<li>
 				解除苏生限制
 			</li>
+	<!--	
 			<li>
 				设置永续效果对象
 			</li>
@@ -104,6 +111,7 @@ $(document).ready(function(){
 			<li>
 				增加指示物
 			</li>
+	-->
 		</ul>
 	</div>
 </body>
