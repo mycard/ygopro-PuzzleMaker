@@ -1,7 +1,6 @@
 
 html,body{
   height:100%;
-  overflow:hidden;
 }
 body{
   font:12px/1.5 \5fae\8f6f\96c5\9ed1;
@@ -16,12 +15,8 @@ input[type="submit"] {
   *overflow: visible;
 }
 #header {
-  padding: 25px 20px 20px 20px;
-  margin: 0;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  padding: 25px 0px 20px 0px;
+  position: absolute;
   width: 100%;
   text-align: center;
   background: #4276b6;
@@ -52,7 +47,7 @@ header p {
 }
 #LPbar{
   z-index: 500;
-  position: fixed;
+  position: absolute;
   left: 450px;
   top: 65px;
 }
@@ -70,23 +65,9 @@ header p {
   color: #ff2222;
   font-size: 18px;
 }
-#main {
-  z-index: 100;
-  left: 100px;
-  position: fixed;
-  top: 55px;
-  width: 1200px;
-  height: 600px;
-}
-#detail{
-  z-index: 100;
-  position: fixed;
-  left: 100px;
-  top: 120px;
-}
 #detail_image{
   z-index: 100;
-  position: fixed;
+  position: absolute;
   left: 120px;
   top: 80px;
   height: 254px;
@@ -94,7 +75,7 @@ header p {
 }
 #detail_label{
   z-index: 100;
-  position: fixed;
+  position: absolute;
   left: 120px;
   top: 340px;
   width: 200px;
@@ -104,7 +85,7 @@ header p {
 }
 #detail_textarea{
   z-index: 100;
-  position: fixed;
+  position: absolute;
   left: 120px;
   top: 340px;
   width: 200px;
@@ -117,13 +98,13 @@ header p {
 }
 #fields{
   z-index: 100;
-  position: fixed;
+  position: absolute;
   left: 400px;
   top: 135px;
   width: 478px;
   height: 478px;
 }
-#main .location_mzone ,.location_szone{
+#fields .location_mzone ,.location_szone{
   position: absolute;
   display: inline-block;
   border: 1px solid #00ffff;
@@ -163,7 +144,7 @@ header p {
   z-index: 100;
   left: 920px;
   top: 55px;
-  position: fixed;
+  position: absolute;
   background: #bbbbbb;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;

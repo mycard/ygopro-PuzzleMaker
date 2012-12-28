@@ -1,7 +1,7 @@
 
 var current_page ;
 var page_num;
-var table_row = Math.floor((getFullSize().h-370)/64);
+var table_row = 6;//Math.floor((getViewSize().h-250)/64);
 var MZONE = 0;
 var SZONE = 1;
 var FIELD = 2;
@@ -41,6 +41,19 @@ var card_img_url = "http://my-card.in/images/cards/ygocore/";
 var card_img_thumb_url = "http://my-card.in/images/cards/ygocore/thumbnail/";
 
 var datas = new Object();
+
+
+function search1(){
+	var name = document.getElementById("keyword").value;
+	var q = JSON.stringify( {name: {$regex: name.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), $options: 'i'}});
+	var url = locale_url + '?q=' + q;
+	$.getJSON(url, function(langs) {
+        alert(JSON.stringify(langs));
+      });
+
+}
+
+
 function search(){
 	var name = document.getElementById("keyword").value;
 	var page_button = document.getElementById("page_button");
@@ -54,9 +67,10 @@ function search(){
 			setPageLabel();
 			page_button.style.display = 'none';
 			$("#result").html(html);
+			alert("未找到相关卡片");
 			return false;
 		}
-		var cards_id = [];
+	/*	var cards_id = [];
 		for (var _i in result) {
 			cards_id.push(result[_i]._id);
 		}
@@ -83,10 +97,15 @@ function search(){
 					"attribute": getAttribute(card),
 					"desc": desc
 				};
-				//alert(JSON.stringify(data));
 				datas[card._id]=data;
 			}
-			//alert(datas);
+	*/
+			for(var i in result){
+				var card = result[i];
+				datas[card._id]=card;
+			}
+			
+			
 			current_page = 1;
 			page_num = 0;
 			$.each(result, function(i, card){
@@ -116,62 +135,8 @@ function search(){
 			for (var i=0; i< thumbs.length;i++){
 				makeDraggable(thumbs[i]);
 			}
-		});
+	//	});
 	});
- }
-function prePage(){ //上一页
-	if(current_page == 1) return false;
-	current_page--;
-	setPageLabel(current_page, page_num);
-	showPage(current_page);
-}
-function nextPage(){//下一页
-	if(current_page == page_num) return false;
-	current_page++;
-	setPageLabel(current_page, page_num);
-	showPage(current_page)
-}
-function showPage(current_page){//显示current页
-	var tables = document.getElementsByTagName('table');
-	for(var i in tables){
-		if(i == current_page -1) //current为1时显示table[0]
-			tables[i].style.display = "block";
-		else
-			tables[i].style.display = "none";
-		if(i == tables.length-1)
-			return false;
-	}
-}
-function setPageLabel(current_page, page_num) {//显示第X页/共X页
-	var page_label = $('.page_label');
-	var built = $('#page-tmpl').tmpl({
-		current_page: current_page || 0,
-		page_num: page_num || 0,
-	});
-	page_label.html(built);
-}
-function addField(player, location, place) {//画场地
-	var top, left;
-	top = COORDINATE[player][location].top;
-	left = COORDINATE[player][location].left + 66*place;
-	if(location == MZONE || location == SZONE){
-		if(player == 0){
-			top = COORDINATE[player][location].top;
-			left = COORDINATE[player][location].left + 66*place;
-		}
-		else {
-			top = COORDINATE[player][location].top;
-			left = COORDINATE[player][location].left + 66*(4-place);
-		}
-	}
-	var built = $('#field-tmpl').tmpl({
-		player: player || 0,
-		location: LOCATION_STRING[location] || 0,
-		place: place || 0,
-		top: top,
-		left: left,
-	});
-	$('#fields').append(built);
 }
 function initField(){
 	var player, place;
@@ -208,6 +173,16 @@ function initField(){
 	}
 	var download = document.getElementById('download');
 	download.onmouseover = downloadURL;
+	
+	var keyword = document.getElementById('keyword');
+	keyword.onkeypress = function(ev){
+		var ev = ev || window.event;
+		var key = ev.keyCode;
+		if(key == 13){
+			search1();
+		}
+	};
+	
 	current_page = 1;
 	page_num = 0;
 	html = "";
@@ -242,7 +217,60 @@ function initField(){
 		makeDraggable(thumbs[i]);
 	}
 }
-
+function prePage(){ //上一页
+	if(current_page == 1) return false;
+	current_page--;
+	setPageLabel(current_page, page_num);
+	showPage(current_page);
+}
+function nextPage(){//下一页
+	if(current_page == page_num) return false;
+	current_page++;
+	setPageLabel(current_page, page_num);
+	showPage(current_page)
+}
+function showPage(current_page){//显示current页
+	var tables = document.getElementsByTagName('table');
+	for(var i in tables){
+		if(i == current_page -1) //current为1时显示table[0]
+			tables[i].style.display = "block";
+		else
+			tables[i].style.display = "none";
+		if(i == tables.length-1)
+			return false;
+	}
+}
+function setPageLabel(current_page, page_num) {//显示第X页/共X页
+	var page_label = $('.page_label');
+	var built = $('#page-tmpl').tmpl({
+		current_page: current_page || 0,
+		page_num: page_num || 0
+	});
+	page_label.html(built);
+}
+function addField(player, location, place) {//画场地
+	var top, left;
+	top = COORDINATE[player][location].top;
+	left = COORDINATE[player][location].left + 66*place;
+	if(location == MZONE || location == SZONE){
+		if(player == 0){
+			top = COORDINATE[player][location].top;
+			left = COORDINATE[player][location].left + 66*place;
+		}
+		else {
+			top = COORDINATE[player][location].top;
+			left = COORDINATE[player][location].left + 66*(4-place);
+		}
+	}
+	var built = $('#field-tmpl').tmpl({
+		player: player || 0,
+		location: LOCATION_STRING[location] || 0,
+		place: place || 0,
+		top: top,
+		left: left
+	});
+	$('#fields').append(built);
+}
 function addCard(field, card_info){
 	var tmplItem = $(field).tmplItem().data;
 	var location = tmplItem.location;
@@ -313,22 +341,46 @@ function updateCards(thumbs){
 			tmplItem.card_info.position = "POS_FACEUP_ATTACK";
 		}
 		if(tmplItem.card_info.position == "POS_FACEUP_ATTACK"){
-			thumb.style.left = tmplItem.left + "px";
+			if(isIE){
+				thumb.style.top = tmplItem.top + "px";
+				thumb.style.left = tmplItem.left + "px";
+			}
+			else {
+				thumb.style.left = tmplItem.left + "px";
+			}
 			thumb.src = card_img_thumb_url + card_id + ".jpg";
 			Img.rotate(thumb, 0, true);
 		}
 		else if(tmplItem.card_info.position == "POS_FACEUP_DEFENCE"){
-			thumb.style.left = 10 + "px";
+			if(isIE){
+				thumb.style.top = 13 + "px";
+				thumb.style.left = 0 + "px";
+			}
+			else {
+				thumb.style.left = 10 + "px";
+			}
 			thumb.src = card_img_thumb_url + card_id + ".jpg";
 			Img.rotate(thumb, -90, true);
 		}
 		else if(tmplItem.card_info.position == "POS_FACEDOWN_DEFENCE"){
-			thumb.style.left = 10 + "px";
+			if(isIE){
+				thumb.style.top = 13 + "px";
+				thumb.style.left = 0 + "px";
+			}
+			else {
+				thumb.style.left = 10 + "px";
+			}
 			thumb.src = "images/unknow.jpg";
 			Img.rotate(thumb, -90, true);
 		}
 		else if(tmplItem.card_info.position == "POS_FACEDOWN_ATTACK"){
-			thumb.style.left = tmplItem.left + "px";
+			if(isIE){
+				thumb.style.top = tmplItem.top + "px";
+				thumb.style.left = tmplItem.left + "px";
+			}
+			else {
+				thumb.style.left = tmplItem.left + "px";
+			}
 			thumb.src = "images/unknow.jpg";
 			Img.rotate(thumb, 0, true);
 		}
@@ -371,30 +423,30 @@ function downloadURL(){
 	var fields = document.getElementById("fields").getElementsByTagName("div");
 	for(var i=0; i< fields.length;i++){
 		var tmplItem = $(fields[i]).tmplItem().data;
-		if(!tmplItem.location){
-		}
 		var player = tmplItem.player;
 		var location = "LOCATION_" + tmplItem.location.toUpperCase();
 		var place = tmplItem.place;
-		var thumbs = fields[i].getElementsByClassName("thumb");
-		if(location == "LOCATION_MZONE"){
-			for(var j=thumbs.length-1; j>=0 ; j--){
-				var card_info = $(thumbs[j]).tmplItem().data.card_info;
-				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
+		if(fields[i]){
+			var thumbs = fields[i].getElementsByClassName("thumb");
+			if(location == "LOCATION_MZONE"){
+				for(var j=thumbs.length-1; j>=0 ; j--){
+					var card_info = $(thumbs[j]).tmplItem().data.card_info;
+					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
+				}
 			}
-		}
-		else if(location == "LOCATION_FIELD"){
-			for(var j=0; j < thumbs.length; j++){
-				location = "LOCATION_SZONE"
-				place = 5;
-				var card_info = $(thumbs[j]).tmplItem().data.card_info;
-				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
+			else if(location == "LOCATION_FIELD"){
+				for(var j=0; j < thumbs.length; j++){
+					location = "LOCATION_SZONE"
+					place = 5;
+					var card_info = $(thumbs[j]).tmplItem().data.card_info;
+					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
+				}
 			}
-		}
-		else {
-			for(var j=0; j < thumbs.length; j++){
-				var card_info = $(thumbs[j]).tmplItem().data.card_info;
-				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
+			else {
+				for(var j=0; j < thumbs.length; j++){
+					var card_info = $(thumbs[j]).tmplItem().data.card_info;
+					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
+				}
 			}
 		}
 	}
@@ -414,24 +466,6 @@ var up;
 function mouseUp(ev){
 	ev         = ev || window.event;
 	var target = ev.target || ev.srcElement;
-	/*if(isIE){
-		var x=ev.clientX;
-		var y=ev.clientY;
-		var fields = document.getElementById("fields").getElementsByTagName("div");
-		for(var i=0; i<fields.length;i++){
-			var x1 = fields[i].offsetLeft;
-			var y1 = fields[i].offsetTop;
-			var x2 = fields[i].offsetLeft + fields[i].offsetWidth;
-			var y2 = fields[i].offsetTop + fields[i].offsetHeight;
-			if( x > x1 && x < x2 && y > y1 && y < y2){
-				putting = false;
-				var dragImage  = document.getElementById('DragImage');
-				var card_info = $.data(dragImage, 'card_info');
-				addCard(fields[i], card_info);
-				break;
-			}
-		}
-	}*/
 	if(ev.button == 0 || ev.button == 1){
 		var dragImage  = document.getElementById('DragImage');
 		if(dragging){
@@ -442,7 +476,7 @@ function mouseUp(ev){
 			up = true;
 		}
 	}
-	if(ev.target.oncontextmenu){
+	if(target.oncontextmenu){
 		return false;
 	}
 }

@@ -21,20 +21,19 @@
 <script src="javascripts/result.js" type="text/javascript">></script>
 
 <script type="text/javascript">
-var _popmenu;
-var dragging = false;
-var putting = false;
-var isIE = /*@cc_on!@*/!1;
-$(document).ready(function(){
-	setPageLabel();
-	document.getElementById('keyword').focus();
-	var dragImage  = document.getElementById('DragImage');
-	dragImage.style.display = "none";
-	initField();
-	_popmenu = new PopMenu;
-	
-});
-
+	var _popmenu;
+	var dragging = false;
+	var putting = false;
+	var isIE = /*@cc_on!@*/!1;
+	$(document).ready(function(){
+		setPageLabel();
+		document.getElementById('keyword').focus();
+		var dragImage  = document.getElementById('DragImage');
+		dragImage.style.display = "none";
+		initField();
+		_popmenu = new PopMenu;
+		
+	});
 </script>
 <script type="text/x-jquery-tmpl" id="page-tmpl">
 	第 ${current_page} 页 / 共 ${page_num} 页
@@ -59,26 +58,22 @@ $(document).ready(function(){
 		
 		<input id="AI_LP" type="text" placeholder="AILP" maxLength=9 value="8000"  onkeydown="return checkNums()"/>
 	</div>
-	<div id="main">
-		<div id="detail">
-			<img id="detail_image" src="images/unknow.jpg" alt=""/>
-			<!--<label id="detail_label"></label>-->
-			<textarea id="detail_textarea" disabled="true"></textarea>
+
+	<img id="detail_image" src="images/unknow.jpg" alt=""/>
+	<!--<label id="detail_label"></label>-->
+	<textarea id="detail_textarea" disabled="true"></textarea>
+
+	<div id="fields"></div>
+	<div id="search_bar">
+		<input class="textfield" id="keyword" type="text" placeholder="请输入关键字" value="黑羽"/>
+		<button class="button" id="search" onmouseup="search()">搜索</button>
+		<div id="content">
+			<div id="result"></div>
 		</div>
-		<div id="fields">
-		
-		</div>
-		<div id="search_bar">
-			<input class="textfield" id="keyword" type="text" placeholder="请输入关键字" value="黑羽"/>
-			<button class="button" id="search" onmouseup="search()">搜索</button>
-			<div id="content">
-				<div id="result"></div>
-			</div>
-			<label class="page_label">第0页/共0页</label>
-			<div id="page_button" style="display:none">
-				<button class="btn" type="button" id="prePage" onclick="prePage()">上一页</button>
-				<button class="btn" type="button" id="nextPage" onclick="nextPage()">下一页</button>
-			</div>
+		<label class="page_label">第0页/共0页</label>
+		<div id="page_button" style="display:none">
+			<button class="btn" type="button" id="prePage" onclick="prePage()">上一页</button>
+			<button class="btn" type="button" id="nextPage" onclick="nextPage()">下一页</button>
 		</div>
 	</div>
 	

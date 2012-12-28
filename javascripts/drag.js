@@ -61,6 +61,7 @@ function makeMoveable(thumb){
 			var tmplItem = $(thumb).tmplItem().data;
 			var card_info = tmplItem.card_info;
 			var degree = $.data(thumb, "degree");
+			Img.rotate(dragImage, degree, true);
 			$.data(dragImage, 'card_info', card_info);
 			dragging=true;
 			var mousePos = getMousePos(ev);
@@ -77,8 +78,6 @@ function makeMoveable(thumb){
 			$.data(parent, 'card_list', list);
 			parent.removeChild(thumb);
 			updateField(parent);
-			//下面这句IE无法执行，所以放最后
-			Img.rotate(dragImage, degree, true);
 		}
 	}
 	thumb.onmouseover = function(){

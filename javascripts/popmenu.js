@@ -172,36 +172,60 @@ var PopMenu = function createPopMenu(){
 		var event = event || window.event;
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		tmplItem.card_info.position = "POS_FACEUP_ATTACK";
-		thumb.style.left = tmplItem.left + "px";
 		thumb.src = card_img_thumb_url + card_id + ".jpg";
+		tmplItem.card_info.position = "POS_FACEUP_ATTACK";
+		if(isIE){
+			thumb.style.top = tmplItem.top + "px";
+			thumb.style.left = tmplItem.left + "px";
+		}
+		else {
+			thumb.style.left = tmplItem.left + "px";
+		}
 		Img.rotate(thumb, 0);
 	}
 	aLi[2].onmousedown = function(event){//表侧守备表示
 		var event = event || window.event;
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		tmplItem.card_info.position = "POS_FACEUP_DEFENCE";
-		thumb.style.left = 10 + "px";
 		thumb.src = card_img_thumb_url + card_id + ".jpg";
+		tmplItem.card_info.position = "POS_FACEUP_DEFENCE";
+		if(isIE){
+			thumb.style.top = 13 + "px";
+			thumb.style.left = 0 + "px";
+		}
+		else {
+			thumb.style.left = 10 + "px";
+		}
 		Img.rotate(thumb, -90);
 	}
 	aLi[3].onmousedown = function(event){//里侧守备表示
 		var event = event || window.event;
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		tmplItem.card_info.position = "POS_FACEDOWN_DEFENCE";
-		thumb.style.left = 10 + "px";
 		thumb.src = "images/unknow.jpg";
+		tmplItem.card_info.position = "POS_FACEDOWN_DEFENCE";
+		if(isIE){
+			thumb.style.top = 13 + "px";
+			thumb.style.left = 0 + "px";
+		}
+		else {
+			thumb.style.left = 10 + "px";
+		}
 		Img.rotate(thumb, -90);
 	}
 	aLi[4].onmousedown = function(event){//里侧攻击表示
 		var event = event || window.event;
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
-		thumb.style.left = tmplItem.left + "px";
 		thumb.src = "images/unknow.jpg";
+		tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
+		if(isIE){
+			thumb.style.top = tmplItem.top + "px";
+			thumb.style.left = tmplItem.left + "px";
+		}
+		else {
+			thumb.style.left = tmplItem.left + "px";
+		}
 		Img.rotate(thumb, 0);
 	}
 	aLi[5].onmousedown = function(event){//不解除苏生限制
@@ -225,56 +249,19 @@ var getOffset = {
 };
 var speed = 1;
 var Img = function() {
-	var rotate = function(thumb, degree, immediately) {
-		if(immediately == true){
+	var rotate = function(thumb, degree, immediatily) {
+		if(immediatily){
 			run(degree);
 			return false;
 		}
-		var i = 0, sinDeg = 0, cosDeg = 0, timer = null ;
-		var deg_begin = $.data(thumb, "degree");
-		var orginW = thumb.clientWidth, orginH = thumb.clientHeight;
-		clearInterval(timer);
-		function run(angle) {
-			if (isIE) { // IE
-				var Matrix; 
-				for(p in thumb.filters) 
-				{        
-					if(p=="DXImageTransform.Microsoft.Matrix")Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"];   
-				} 
-				if(!Matrix) 
-				{ 
-					thumb.style.filter+="progid:DXImageTransform.Microsoft.Matrix(enabled=true,SizingMethod=clip to original,FilterType=nearest neighbor)"; 
-				} 
-				Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"]; 
-				Matrix.SizingMethod = "auto expand";//Notice this code,it's very important
-				this.equal=function(Matrix2D_x) 
-				{ 
-					if(Matrix2D_x.M11)Matrix.M11 = Matrix2D_x.M11; 
-					if(Matrix2D_x.M12)Matrix.M12 = Matrix2D_x.M12; 
-					if(Matrix2D_x.M21)Matrix.M21 = Matrix2D_x.M21; 
-					if(Matrix2D_x.M22)Matrix.M22 = Matrix2D_x.M22; 
-				}
-				thumb.Matrix=Matrix;
-				var t=Math.PI*angle/180;
-				var c=Math.cos(t);
-				var s=Math.sin(t);
-				with(thumb.Matrix){Dx=0; M11=c; M12=-1*s; M21=s; M22=c;}
-				var orginW = thumb.clientWidth, orginH = thumb.clientHeight;
-			//	thumb.style.top = (orginH - thumb.offsetHeight) / 2 + 'px';
-			//	thumb.style.left = (orginW - thumb.offsetWidth) / 2 + 'px';
-			} else if (thumb.style.MozTransform !== undefined) {  // Mozilla
-				thumb.style.MozTransform = 'rotate(' + angle + 'deg)';
-			} else if (thumb.style.OTransform !== undefined) {   // Opera
-				thumb.style.OTransform = 'rotate(' + angle + 'deg)';
-			} else if (thumb.style.webkitTransform !== undefined) { // Chrome Safari
-				thumb.style.webkitTransform = 'rotate(' + angle + 'deg)';
-			} else {
-				thumb.style.transform = "rotate(" + angle + "deg)";
-			}
-			
-			$.data(thumb, "degree", angle);
+		if(isIE){
+			run(degree);
+			return false;
 		}
-		
+		var i = 0, timer = null ;
+		var deg_begin = $.data(thumb, "degree");
+		clearInterval(timer);
+
 		timer = setInterval(function() {
 			if(deg_begin < degree){
 				i += 1;
@@ -292,7 +279,37 @@ var Img = function() {
 					clearInterval(timer);
 				}
 			}
-		}, speed); 
+		}, speed);
+		function run(angle) {
+			if (isIE) { // IE
+				var Matrix; 
+				for(p in thumb.filters) {
+					if(p=="DXImageTransform.Microsoft.Matrix")Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"];
+				}
+				if(!Matrix) {
+					thumb.style.filter+="progid:DXImageTransform.Microsoft.Matrix(enabled=true,SizingMethod=clip to original,FilterType=nearest neighbor)";
+				}
+				Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"];
+				Matrix.SizingMethod = "auto expand";//Notice this code,it's very important
+				thumb.Matrix=Matrix;
+				var t=Math.PI*angle/180;
+				var c=Math.cos(t);
+				var s=Math.sin(t);
+				with(thumb.Matrix){Dx=0; M11=c; M12=-1*s; M21=s; M22=c;}
+			} else if (thumb.style.MozTransform !== undefined) {  // Mozilla
+				thumb.style.MozTransform = 'rotate(' + angle + 'deg)';
+			} else if (thumb.style.OTransform !== undefined) {   // Opera
+				thumb.style.OTransform = 'rotate(' + angle + 'deg)';
+			} else if (thumb.style.webkitTransform !== undefined) { // Chrome Safari
+				thumb.style.webkitTransform = 'rotate(' + angle + 'deg)';
+			} else {
+				thumb.style.transform = "rotate(" + angle + "deg)";
+			}
+			
+			$.data(thumb, "degree", angle);
+		}
 	}
+	
+	
 	return {rotate: rotate}
 }();
