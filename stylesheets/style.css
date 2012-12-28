@@ -1,4 +1,12 @@
 
+html,body{
+  height:100%;
+  overflow:hidden;
+}
+body{
+  font:12px/1.5 \5fae\8f6f\96c5\9ed1;
+  background: url(../images/body-background.png) #eae6d1;
+}
 button,
 input[type="button"],
 input[type="reset"],
@@ -258,42 +266,6 @@ header p {
   margin: 5px 30px 5px 30px;
   position: absolute;
 }
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin:5px 5px;
-  padding: 5px 5px;
-}
-
-
-table, td{
-  font:100% Arial, Helvetica, sans-serif; 
-}
-th, td {
-  text-align: left;
-  border-left: 1px solid #4276b6;
-  border-right: 1px solid #4276b6;
-  border-top: 1px solid #4276b6;
-  border-bottom: 1px solid #4276b6;
-  background: #64c8c8;
-}
-
-/* tablecloth styles */
-
-tr.even td{background:#e5f1f4;}
-tr.odd td{background:#f8fbfc;}
-
-td.over, tr.even td.over, tr.odd td.over{background:#bce774;}
-td.down, tr.even td.down, tr.odd td.down{background:#bce774;color:#fff;}
-
-/* use this if you want to apply different styleing to empty table cells*/
-td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
-
-html,body{
-  height:100%;
-  overflow:hidden;
-}
-body{font:12px/1.5 \5fae\8f6f\96c5\9ed1;}
 #popMenu{
   position:absolute;
   top:-9999px;
@@ -340,3 +312,32 @@ body{font:12px/1.5 \5fae\8f6f\96c5\9ed1;}
   display:none;
   position:absolute;
 }
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:5px 5px;
+  padding: 5px 5px;
+}
+table, td{
+  font:100% Arial, Helvetica, sans-serif; 
+}
+th, td {
+  text-align: left;
+  border-left: 1px solid #4276b6;
+  border-right: 1px solid #4276b6;
+  border-top: 1px solid #4276b6;
+  border-bottom: 1px solid #4276b6;
+  background: #64c8c8;
+}
+
+/* tablecloth styles */
+
+tr.even td{background:#e5f1f4;}
+tr.odd td{background:#f8fbfc;}
+
+td.over, tr.even td.over, tr.odd td.over{background:#bce774;}
+td.down, tr.even td.down, tr.odd td.down{background:#bce774;color:#fff;}
+
+/* use this if you want to apply different styleing to empty table cells*/
+td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
