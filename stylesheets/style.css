@@ -90,11 +90,11 @@ header p {
   top: 340px;
   width: 200px;
   height: 250px;
-  resize:none;
   cursor:text;
   border: 1px solid #00ffff;
   background: #dddddd;
   color: #333333;
+  resize:none;
 }
 #fields{
   z-index: 100;
@@ -127,7 +127,13 @@ header p {
   width: 327px;
   height: 72px;
 }
-#fields :hover{
+#fields .location_hand:hover,.location_extra:hover,.location_grave:hover,.location_removed:hover{
+  border: 1px solid #ff0000;
+}
+#fields .location_deck:hover{
+  border: 1px solid #ff0000;
+}
+#fields .location_mzone:hover,.location_szone:hover,.location_field:hover{
   border: 1px solid #ff0000;
 }
 #fields .thumb {
@@ -137,8 +143,25 @@ header p {
   position: absolute;
   display: inline-block;
 }
-#fields .thumb:hover{
-  border: none;
+.field_group_count{
+  z-index: 400;
+  top: 60px;
+  width: 52px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  position: absolute;
+  color: #ffff00;
+}
+.monster_ad{
+  z-index: 400;
+  top: 58px;
+  width: 64px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+  position: absolute;
+  color: #ffffff;
 }
 #search_bar {
   z-index: 100;

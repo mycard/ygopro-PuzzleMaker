@@ -1,4 +1,8 @@
 
+var _popmenu;
+var dragging = false;
+var putting = false;
+var isIE = /*@cc_on!@*/!1;
 var current_page ;
 var page_num;
 var table_row = 6;//Math.floor((getViewSize().h-250)/64);
@@ -42,18 +46,6 @@ var card_img_thumb_url = "http://my-card.in/images/cards/ygocore/thumbnail/";
 
 var datas = new Object();
 
-
-function search1(){
-	var name = document.getElementById("keyword").value;
-	var q = JSON.stringify( {name: {$regex: name.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), $options: 'i'}});
-	var url = locale_url + '?q=' + q;
-	$.getJSON(url, function(langs) {
-        alert(JSON.stringify(langs));
-      });
-
-}
-
-
 function search(){
 	var name = document.getElementById("keyword").value;
 	var page_button = document.getElementById("page_button");
@@ -70,7 +62,7 @@ function search(){
 			alert("未找到相关卡片");
 			return false;
 		}
-	/*	var cards_id = [];
+		var cards_id = [];
 		for (var _i in result) {
 			cards_id.push(result[_i]._id);
 		}
@@ -99,13 +91,6 @@ function search(){
 				};
 				datas[card._id]=data;
 			}
-	*/
-			for(var i in result){
-				var card = result[i];
-				datas[card._id]=card;
-			}
-			
-			
 			current_page = 1;
 			page_num = 0;
 			$.each(result, function(i, card){
@@ -135,7 +120,7 @@ function search(){
 			for (var i=0; i< thumbs.length;i++){
 				makeDraggable(thumbs[i]);
 			}
-	//	});
+		});
 	});
 }
 function initField(){
@@ -173,16 +158,17 @@ function initField(){
 	}
 	var download = document.getElementById('download');
 	download.onmouseover = downloadURL;
-	
 	var keyword = document.getElementById('keyword');
 	keyword.onkeypress = function(ev){
 		var ev = ev || window.event;
 		var key = ev.keyCode;
 		if(key == 13){
-			search1();
+			search();
 		}
 	};
+	_popmenu = new PopMenu;
 	
+	/*黑羽 for test*/
 	current_page = 1;
 	page_num = 0;
 	html = "";
@@ -231,13 +217,11 @@ function nextPage(){//下一页
 }
 function showPage(current_page){//显示current页
 	var tables = document.getElementsByTagName('table');
-	for(var i in tables){
+	for(var i=0; i<tables.length; i++){
 		if(i == current_page -1) //current为1时显示table[0]
 			tables[i].style.display = "block";
 		else
 			tables[i].style.display = "none";
-		if(i == tables.length-1)
-			return false;
 	}
 }
 function setPageLabel(current_page, page_num) {//显示第X页/共X页
@@ -285,6 +269,7 @@ function addCard(field, card_info){
 
 function updateField(field){
 	var tmplItem = $(field).tmplItem().data;
+	var location = tmplItem.location;
 	var card_list = $.data(field, 'card_list');
 	$(field).empty();
 	var width = $(field).width();
@@ -314,6 +299,28 @@ function updateField(field){
 		makeMoveable(thumbs[i]);
 	}
 	updateCards(thumbs);
+	if(0 != length){
+		var type;
+		var text = "";
+		if(location == "grave" || location == "deck" || location == "extra" || location == "removed"){
+			type = "field_group_count";
+			text = length;
+		}
+		else if(location == "mzone"){
+			type = "monster_ad";
+			var card_info = card_list[length-1];
+			var data = datas[card_info.card_id];
+			var atk = data.atk;
+			var def = data.def;
+			if(atk < 0){atk = "?";}
+			if(def < 0){def = "?";}
+			text = atk + "/" + def;
+		}
+		$("#label_field-tmpl").tmpl({
+			type: type,
+			text: text
+		}).appendTo(field);
+	}
 }
 function updateCards(thumbs){	
 	for (var i=0; i<thumbs.length; i++){
