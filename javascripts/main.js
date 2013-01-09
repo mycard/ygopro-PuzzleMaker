@@ -167,7 +167,7 @@ function initField(){
 		}
 	};
 	_popmenu = new PopMenu;
-	
+
 	/*黑羽 for test*/
 	current_page = 1;
 	page_num = 0;
@@ -291,7 +291,8 @@ function updateField(field){
 			top: top || 3,
 			left: left || 0,
 			right: right || 0,
-			bottom: bottom || 0
+			bottom: bottom || 0,
+			card_img_thumb_url: card_img_thumb_url
 		}).appendTo(field);
 	}
 	var thumbs = field.getElementsByClassName("thumb");

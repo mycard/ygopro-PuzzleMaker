@@ -57,6 +57,7 @@ header p {
   width: 120px;
   color: #ff2222;
   font-size: 18px;
+  text-align: center;
 }
 #AI_LP{
   position: absolute;
@@ -64,6 +65,7 @@ header p {
   width: 120px;
   color: #ff2222;
   font-size: 18px;
+  text-align: center;
 }
 #detail_image{
   z-index: 100;
@@ -151,16 +153,18 @@ header p {
   font-size: 14px;
   font-weight: bold;
   position: absolute;
+  text-shadow: 0px 2px 0px #235796;
   color: #ffff00;
 }
 .monster_ad{
   z-index: 400;
-  top: 58px;
+  top: 55px;
   width: 64px;
   text-align: center;
   font-size: 10px;
   font-weight: bold;
   position: absolute;
+  text-shadow: 0px 2px 0px #235796;
   color: #ffffff;
 }
 #search_bar {
@@ -334,6 +338,22 @@ th, td {
   border-bottom: 1px solid #4276b6;
   background: #64c8c8;
 }
+#sortable {
+  list-style-type:none;
+  margin: 0;
+  padding: 0;
+  width:
+  450px;
+}
+#sortable li {
+  margin: 3px 3px 3px 0;
+  padding: 1px;
+  float: left;
+  width: 44px;
+  height: 64px;
+  text-align: center;
+}
+
 
 /* tablecloth styles */
 

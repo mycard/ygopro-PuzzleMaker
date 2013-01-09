@@ -1,13 +1,14 @@
 var menu_position = 1;
-var menu_pos_faceup_attack = 2;
-var menu_pos_faceup_defence = 4;
-var menu_pos_facedown_defence = 8;
-var menu_pos_facedown_attack = 16;
-var menu_enable_revivelimit = 32;
-var menu_disable_revivelimit = 64;
-var menu_target = 128;
-var menu_equip = 256;
-var menu_counter = 512;
+var menu_pos_faceup_attack = 1 << 1;
+var menu_pos_faceup_defence = 1 << 2;
+var menu_pos_facedown_defence = 1 << 3;
+var menu_pos_facedown_attack = 1 << 4;
+var menu_enable_revivelimit = 1 << 5;
+var menu_disable_revivelimit = 1 << 6;
+var menu_target = 1 << 7;
+var menu_equip = 1 << 8;
+var menu_counter = 1 << 9;
+var menu_show_list = 1 << 10;
 
 
 var PopMenu = function createPopMenu(){
@@ -66,6 +67,7 @@ var PopMenu = function createPopMenu(){
 		else if(location == 'removed'){
 			menuItems = 0;
 		}
+		menuItems += menu_show_list;
 		if(menuItems == 0) return false;
 		setMenu(menuItems);
 		for(var i=1;i<5;i++){
@@ -238,6 +240,56 @@ var PopMenu = function createPopMenu(){
 		var tmplItem = $(thumb).tmplItem().data;
 		tmplItem.card_info.disable_revivelimit = true;
 	}
+	aLi[10].onmousedown = function(event){//查看列表
+		var event = event || window.event;
+		var field = thumb.parentNode;
+		var sortable = $('#sortable');
+		sortable.empty();
+		var card_list = $.data(field, 'card_list');
+		for(var i in card_list){
+			$("#sortable-tmpl").tmpl({
+				card_info: card_list[i],
+				card_img_thumb_url: card_img_thumb_url
+			}).appendTo(sortable);
+		}
+		sortable.sortable();
+		sortable.disableSelection();
+		$('#show_list_dialog').dialog('open');
+		return false;
+	}
+	
+	$("#show_list_dialog").dialog({
+		autoOpen: false,
+		resizable: false,
+		show: "clip",
+		hide: "puff",
+		modal: true,
+		width: 450,
+		buttons: {
+			"确定": function() {
+				sort(this, thumb.parentNode);
+				$( this ).dialog({hide: "clip"});
+				$( this ).dialog( "close" );
+				$( this ).dialog({hide: "puff"});
+			},
+			"取消": function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+	
+}
+function sort(dialog, field){
+	var thumbs = dialog.getElementsByClassName("thumb");
+	var card_list = [];
+	for(var i =0; i < thumbs.length; i++){
+		var tmplItem = $(thumbs[i]).tmplItem().data;
+		var card_info = tmplItem.card_info;
+		card_list[i] = card_info;
+	}
+	$.data(field, 'card_list', card_list);
+	updateField(field);
+	
 }
 var getOffset = {
 	top: function (obj) {
