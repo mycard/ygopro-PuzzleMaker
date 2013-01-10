@@ -162,8 +162,9 @@ var PopMenu = function createPopMenu(){
 		maxWidth = 0;
 		for (var i = 0; i < obj.children.length; i++){
 			var oLi = obj.children[i];   
-			var iWidth = oLi.clientWidth - parseInt(oLi.currentStyle ? oLi.currentStyle["paddingLeft"] : getComputedStyle(oLi,null)["paddingLeft"]) * 2
-			if (iWidth > maxWidth) maxWidth = iWidth;
+			var iWidth = oLi.clientWidth - parseInt(oLi.currentStyle ? oLi.currentStyle["paddingLeft"] : getComputedStyle(oLi,null)["paddingLeft"]) * 2;
+			if (iWidth > maxWidth)
+				maxWidth = iWidth;
 		}
 		if(maxWidth > 0){
 			for (i = 0; i < obj.children.length; i++)
@@ -240,7 +241,35 @@ var PopMenu = function createPopMenu(){
 		var tmplItem = $(thumb).tmplItem().data;
 		tmplItem.card_info.disable_revivelimit = true;
 	}
-	aLi[10].onmousedown = function(event){//查看列表
+	aLi[7].onmousedown = function(event){//设置永续效果对象
+		var event = event || window.event;
+		var tmplItem = $(thumb).tmplItem().data;
+		
+	}
+	aLi[8].onmousedown = function(event){//设置装备对象
+		var event = event || window.event;
+		var tmplItem = $(thumb).tmplItem().data;
+		
+	}
+	aLi[9].onmousedown = function(event){//放置指示物
+		var event = event || window.event;
+		var tmplItem = $(thumb).tmplItem().data;
+		var card_counters = tmplItem.card_info.card_counters;
+		if(card_counters == undefined) card_counters = [];
+		var counterSelectors = $('#counterSelectors');
+		counterSelectors.empty();
+		if(card_counters == 0){	
+			addCounterSelector();//增加默认的指示物选择器
+		}
+		else {
+			for(var i=0; i<card_counters.length; i++){//设置指示物选择器中已选中的项以及数量
+				addCounterSelector(card_counters[i].code, card_counters[i].number);
+			}
+		}
+		$('#add_counter_dialog').dialog('open');
+		return false;
+	}
+	aLi[10].onmousedown = function(event){//调整顺序
 		var event = event || window.event;
 		var field = thumb.parentNode;
 		var sortable = $('#sortable');
@@ -258,6 +287,25 @@ var PopMenu = function createPopMenu(){
 		return false;
 	}
 	
+	$("#add_counter_dialog").dialog({
+		autoOpen: false,
+		resizable: false,
+		show: "clip",
+		hide: "puff",
+		modal: true,
+		width: 450,
+		buttons: {
+			"确定": function() {
+				addCounter(this, thumb);
+				$( this ).dialog({hide: "clip"});
+				$( this ).dialog( "close" );
+				$( this ).dialog({hide: "puff"});
+			},
+			"取消": function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
 	$("#show_list_dialog").dialog({
 		autoOpen: false,
 		resizable: false,
@@ -277,9 +325,41 @@ var PopMenu = function createPopMenu(){
 			}
 		}
 	});
-	
 }
-function sort(dialog, field){
+function delCounterSelector(ev){//删除同一行的选择器
+	ev         = ev || window.event;
+	var target = ev.target || ev.srcElement;
+	var div = target.parentNode;
+	div.parentNode.removeChild(div);
+}
+function addCounterSelector(code, number){//添加选择器
+	$("#CounterSelector-tmpl").tmpl({
+		counters: counters,
+		_code: code || "0x3001",
+		_number: number || 1
+	}).appendTo($('#counterSelectors'));
+	$('.spinner').spinner({//设置指示物的数量不能小于1
+		spin: function( event, ui ) {
+			if ( ui.value < 1 ) {
+				return false;
+			}
+		}
+	});
+}
+function addCounter(dialog, thumb){//根据dialog的内容更新thumb
+	var tmplItem = $(thumb).tmplItem().data;
+	var card_info = tmplItem.card_info;
+	card_info.card_counters = [];
+	var CounterSelectors = dialog.getElementsByClassName("CounterSelector");
+	for(var i=0; i<CounterSelectors.length; i++){
+		var select = CounterSelectors[i].getElementsByTagName("select")[0];
+		var input = CounterSelectors[i].getElementsByTagName("input")[0];
+		var code = select.value;
+		var number = input.value;
+		card_info.card_counters[i] = {code : code , number : number};
+	}
+}
+function sort(dialog, field){//根据dialog的顺序更新field
 	var thumbs = dialog.getElementsByClassName("thumb");
 	var card_list = [];
 	for(var i =0; i < thumbs.length; i++){
@@ -289,7 +369,6 @@ function sort(dialog, field){
 	}
 	$.data(field, 'card_list', card_list);
 	updateField(field);
-	
 }
 var getOffset = {
 	top: function (obj) {

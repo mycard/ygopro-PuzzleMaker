@@ -246,14 +246,13 @@ function addField(player, location, place) {//画场地
 			left = COORDINATE[player][location].left + 66*(4-place);
 		}
 	}
-	var built = $('#field-tmpl').tmpl({
+	$('#field-tmpl').tmpl({
 		player: player || 0,
 		location: LOCATION_STRING[location] || 0,
 		place: place || 0,
 		top: top,
 		left: left
-	});
-	$('#fields').append(built);
+	}).appendTo($('#fields'));
 }
 function addCard(field, card_info){
 	var tmplItem = $(field).tmplItem().data;
@@ -418,49 +417,6 @@ function showDetail(card_id){
 	//$('#detail_label').html($('#detail-tmpl').tmpl({detail: data}));
 	var textarea = document.getElementById("detail_textarea");
 	textarea.value = data.desc;
-}
-function downloadURL(){
-	var player_LP = document.getElementById("Player_LP").value;
-	var AI_LP = document.getElementById("AI_LP").value;
-	var str = "--created by ygopro puzzle maker \r\n";
-	str += "Debug.SetAIName('高性能电子头脑')\r\n";
-	str += "Debug.ReloadFieldBegin(DUEL_ATTACK_FIRST_TURN+DUEL_SIMPLE_AI)\r\n";
-	str += "Debug.SetPlayerInfo(0," + player_LP + ",0,0)\r\n";
-	str += "Debug.SetPlayerInfo(1," + AI_LP + ",0,0)\r\n" ;
-	
-	var fields = document.getElementById("fields").getElementsByTagName("div");
-	for(var i=0; i< fields.length;i++){
-		var tmplItem = $(fields[i]).tmplItem().data;
-		var player = tmplItem.player;
-		var location = "LOCATION_" + tmplItem.location.toUpperCase();
-		var place = tmplItem.place;
-		if(fields[i]){
-			var thumbs = fields[i].getElementsByClassName("thumb");
-			if(location == "LOCATION_MZONE"){
-				for(var j=thumbs.length-1; j>=0 ; j--){
-					var card_info = $(thumbs[j]).tmplItem().data.card_info;
-					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
-				}
-			}
-			else if(location == "LOCATION_FIELD"){
-				for(var j=0; j < thumbs.length; j++){
-					location = "LOCATION_SZONE"
-					place = 5;
-					var card_info = $(thumbs[j]).tmplItem().data.card_info;
-					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
-				}
-			}
-			else {
-				for(var j=0; j < thumbs.length; j++){
-					var card_info = $(thumbs[j]).tmplItem().data.card_info;
-					str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
-				}
-			}
-		}
-	}
-	str += "Debug.ReloadFieldEnd()\r\n" ;
-	str += "aux.BeginPuzzle()\r\n";
-	this.href = "http://my-card.in/singles/new.lua?name=Untitled&script=" + encodeURIComponent(str);
 }
 function mouseDown(ev){
 	ev         = ev || window.event;

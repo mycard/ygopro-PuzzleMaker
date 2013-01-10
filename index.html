@@ -19,6 +19,7 @@
 <script src="javascripts/tablecloth.js" type="text/javascript">></script>
 <script src="javascripts/drag.js" type="text/javascript">></script>
 <script src="javascripts/main.js" type="text/javascript">></script>
+<script src="javascripts/download.js" type="text/javascript">></script>
 <script src="javascripts/ygo.js" type="text/javascript">></script>
 <script src="javascripts/popmenu.js" type="text/javascript">></script>
 <script src="javascripts/result.js" type="text/javascript">></script>
@@ -30,7 +31,7 @@
 		var dragImage  = document.getElementById('DragImage');
 		dragImage.style.display = "none";
 		initField();
-		
+		search();
 	});
 </script>
 <script type="text/x-jquery-tmpl" id="page-tmpl">
@@ -45,11 +46,30 @@
 <script type="text/x-jquery-tmpl" id="label_field-tmpl">
 	<label class=${type} >${text}</label>
 </script>
-<script type="text/x-jquery-tmpl" id="sortable-tmpl">		
+<script type="text/x-jquery-tmpl" id="sortable-tmpl">
 	<li class="ui-state-default"><img class='thumb' style='cursor:move;' src='${card_img_thumb_url}${card_info.card_id}.jpg'/></li>
 </script>
+<script type="text/x-jquery-tmpl" id="CounterSelector-tmpl">
+	<div class="CounterSelector">
+		种类：
+		<select class="select">
+		{{each counters}}
+			{{if $value.code==_code}}
+				<option value="${$value.code}" selected="selected">${$value.str}</option>
+			{{else}}
+				<option value="${$value.code}">${$value.str}</option>
+			{{/if}}
+		{{/each}}
+		</select>
+		数量：
+		<input class="spinner" onkeydown="return checkNums()" value="${_number}"/>
+		<button class="btn btn-danger" onclick="delCounterSelector()">删除</button>
+	</div>
+</script>
+<script type="text/javascript">
+	
+</script>
 </head>
-
 <body>
 	<img id="DragImage" src="images/unknow.jpg" alt=""/>
 
@@ -75,8 +95,8 @@
 		</div>
 		<label class="page_label">第0页/共0页</label>
 		<div id="page_button" style="display:none">
-			<button class="btn" type="button" id="prePage" onclick="prePage()">上一页</button>
-			<button class="btn" type="button" id="nextPage" onclick="nextPage()">下一页</button>
+			<button class="btn" id="prePage" onclick="prePage()">上一页</button>
+			<button class="btn" id="nextPage" onclick="nextPage()">下一页</button>
 		</div>
 	</div>
 	
@@ -106,7 +126,7 @@
 				设置装备对象
 			</li>
 			<li>
-				增加指示物
+				放置指示物
 			</li>
 			<li>
 				调整顺序
@@ -118,5 +138,9 @@
 	</div>
 	
 	
+	<div id="add_counter_dialog" title="放置指示物">
+		<div id="counterSelectors"></div>
+		<button class="btn" onclick="addCounterSelector()">增加其他种类的指示物</button>
+	</div>
 </body>
 </html>

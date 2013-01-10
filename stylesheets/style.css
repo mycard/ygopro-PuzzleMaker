@@ -293,6 +293,7 @@ header p {
   float:left;
   clear:both;
   height:24px;
+  width:100px;
   cursor:pointer;
   line-height:24px;
   white-space:nowrap;
@@ -338,12 +339,19 @@ th, td {
   border-bottom: 1px solid #4276b6;
   background: #64c8c8;
 }
+.select {
+  height: 28px;
+  width: 180px;
+}
+.spinner {
+  height: 25px;
+  width: 50px;
+}
 #sortable {
   list-style-type:none;
   margin: 0;
   padding: 0;
-  width:
-  450px;
+  width: 450px;
 }
 #sortable li {
   margin: 3px 3px 3px 0;
@@ -353,7 +361,6 @@ th, td {
   height: 64px;
   text-align: center;
 }
-
 
 /* tablecloth styles */
 
