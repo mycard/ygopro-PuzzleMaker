@@ -2,6 +2,12 @@
 var _popmenu;
 var dragging = false;
 var putting = false;
+var selectingEquip;
+var selectingContinuous;
+var thumb_equip;
+var thumb_equip_target;
+var thumb_continuous;
+var thumb_continuous_target;
 var isIE = /*@cc_on!@*/!1;
 var current_page ;
 var page_num;
@@ -394,22 +400,6 @@ function updateCards(thumbs){
 	}
 }
 
-
-function getViewSize(){
-	return {w: window['innerWidth'] || document.documentElement.clientWidth,
-	h: window['innerHeight'] || document.documentElement.clientHeight}
-}
-function getFullSize(){
-	return {w: window.screen.width, h: window.screen.height}
-}
-function del(array,n){
-	var result = [];
-	for(var i in array){
-		if(i != n)
-			result.push(array[i]);
-	}
-　　return result;
-}
 function showDetail(card_id){
 	var img = document.getElementById("detail_image");
 	img.src = card_img_url + card_id + ".jpg";
@@ -430,7 +420,7 @@ var up;
 function mouseUp(ev){
 	ev         = ev || window.event;
 	var target = ev.target || ev.srcElement;
-	if(ev.button == 0 || ev.button == 1){
+	if(ev.button == 0 || ev.button == 1){//鼠标左键，ie是0，其他是1
 		var dragImage  = document.getElementById('DragImage');
 		if(dragging){
 			dragging = false;
@@ -486,6 +476,22 @@ function checkLetter() {
 	else {
 		return false;
 	}
+}
+
+function getViewSize(){
+	return {w: window['innerWidth'] || document.documentElement.clientWidth,
+	h: window['innerHeight'] || document.documentElement.clientHeight}
+}
+function getFullSize(){
+	return {w: window.screen.width, h: window.screen.height}
+}
+function del(array,n){
+	var result = [];
+	for(var i in array){
+		if(i != n)
+			result.push(array[i]);
+	}
+	return result;
 }
 document.onmousemove = mouseMove;
 document.onmousedown = mouseDown;

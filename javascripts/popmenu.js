@@ -10,7 +10,6 @@ var menu_equip = 1 << 8;
 var menu_counter = 1 << 9;
 var menu_show_list = 1 << 10;
 
-
 var PopMenu = function createPopMenu(){
 	var popMenu = document.getElementById("popMenu");
 	var aUl = popMenu.getElementsByTagName("ul");
@@ -21,7 +20,180 @@ var PopMenu = function createPopMenu(){
 	var aDoc = [document.documentElement.offsetWidth, document.documentElement.offsetHeight];
 	var thumb;//弹出右键菜单的thumb
 	popMenu.style.display = "none";
+	for (i = 0; i < aLi.length; i++){
+		//为含有子菜单的li加上箭头
+		aLi[i].getElementsByTagName("ul")[0] && (aLi[i].className = "sub");
+		
+		aLi[i].onmouseover = function (){
+			var oThis = this;
+			var oUl = oThis.getElementsByTagName("ul");
+			oThis.className += " active";   
+			//显示子菜单
+			if (oUl[0]){
+				clearTimeout(hideTimer);    
+				showTimer = setTimeout(function (){
+					for (i = 0; i < oThis.parentNode.children.length; i++){
+						oThis.parentNode.children[i].getElementsByTagName("ul")[0] &&
+						(oThis.parentNode.children[i].getElementsByTagName("ul")[0].style.display = "none");
+					}
+					oUl[0].style.display = "block";
+					oUl[0].style.top = oThis.offsetTop + "px";
+					oUl[0].style.left = oThis.offsetWidth + "px";
+					setWidth(oUl[0]);
+					//最大显示范围
+					maxWidth = aDoc[0] - oUl[0].offsetWidth;
+					maxHeight = aDoc[1] - oUl[0].offsetHeight;
+					//防止溢出
+					maxWidth < getOffset.left(oUl[0]) && (oUl[0].style.left = -oUl[0].clientWidth + "px");
+					maxHeight < getOffset.top(oUl[0]) && (oUl[0].style.top = -oUl[0].clientHeight + oThis.offsetTop + oThis.clientHeight + "px")
+				},300);
+			}
+		};
 
+		aLi[i].onmouseout = function (){
+			var oThis = this;
+			var oUl = oThis.getElementsByTagName("ul");
+			oThis.className = oThis.className.replace(/\s?active/,"");
+			clearTimeout(showTimer);
+			hideTimer = setTimeout(function (){
+				for (i = 0; i < oThis.parentNode.children.length; i++){
+					oThis.parentNode.children[i].getElementsByTagName("ul")[0] &&
+					(oThis.parentNode.children[i].getElementsByTagName("ul")[0].style.display = "none");
+				}
+			},300);
+		};
+	}
+	
+	//各菜单项的响应事件
+	aLi[1].onmousedown = function(event){//表侧攻击表示
+		var tmplItem = $(thumb).tmplItem().data;
+		var card_id = tmplItem.card_info.card_id;
+		thumb.src = card_img_thumb_url + card_id + ".jpg";
+		tmplItem.card_info.position = "POS_FACEUP_ATTACK";
+		if(isIE){
+			thumb.style.top = tmplItem.top + "px";
+			thumb.style.left = tmplItem.left + "px";
+		}
+		else {
+			thumb.style.left = tmplItem.left + "px";
+		}
+		Img.rotate(thumb, 0);
+	}
+	aLi[2].onmousedown = function(event){//表侧守备表示
+		var tmplItem = $(thumb).tmplItem().data;
+		var card_id = tmplItem.card_info.card_id;
+		thumb.src = card_img_thumb_url + card_id + ".jpg";
+		tmplItem.card_info.position = "POS_FACEUP_DEFENCE";
+		if(isIE){
+			thumb.style.top = 13 + "px";
+			thumb.style.left = 0 + "px";
+		}
+		else {
+			thumb.style.left = 10 + "px";
+		}
+		Img.rotate(thumb, -90);
+	}
+	aLi[3].onmousedown = function(event){//里侧守备表示
+		var tmplItem = $(thumb).tmplItem().data;
+		var card_id = tmplItem.card_info.card_id;
+		thumb.src = "images/unknow.jpg";
+		tmplItem.card_info.position = "POS_FACEDOWN_DEFENCE";
+		if(isIE){
+			thumb.style.top = 13 + "px";
+			thumb.style.left = 0 + "px";
+		}
+		else {
+			thumb.style.left = 10 + "px";
+		}
+		Img.rotate(thumb, -90);
+	}
+	aLi[4].onmousedown = function(event){//里侧攻击表示
+		var tmplItem = $(thumb).tmplItem().data;
+		var card_id = tmplItem.card_info.card_id;
+		thumb.src = "images/unknow.jpg";
+		tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
+		if(isIE){
+			thumb.style.top = tmplItem.top + "px";
+			thumb.style.left = tmplItem.left + "px";
+		}
+		else {
+			thumb.style.left = tmplItem.left + "px";
+		}
+		Img.rotate(thumb, 0);
+	}
+	aLi[5].onmousedown = function(event){//不解除苏生限制
+		var tmplItem = $(thumb).tmplItem().data;
+		tmplItem.card_info.disable_revivelimit = false;
+	}
+	aLi[6].onmousedown = function(event){//解除苏生限制
+		var tmplItem = $(thumb).tmplItem().data;
+		tmplItem.card_info.disable_revivelimit = true;
+	}
+	aLi[7].onmousedown = function(event){//设置永续效果对象
+		thumb_continuous = thumb;
+		selectingContinuous = true;
+		var fields = document.getElementById("fields").getElementsByTagName("div");
+		for(var i=0; i< fields.length;i++){
+			var tmplItem = $(fields[i]).tmplItem().data;
+			var location = tmplItem.location;
+			if(location == 'mzone' || location == 'szone'){
+				var thumbs = fields[i].getElementsByClassName("thumb");
+				if(thumbs.length != 0){
+					var card_info = $(thumbs[thumbs.length-1]).tmplItem().data.card_info;
+					card_info.IsSelectable = true;
+				}
+			}
+		}
+	}
+	aLi[8].onmousedown = function(event){//设置装备对象
+		thumb_equip = thumb;
+		selectingEquip = true;
+		var fields = document.getElementById("fields").getElementsByTagName("div");
+		for(var i=0; i< fields.length;i++){
+			var tmplItem = $(fields[i]).tmplItem().data;
+			var location = tmplItem.location;
+			if(location == 'mzone'){
+				var thumbs = fields[i].getElementsByClassName("thumb");
+				if(thumbs.length != 0){
+					var card_info = $(thumbs[thumbs.length-1]).tmplItem().data.card_info;
+					card_info.IsSelectable = true;
+				}
+			}
+		}
+	}
+	aLi[9].onmousedown = function(event){//放置指示物
+		var tmplItem = $(thumb).tmplItem().data;
+		var card_counters = tmplItem.card_info.card_counters;
+		var counterSelectors = $('#counterSelectors');
+		counterSelectors.empty();
+		if(card_counters.length == 0){	
+			addCounterSelector();//增加默认的指示物选择器
+		}
+		else {
+			for(var i=0; i<card_counters.length; i++){//设置指示物选择器中已选中的项以及数量
+				addCounterSelector(card_counters[i].code, card_counters[i].number);
+			}
+		}
+		$('#add_counter_dialog').dialog('open');
+		return false;
+	}
+	aLi[10].onmousedown = function(event){//调整顺序
+		var field = thumb.parentNode;
+		var sortable = $('#sortable');
+		sortable.empty();
+		var card_list = $.data(field, 'card_list');
+		for(var i in card_list){
+			$("#sortable-tmpl").tmpl({
+				card_info: card_list[i],
+				card_img_thumb_url: card_img_thumb_url
+			}).appendTo(sortable);
+		}
+		sortable.sortable();
+		sortable.disableSelection();
+		$('#show_list_dialog').dialog('open');
+		return false;
+	}
+	
 	this.show = function (event){
 		var event = event || window.event;
 		thumb = event.target;
@@ -112,51 +284,6 @@ var PopMenu = function createPopMenu(){
 			menuItems = menuItems >> 1;
 		}
 	}
-	for (i = 0; i < aLi.length; i++){
-		//为含有子菜单的li加上箭头
-		aLi[i].getElementsByTagName("ul")[0] && (aLi[i].className = "sub");
-		
-		//鼠标移入
-		aLi[i].onmouseover = function (){
-			var oThis = this;
-			var oUl = oThis.getElementsByTagName("ul");
-			oThis.className += " active";   
-			//显示子菜单
-			if (oUl[0]){
-				clearTimeout(hideTimer);    
-				showTimer = setTimeout(function (){
-					for (i = 0; i < oThis.parentNode.children.length; i++){
-						oThis.parentNode.children[i].getElementsByTagName("ul")[0] &&
-						(oThis.parentNode.children[i].getElementsByTagName("ul")[0].style.display = "none");
-					}
-					oUl[0].style.display = "block";
-					oUl[0].style.top = oThis.offsetTop + "px";
-					oUl[0].style.left = oThis.offsetWidth + "px";
-					setWidth(oUl[0]);
-					//最大显示范围
-					maxWidth = aDoc[0] - oUl[0].offsetWidth;
-					maxHeight = aDoc[1] - oUl[0].offsetHeight;
-					//防止溢出
-					maxWidth < getOffset.left(oUl[0]) && (oUl[0].style.left = -oUl[0].clientWidth + "px");
-					maxHeight < getOffset.top(oUl[0]) && (oUl[0].style.top = -oUl[0].clientHeight + oThis.offsetTop + oThis.clientHeight + "px")
-				},300);
-			}
-		};
-		aLi[i].onmousedown = function (){ }
-		//鼠标移出 
-		aLi[i].onmouseout = function (){
-			var oThis = this;
-			var oUl = oThis.getElementsByTagName("ul");
-			oThis.className = oThis.className.replace(/\s?active/,"");
-			clearTimeout(showTimer);
-			hideTimer = setTimeout(function (){
-				for (i = 0; i < oThis.parentNode.children.length; i++){
-					oThis.parentNode.children[i].getElementsByTagName("ul")[0] &&
-					(oThis.parentNode.children[i].getElementsByTagName("ul")[0].style.display = "none");
-				}
-			},300);
-		};
-	}
 
 	function setWidth(obj){
 		maxWidth = 0;
@@ -170,121 +297,6 @@ var PopMenu = function createPopMenu(){
 			for (i = 0; i < obj.children.length; i++)
 				obj.children[i].style.width = maxWidth + "px";
 		}
-	}
-	aLi[1].onmousedown = function(event){//表侧攻击表示
-		var event = event || window.event;
-		var tmplItem = $(thumb).tmplItem().data;
-		var card_id = tmplItem.card_info.card_id;
-		thumb.src = card_img_thumb_url + card_id + ".jpg";
-		tmplItem.card_info.position = "POS_FACEUP_ATTACK";
-		if(isIE){
-			thumb.style.top = tmplItem.top + "px";
-			thumb.style.left = tmplItem.left + "px";
-		}
-		else {
-			thumb.style.left = tmplItem.left + "px";
-		}
-		Img.rotate(thumb, 0);
-	}
-	aLi[2].onmousedown = function(event){//表侧守备表示
-		var event = event || window.event;
-		var tmplItem = $(thumb).tmplItem().data;
-		var card_id = tmplItem.card_info.card_id;
-		thumb.src = card_img_thumb_url + card_id + ".jpg";
-		tmplItem.card_info.position = "POS_FACEUP_DEFENCE";
-		if(isIE){
-			thumb.style.top = 13 + "px";
-			thumb.style.left = 0 + "px";
-		}
-		else {
-			thumb.style.left = 10 + "px";
-		}
-		Img.rotate(thumb, -90);
-	}
-	aLi[3].onmousedown = function(event){//里侧守备表示
-		var event = event || window.event;
-		var tmplItem = $(thumb).tmplItem().data;
-		var card_id = tmplItem.card_info.card_id;
-		thumb.src = "images/unknow.jpg";
-		tmplItem.card_info.position = "POS_FACEDOWN_DEFENCE";
-		if(isIE){
-			thumb.style.top = 13 + "px";
-			thumb.style.left = 0 + "px";
-		}
-		else {
-			thumb.style.left = 10 + "px";
-		}
-		Img.rotate(thumb, -90);
-	}
-	aLi[4].onmousedown = function(event){//里侧攻击表示
-		var event = event || window.event;
-		var tmplItem = $(thumb).tmplItem().data;
-		var card_id = tmplItem.card_info.card_id;
-		thumb.src = "images/unknow.jpg";
-		tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
-		if(isIE){
-			thumb.style.top = tmplItem.top + "px";
-			thumb.style.left = tmplItem.left + "px";
-		}
-		else {
-			thumb.style.left = tmplItem.left + "px";
-		}
-		Img.rotate(thumb, 0);
-	}
-	aLi[5].onmousedown = function(event){//不解除苏生限制
-		var event = event || window.event;
-		var tmplItem = $(thumb).tmplItem().data;
-		tmplItem.card_info.disable_revivelimit = false;
-	}
-	aLi[6].onmousedown = function(event){//解除苏生限制
-		var event = event || window.event;
-		var tmplItem = $(thumb).tmplItem().data;
-		tmplItem.card_info.disable_revivelimit = true;
-	}
-	aLi[7].onmousedown = function(event){//设置永续效果对象
-		var event = event || window.event;
-		var tmplItem = $(thumb).tmplItem().data;
-		
-	}
-	aLi[8].onmousedown = function(event){//设置装备对象
-		var event = event || window.event;
-		var tmplItem = $(thumb).tmplItem().data;
-		
-	}
-	aLi[9].onmousedown = function(event){//放置指示物
-		var event = event || window.event;
-		var tmplItem = $(thumb).tmplItem().data;
-		var card_counters = tmplItem.card_info.card_counters;
-		if(card_counters == undefined) card_counters = [];
-		var counterSelectors = $('#counterSelectors');
-		counterSelectors.empty();
-		if(card_counters == 0){	
-			addCounterSelector();//增加默认的指示物选择器
-		}
-		else {
-			for(var i=0; i<card_counters.length; i++){//设置指示物选择器中已选中的项以及数量
-				addCounterSelector(card_counters[i].code, card_counters[i].number);
-			}
-		}
-		$('#add_counter_dialog').dialog('open');
-		return false;
-	}
-	aLi[10].onmousedown = function(event){//调整顺序
-		var event = event || window.event;
-		var field = thumb.parentNode;
-		var sortable = $('#sortable');
-		sortable.empty();
-		var card_list = $.data(field, 'card_list');
-		for(var i in card_list){
-			$("#sortable-tmpl").tmpl({
-				card_info: card_list[i],
-				card_img_thumb_url: card_img_thumb_url
-			}).appendTo(sortable);
-		}
-		sortable.sortable();
-		sortable.disableSelection();
-		$('#show_list_dialog').dialog('open');
-		return false;
 	}
 	
 	$("#add_counter_dialog").dialog({
