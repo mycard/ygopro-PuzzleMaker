@@ -43,12 +43,14 @@ var PLAYER_0 = [
 ];
 var COORDINATE = [PLAYER_0,PLAYER_1];
 
-var locale = 'zh';
+var locale = 'de';
 var cards_url = "http://my-card.in/cards";
+//var cards_url = "../../cards";
 var locale_url = "http://my-card.in/cards_" + locale;
 
-var card_img_url = "http://my-card.in/images/cards/ygocore/";
-var card_img_thumb_url = "http://my-card.in/images/cards/ygocore/thumbnail/";
+var card_img_url = "http://dev-pro.org/puzzle/pics/";
+
+var card_img_thumb_url = "http://dev-pro.org/puzzle/pics/thumbnail/";
 
 var datas = new Object();
 
@@ -104,8 +106,8 @@ function search(){
 					page_num ++;
 					html = html + "<table class='page' style='display:none'>";
 					html = html + "<tr>";
-					html = html + "<th width='46px'>卡图</th>";
-					html = html + "<th >卡名</th>";
+					html = html + "<th width='46px'>Bild</th>";
+					html = html + "<th >Name</th>";
 					html = html + "</tr>";
 				}
 				html = html + "<tr>";

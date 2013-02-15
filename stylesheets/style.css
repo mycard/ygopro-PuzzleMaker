@@ -14,6 +14,48 @@ input[type="submit"] {
   -webkit-appearance: button;
   *overflow: visible;
 }
+.header {
+padding-bottom:50px;
+}
+.footer {
+position: relativ;
+margin-top: 30px;
+}
+#ads {
+height: 100px;
+text-align: center;
+}
+
+ul#Navigation {
+    margin: 0; padding: 0.8em;
+    text-align: center;
+    border: 1px solid black;
+    background-color: silver;
+  }
+  ul#Navigation li {
+    list-style: none;
+    display: inline;
+    margin: 0.4em; padding: 0;
+  }
+
+  ul#Navigation a, ul#Navigation span {
+    padding: 0.2em 1em;
+    text-decoration: none; font-weight: bold;
+    border: 1px solid black;
+    border-left-color: white; border-top-color: white;
+    color: black; background-color: #ccc;
+  }
+  * html ul#Navigation a, * html ul#Navigation span {
+    width: 1em;    /* nur fuer IE 5.0x erforderlich */
+    w/idth: auto;  /* sicherheitshalber fuer IE 6 zurueckgesetzt */
+  }
+  ul#Navigation a:hover, ul#Navigation span {
+    border-color: white;
+    border-left-color: black; border-top-color: black;
+    color: white; background-color: gray;
+  }
+
+
 #header {
   padding: 25px 0px 20px 0px;
   position: absolute;
@@ -38,18 +80,21 @@ input[type="submit"] {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
+  margin-top:0px;
 }
 header p {
   color: #d8d8d8;
   text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
   font-size: 18px;
   margin: 0px;
+  
 }
 #LPbar{
   z-index: 500;
   position: absolute;
   left: 450px;
   top: 65px;
+  margin-top:160px;
 }
 #Player_LP{
   position: absolute;
@@ -74,6 +119,7 @@ header p {
   top: 80px;
   height: 254px;
   width: 177px;
+  margin-top:120px;
 }
 #detail_label{
   z-index: 100;
@@ -97,6 +143,7 @@ header p {
   background: #dddddd;
   color: #333333;
   resize:none;
+  margin-top:130px;
 }
 #fields{
   z-index: 100;
@@ -105,6 +152,7 @@ header p {
   top: 135px;
   width: 478px;
   height: 478px;
+  margin-top:150px;
 }
 #fields .location_mzone ,.location_szone{
   position: absolute;
@@ -183,6 +231,7 @@ header p {
   padding-right: 10px;
   width: 300px;
   text-align:center;
+  margin-top:150px;
 }
 #search_bar .button {
   border: 1px solid #dddddd;
@@ -266,12 +315,11 @@ header p {
 
 #download{
   z-index: 1000;
-  top: 70px;
-  left: 280px;
+  top: 30px;
+  left: 120px;
   cursor: pointer;
   width:80px;
   height:80px;
-  margin: 5px 30px 5px 30px;
   position: absolute;
 }
 #popMenu{

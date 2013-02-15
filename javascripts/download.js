@@ -3,7 +3,7 @@ function downloadURL(){
 	var player_LP = document.getElementById("Player_LP").value;
 	var AI_LP = document.getElementById("AI_LP").value;
 	var str = "--created by ygopro puzzle maker \r\n";
-	str += "Debug.SetAIName('高性能电子头脑')\r\n";
+	str += "Debug.SetAIName('NPC')\r\n";
 	str += "Debug.ReloadFieldBegin(DUEL_ATTACK_FIRST_TURN+DUEL_SIMPLE_AI)\r\n";
 	str += "Debug.SetPlayerInfo(0," + player_LP + ",0,0)\r\n";
 	str += "Debug.SetPlayerInfo(1," + AI_LP + ",0,0)\r\n" ;

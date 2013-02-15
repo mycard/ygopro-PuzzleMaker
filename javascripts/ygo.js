@@ -1,18 +1,18 @@
 
 var types_zh = [
-  '怪兽','魔法','陷阱',null,'通常','效果','融合','仪式','陷阱怪兽','灵魂','同盟','二重','调整','同调', null,'衍生物',
-  '速攻','永续','装备','场地','反击','翻转','卡通','超量'
+  'Monster','Zauber','Falle',null,'allgemein','Effekt','Union','Ritual','Fallen-Monster','Spirit','Allianz','Doppelklick','Anpassung','Kohomologie', null,'Ableitung',
+  'Aufregung','Nachhaltige','Ausrüstung','Standort','Konter','drehen','Karikatur','Überschuss'
 ];
 var attributes_zh = [
-  '地','水','炎','风','光','暗','神'
+  'ERDE','WASSER','FEUER','WIND','LICHT','FINSTERNIS','GOTT'
 ];	  
 var races_zh = [
-  '战士族','魔法师族','天使族','恶魔族','不死族','机械族','水族','炎族','岩石族','鸟兽族','植物族','昆虫族','雷族',
-  '龙族','兽族','兽战士族','恐龙族','鱼族','海龙族','爬虫族','念动力族','幻神兽族','创造神族'
+  'Krieger','Hexer','Fee','Unterwelter','Zombie','Maschine','Aqua','炎族','Fels','geflügeltes Ungeheuer','Pflanze','Insekten','雷族',
+  'Drachen','Ungeheuer','Ungeheuer-Krieger','Dinosaurier','Fisch','Seeschlange','Reptil','念动力族','Gott','创造神族'
 ];
 
 var counters = [
-{"code" : "0x3001" ,"str" : "魔力指示物"},
+{"code" : "0x3001" ,"str" : "test魔力指示物"},
 {"code" : "0x2" ,	"str" : "楔指示物"},
 {"code" : "0x3003" ,"str" : "武士道指示物"},
 {"code" : "0x3004" ,"str" : "念力指示物"},
