@@ -162,8 +162,8 @@ function initField(){
 		var card_id = card_info.card_id;
 		showDetail(card_id);
 	}
-	var download = document.getElementById('download');
-	download.onmouseover = downloadURL;
+	var download = document.getElementById('downloadButton');
+	download.onclick = downloadURL;
 	var keyword = document.getElementById('keyword');
 	keyword.onkeypress = function(ev){
 		var ev = ev || window.event;
@@ -173,8 +173,8 @@ function initField(){
 		}
 	};
 	_popmenu = new PopMenu;
+/*
 
-	/*黑羽 for test*/
 	current_page = 1;
 	page_num = 0;
 	html = "";
@@ -208,6 +208,7 @@ function initField(){
 	for (var i=0; i< thumbs.length;i++){
 		makeDraggable(thumbs[i]);
 	}
+//*/
 }
 function prePage(){ //上一页
 	if(current_page == 1) return false;
@@ -279,7 +280,7 @@ function updateField(field){
 	$(field).empty();
 	var width = $(field).width();
 	var length = card_list.length;
-	var start = width/2 - 22.5*length;
+	var start = width/2 - 23*length;
 	for(var i in card_list){
 		var card_info = card_list[i];
 		card_info.location = tmplItem.location;
@@ -288,9 +289,9 @@ function updateField(field){
 		card_info.index = i;
 		var top, left, right, bottom;
 		if(45 < (width / length)) 
-			left = start + 45*i ;
+			left = start + 46*i ;
 		else 
-			left = (width-45)/(length-1)*i;
+			left = (width-46)/(length-1)*i;
 		$("#thumb-tmpl").tmpl({
 			card_info: card_info,
 			top: top || 3,
@@ -430,8 +431,18 @@ function mouseUp(ev){
 			up = true;
 		}
 	}
-	if(target.oncontextmenu){
-		return false;
+	else {
+		if(selectingEquip || selectingContinuous){
+			selectingEquip = false;
+			selectingContinuous = false;
+			var thumbs = document.getElementsByClassName('thumb');
+			for(var i = 0; i < thumbs.length; i++)
+				thumbs[i].style.border = "none";
+			return false;
+		}
+		else if(target.oncontextmenu){
+			return false;
+		}
 	}
 }
 function mouseMove(ev){

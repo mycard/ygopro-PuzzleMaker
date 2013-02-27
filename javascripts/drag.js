@@ -43,14 +43,22 @@ function makeMoveable(thumb){
 				createEquipRelation(thumb_equip, thumb);
 				selectingEquip = false;
 				card_info.IsSelectable = false;
+				var thumbs = document.getElementsByClassName('thumb');
+				for(var i = 0; i < thumbs.length; i++)
+					thumbs[i].style.border = "none";
 				return false;
 			}
 			if(selectingContinuous && card_info.IsSelectable){
 				createContinuousRelation(thumb_continuous, thumb);
 				selectingContinuous = false;
 				card_info.IsSelectable = false;
+				var thumbs = document.getElementsByClassName('thumb');
+				for(var i = 0; i < thumbs.length; i++)
+					thumbs[i].style.border = "none";
 				return false;
 			}
+			else if(selectingEquip || selectingContinuous)
+				return false;
 			dragImage.src = thumb.src;
 			var degree = $.data(thumb, "degree");
 			Img.rotate(dragImage, degree, true);
@@ -73,9 +81,44 @@ function makeMoveable(thumb){
 		}
 	}
 	thumb.onmouseover = function(){
-		var tmplItem = $(thumb).tmplItem().data;
-		card_id = tmplItem.card_info.card_id;
+		var card_info = $(thumb).tmplItem().data.card_info;
+		card_id = card_info.card_id;
+		card_counters = card_info.card_counters;
+		continuous_target = card_info.continuous_target;
+		equip_target = card_info.equip_target;
 		showDetail(card_id);
+	/*	
+		if(card_counters.length){
+			var str="";
+			for(var k = 0; k < card_counters.length; k++){
+				str += GetCounterStrByCode(card_counters[k].code) + " ：" + card_counters[k].number + "\r\n"
+			}
+			var options = {
+				animation: true,
+				placement: "top",
+				trigger: "hover",
+				title: str,
+				delay: { show: 0, hide: 200 }
+			}
+			$(thumb).popover(options);
+		}
+		if(continuous_target.length){
+			for(var k = 0;k < continuous_target.length; k++){
+				
+			}
+		}
+		if(equip_target.length){
+			for(var k = 0;k < equip_target.length; k++){
+			
+			}
+		}
+		if(card_info.equip_target.length){
+		
+		}
+		if(card_info.be_continuous_target.length || card_info.be_equip_target.length){
+		
+		}
+	*/
 	}
 	$.data(thumb, "degree", 0);
 	thumb.oncontextmenu = function(ev){
@@ -118,7 +161,7 @@ function createEquipRelation(thumb_equip, thumb_equip_target){
 		equip_relation[i].equip = equip.cn;
 		equip_relation[i].equip_target = equip_target.cn;
 	}
-	alert("equip: " + equip.cn + " -> " + equip_target.cn);
+	//alert("equip: " + equip.cn + " -> " + equip_target.cn);
 	equip.equip_target[0] = thumb_equip_target;
 	equip_target.be_equip_target.push(thumb_equip);
 }
@@ -153,7 +196,7 @@ function createContinuousRelation(thumb_continuous, thumb_continuous_target){
 		continuous_relation[i].continuous = continuous.cn;
 		continuous_relation[i].continuous_target = continuous_target.cn;
 	}
-	alert("continuous: " + continuous.cn + " -> " + continuous_target.cn);
+	//alert("continuous: " + continuous.cn + " -> " + continuous_target.cn);
 	continuous.continuous_target.push(thumb_continuous_target);
 	continuous_target.be_continuous_target.push(thumb_continuous);
 }
@@ -169,5 +212,11 @@ function removeContinuousRelation(thumb_continuous, thumb_continuous_target){
 			continuous_target.be_continuous_target.delElement(thumb_continuous);
 			break;
 		}
+	}
+}
+function GetCounterStrByCode(code){
+	for(var i in counters){
+		if(counters[i].code == code)
+			return counters[i].str;
 	}
 }

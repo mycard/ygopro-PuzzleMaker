@@ -1,4 +1,5 @@
 
+
 function downloadURL(){
 	var player_LP = document.getElementById("Player_LP").value;
 	var AI_LP = document.getElementById("AI_LP").value;
@@ -29,23 +30,48 @@ function downloadURL(){
 			}
 			var card_info = $(thumbs[j]).tmplItem().data.card_info;
 			var card_counters = card_info.card_counters;
+			var continuous_target = card_info.continuous_target;
+			var equip_target = card_info.equip_target;
 			if(card_counters.length){
 				str += card_info.cn + "=";//卡片添加标记
-				for(var k=0;k<card_counters.length; k++){
+				for(var k = 0; k < card_counters.length; k++){
 					action += "Debug.PreAddCounter(" + card_info.cn + "," + card_counters[k].code + "," + card_counters[k].number + ")\r\n";
 				}
 			}
-			str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
+			else if(continuous_target.length){
+				str += card_info.cn + "=";
+				for(var k = 0;k < continuous_target.length; k++){
+					var target_info = $(continuous_target[k]).tmplItem().data.card_info;
+					action += "Debug.PreSetTarget(" + card_info.cn + "," + target_info.cn + ")\r\n";
+				}
+			}
+			else if(equip_target.length){
+				str += card_info.cn + "=";
+				for(var k = 0;k < equip_target.length; k++){
+					var target_info = $(equip_target[k]).tmplItem().data.card_info;
+					action += "Debug.PreEquip(" + card_info.cn + "," + target_info.cn + ")\r\n";
+				}
+			}
+			else if(card_info.equip_target.length){
+				str += card_info.cn + "=";
+			}
+			else if(card_info.be_continuous_target.length || card_info.be_equip_target.length){
+				str += card_info.cn + "=";
+			}
+			if(card_info.disable_revivelimit){
+				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
+			}
+			else {
+				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + ")\r\n";
+			}
 		}
 	}
 	str += "Debug.ReloadFieldEnd()\r\n" ;
 	str += "aux.BeginPuzzle()\r\n";
-	for(var i=0; i<equip_relation.length; i++){
-		action += "Debug.PreEquip(" + equip_relation[i].equip + "," + equip_relation[i].equip_target + ")\r\n";
-	}
-	for(var i=0; i<continuous_relation.length; i++){
-		action += "Debug.PreSetTarget(" + continuous_relation[i].continuous + "," + continuous_relation[i].continuous_target + ")\r\n";
-	}
 	str += action;
-	this.href = "http://my-card.in/singles/new.lua?name=Untitled&script=" + encodeURIComponent(str);
+	//this.href = "http://my-card.in/singles/new.lua?name=Untitled&script=" + encodeURIComponent(str);
+	document.getElementById("single_name").value = "Untitled";
+	document.getElementById("single_script").value = str;
+	document.getElementById("download_form").submit();
 }
+	

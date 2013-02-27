@@ -131,23 +131,27 @@ var PopMenu = function createPopMenu(){
 	}
 	aLi[7].onmousedown = function(event){//设置永续效果对象
 		thumb_continuous = thumb;
-		selectingContinuous = true;
 		var fields = document.getElementById("fields").getElementsByTagName("div");
 		for(var i=0; i< fields.length;i++){
 			var tmplItem = $(fields[i]).tmplItem().data;
 			var location = tmplItem.location;
-			if(location == 'mzone' || location == 'szone'){
+			if(location == 'mzone' || location == 'szone' || location == 'field'){
 				var thumbs = fields[i].getElementsByClassName("thumb");
 				if(thumbs.length != 0){
-					var card_info = $(thumbs[thumbs.length-1]).tmplItem().data.card_info;
+					var temp = thumbs[thumbs.length-1];
+					temp.style.border = "1px dashed #ffff00";
+					var card_info = $(temp).tmplItem().data.card_info;
 					card_info.IsSelectable = true;
+					selectingContinuous = true;
 				}
 			}
+		}
+		if(!selectingContinuous){
+			alert("场上不存在合适的永续效果对象！");
 		}
 	}
 	aLi[8].onmousedown = function(event){//设置装备对象
 		thumb_equip = thumb;
-		selectingEquip = true;
 		var fields = document.getElementById("fields").getElementsByTagName("div");
 		for(var i=0; i< fields.length;i++){
 			var tmplItem = $(fields[i]).tmplItem().data;
@@ -155,10 +159,16 @@ var PopMenu = function createPopMenu(){
 			if(location == 'mzone'){
 				var thumbs = fields[i].getElementsByClassName("thumb");
 				if(thumbs.length != 0){
-					var card_info = $(thumbs[thumbs.length-1]).tmplItem().data.card_info;
+					var temp = thumbs[thumbs.length-1];
+					temp.style.border = "1px dashed #ffff00";
+					var card_info = $(temp).tmplItem().data.card_info;
 					card_info.IsSelectable = true;
+					selectingEquip = true;
 				}
 			}
+		}
+		if(!selectingEquip){
+			alert("场上不存在合适的装备对象！");
 		}
 	}
 	aLi[9].onmousedown = function(event){//放置指示物
@@ -215,6 +225,12 @@ var PopMenu = function createPopMenu(){
 		}
 		else if(location == 'szone'){
 			menuItems = menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_target + menu_equip + menu_counter;
+			if(card_info.disable_revivelimit){
+				menuItems += menu_enable_revivelimit;
+			}
+			else {
+				menuItems += menu_disable_revivelimit;
+			}
 		}
 		else if(location == 'field'){
 			menuItems = menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_target + menu_counter;
@@ -237,7 +253,12 @@ var PopMenu = function createPopMenu(){
 			menuItems = 0;
 		}
 		else if(location == 'removed'){
-			menuItems = 0;
+			if(card_info.disable_revivelimit){
+				menuItems += menu_enable_revivelimit;
+			}
+			else {
+				menuItems += menu_disable_revivelimit;
+			}
 		}
 		menuItems += menu_show_list;
 		if(menuItems == 0) return false;
@@ -361,7 +382,6 @@ function addCounterSelector(code, number){//添加选择器
 function addCounter(dialog, thumb){//根据dialog的内容更新thumb
 	var tmplItem = $(thumb).tmplItem().data;
 	var card_info = tmplItem.card_info;
-	card_info.card_counters = [];
 	var CounterSelectors = dialog.getElementsByClassName("CounterSelector");
 	for(var i=0; i<CounterSelectors.length; i++){
 		var select = CounterSelectors[i].getElementsByTagName("select")[0];

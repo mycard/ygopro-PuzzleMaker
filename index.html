@@ -100,8 +100,6 @@
 		</div>
 	</div>
 	
-	<a id="download" href="#" title="下载到本地"><img src="images/download.png" alt=""/></a>
-	
 	<div id="popMenu">
 		<ul>
 			<li>
@@ -142,5 +140,11 @@
 		<div id="counterSelectors"></div>
 		<button class="btn" onclick="addCounterSelector()">增加其他种类的指示物</button>
 	</div>
+	
+	<form id="download_form" action="http://my-card.in/singles/new.lua" method="post" style="display: none">
+		<input type="hidden" id="single_name" name="name">
+		<input type="hidden" id="single_script" name="script">
+	</form>
+	<img id="downloadButton" title="下载到本地" src="images/download.png"/>
 </body>
 </html>
