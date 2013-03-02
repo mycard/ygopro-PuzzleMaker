@@ -145,6 +145,18 @@ header p {
   position: absolute;
   display: inline-block;
 }
+#fields .equipImg {
+  top: 15px;
+  left: 5px;
+  position: absolute;
+  display: inline-block;
+}
+#fields .targetImg {
+  top: 15px;
+  left: 5px;
+  position: absolute;
+  display: inline-block;
+}
 .field_group_count{
   z-index: 400;
   top: 60px;
@@ -242,6 +254,13 @@ header p {
   text-align: left;
   width: 60%;
   height: 25px;
+}
+#search_bar.thumbImg {
+  z-index: 300;
+  height: 64px;
+  width: 44px;
+  position: absolute;
+  display: inline-block;
 }
 #search_bar .cardname {
   font-size: 14px;
@@ -361,7 +380,19 @@ th, td {
   height: 64px;
   text-align: center;
 }
-
+.tooltip { 
+background-color:#000; 
+border:1px solid #fff; 
+padding:10px 15px; 
+width:200px; 
+display:none; 
+color:#fff; 
+text-align:left; 
+font-size:12px; 
+/* outline radius for mozilla/firefox only */ 
+-moz-box-shadow:0 0 10px #000; 
+-webkit-box-shadow:0 0 10px #000; 
+} 
 /* tablecloth styles */
 
 tr.even td{background:#e5f1f4;}

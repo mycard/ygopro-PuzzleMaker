@@ -41,7 +41,11 @@
 	<div class="location_${location}" style="top:${top}px; left:${left}px;"></div>
 </script>
 <script type="text/x-jquery-tmpl" id="thumb-tmpl">
-	<img class='thumb' style="top:${top}px; left:${left}px; right:${right}px; bottom:${bottom}px;cursor:pointer;" src='${card_img_thumb_url}${card_info.card_id}.jpg'/>
+	<div class='thumb' style="top:${top}px; left:${left}px; right:${right}px; bottom:${bottom}px;cursor:pointer;" >
+		<img class="thumbImg" src='${card_img_thumb_url}${card_info.card_id}.jpg'/>
+		<img class="equipImg" src='images/equip.png' style="display: none"/>
+		<img class="targetImg" src='images/target.png' style="display: none"/>
+	</div>
 </script>
 <script type="text/x-jquery-tmpl" id="label_field-tmpl">
 	<label class=${type} >${text}</label>

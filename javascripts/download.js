@@ -9,7 +9,7 @@ function downloadURL(){
 	str += "Debug.SetPlayerInfo(0," + player_LP + ",0,0)\r\n";
 	str += "Debug.SetPlayerInfo(1," + AI_LP + ",0,0)\r\n" ;
 	var action = "";//包括addCounter、Equip、setTarget等等
-	var fields = document.getElementById("fields").getElementsByTagName("div");
+	var fields = GetAllFields();
 	for(var i=0; i< fields.length;i++){
 		var tmplItem = $(fields[i]).tmplItem().data;
 		var player = tmplItem.player;
@@ -51,9 +51,6 @@ function downloadURL(){
 					var target_info = $(equip_target[k]).tmplItem().data.card_info;
 					action += "Debug.PreEquip(" + card_info.cn + "," + target_info.cn + ")\r\n";
 				}
-			}
-			else if(card_info.equip_target.length){
-				str += card_info.cn + "=";
 			}
 			else if(card_info.be_continuous_target.length || card_info.be_equip_target.length){
 				str += card_info.cn + "=";

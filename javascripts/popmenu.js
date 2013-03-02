@@ -19,6 +19,7 @@ var PopMenu = function createPopMenu(){
 	var maxWidth = maxHeight = 0;
 	var aDoc = [document.documentElement.offsetWidth, document.documentElement.offsetHeight];
 	var thumb;//弹出右键菜单的thumb
+	var thumbImg;
 	popMenu.style.display = "none";
 	for (i = 0; i < aLi.length; i++){
 		//为含有子菜单的li加上箭头
@@ -68,7 +69,7 @@ var PopMenu = function createPopMenu(){
 	aLi[1].onmousedown = function(event){//表侧攻击表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		thumb.src = card_img_thumb_url + card_id + ".jpg";
+		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
 		tmplItem.card_info.position = "POS_FACEUP_ATTACK";
 		if(isIE){
 			thumb.style.top = tmplItem.top + "px";
@@ -82,7 +83,7 @@ var PopMenu = function createPopMenu(){
 	aLi[2].onmousedown = function(event){//表侧守备表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		thumb.src = card_img_thumb_url + card_id + ".jpg";
+		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
 		tmplItem.card_info.position = "POS_FACEUP_DEFENCE";
 		if(isIE){
 			thumb.style.top = 13 + "px";
@@ -96,7 +97,7 @@ var PopMenu = function createPopMenu(){
 	aLi[3].onmousedown = function(event){//里侧守备表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		thumb.src = "images/unknow.jpg";
+		thumbImg.src = "images/unknow.jpg";
 		tmplItem.card_info.position = "POS_FACEDOWN_DEFENCE";
 		if(isIE){
 			thumb.style.top = 13 + "px";
@@ -110,7 +111,7 @@ var PopMenu = function createPopMenu(){
 	aLi[4].onmousedown = function(event){//里侧攻击表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		thumb.src = "images/unknow.jpg";
+		thumbImg.src = "images/unknow.jpg";
 		tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
 		if(isIE){
 			thumb.style.top = tmplItem.top + "px";
@@ -131,7 +132,7 @@ var PopMenu = function createPopMenu(){
 	}
 	aLi[7].onmousedown = function(event){//设置永续效果对象
 		thumb_continuous = thumb;
-		var fields = document.getElementById("fields").getElementsByTagName("div");
+		var fields = GetAllFields();
 		for(var i=0; i< fields.length;i++){
 			var tmplItem = $(fields[i]).tmplItem().data;
 			var location = tmplItem.location;
@@ -143,6 +144,8 @@ var PopMenu = function createPopMenu(){
 					var card_info = $(temp).tmplItem().data.card_info;
 					card_info.IsSelectable = true;
 					selectingContinuous = true;
+					$(document).tooltip({track: true});
+					$(document).tooltip( "destroy" );
 				}
 			}
 		}
@@ -152,7 +155,7 @@ var PopMenu = function createPopMenu(){
 	}
 	aLi[8].onmousedown = function(event){//设置装备对象
 		thumb_equip = thumb;
-		var fields = document.getElementById("fields").getElementsByTagName("div");
+		var fields = GetAllFields();
 		for(var i=0; i< fields.length;i++){
 			var tmplItem = $(fields[i]).tmplItem().data;
 			var location = tmplItem.location;
@@ -160,10 +163,14 @@ var PopMenu = function createPopMenu(){
 				var thumbs = fields[i].getElementsByClassName("thumb");
 				if(thumbs.length != 0){
 					var temp = thumbs[thumbs.length-1];
-					temp.style.border = "1px dashed #ffff00";
-					var card_info = $(temp).tmplItem().data.card_info;
-					card_info.IsSelectable = true;
-					selectingEquip = true;
+					if(temp != thumb){
+						temp.style.border = "1px dashed #ffff00";
+						var card_info = $(temp).tmplItem().data.card_info;
+						card_info.IsSelectable = true;
+						selectingEquip = true;
+						$(document).tooltip({track: true});
+						$(document).tooltip( "destroy" );
+					}
 				}
 			}
 		}
@@ -206,7 +213,8 @@ var PopMenu = function createPopMenu(){
 	
 	this.show = function (event){
 		var event = event || window.event;
-		thumb = event.target;
+		thumb = event.target.parentNode;
+		thumbImg = thumb.getElementsByTagName("img")[0];
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_info = tmplItem.card_info;
 		var location = card_info.location;
@@ -222,6 +230,7 @@ var PopMenu = function createPopMenu(){
 			else {
 				menuItems += menu_disable_revivelimit;
 			}
+			menuItems += menu_show_list;
 		}
 		else if(location == 'szone'){
 			menuItems = menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_target + menu_equip + menu_counter;
@@ -233,7 +242,7 @@ var PopMenu = function createPopMenu(){
 			}
 		}
 		else if(location == 'field'){
-			menuItems = menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_target + menu_counter;
+			menuItems += menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_target + menu_counter;
 		}
 		else if(location == 'grave'){
 			if(card_info.disable_revivelimit){
@@ -242,15 +251,16 @@ var PopMenu = function createPopMenu(){
 			else {
 				menuItems += menu_disable_revivelimit;
 			}
+			menuItems += menu_show_list;
 		}
 		else if(location == 'hand'){
 			menuItems = 0;
 		}
 		else if(location == 'deck'){
-			menuItems = 0;
+			menuItems += menu_show_list;
 		}
 		else if(location == 'extra'){
-			menuItems = 0;
+			menuItems += menu_show_list;
 		}
 		else if(location == 'removed'){
 			if(card_info.disable_revivelimit){
@@ -259,8 +269,8 @@ var PopMenu = function createPopMenu(){
 			else {
 				menuItems += menu_disable_revivelimit;
 			}
+			menuItems += menu_show_list;
 		}
-		menuItems += menu_show_list;
 		if(menuItems == 0) return false;
 		setMenu(menuItems);
 		for(var i=1;i<5;i++){
@@ -323,7 +333,6 @@ var PopMenu = function createPopMenu(){
 	$("#add_counter_dialog").dialog({
 		autoOpen: false,
 		resizable: false,
-		show: "clip",
 		hide: "puff",
 		modal: true,
 		width: 450,
@@ -342,7 +351,6 @@ var PopMenu = function createPopMenu(){
 	$("#show_list_dialog").dialog({
 		autoOpen: false,
 		resizable: false,
-		show: "clip",
 		hide: "puff",
 		modal: true,
 		width: 450,
@@ -369,7 +377,7 @@ function addCounterSelector(code, number){//添加选择器
 	$("#CounterSelector-tmpl").tmpl({
 		counters: counters,
 		_code: code || "0x3001",
-		_number: number || 1
+		_number: number || 0
 	}).appendTo($('#counterSelectors'));
 	$('.spinner').spinner({//设置指示物的数量不能小于1
 		spin: function( event, ui ) {
@@ -380,15 +388,16 @@ function addCounterSelector(code, number){//添加选择器
 	});
 }
 function addCounter(dialog, thumb){//根据dialog的内容更新thumb
-	var tmplItem = $(thumb).tmplItem().data;
-	var card_info = tmplItem.card_info;
+	var card_info = $(thumb).tmplItem().data.card_info;
+	card_info.card_counters = [];
 	var CounterSelectors = dialog.getElementsByClassName("CounterSelector");
 	for(var i=0; i<CounterSelectors.length; i++){
 		var select = CounterSelectors[i].getElementsByTagName("select")[0];
 		var input = CounterSelectors[i].getElementsByTagName("input")[0];
 		var code = select.value;
 		var number = input.value;
-		card_info.card_counters[i] = {code : code , number : number};
+		if(number > 0)
+			card_info.card_counters.push({code : code , number : number});
 	}
 }
 function sort(dialog, field){//根据dialog的顺序更新field

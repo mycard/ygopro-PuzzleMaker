@@ -109,7 +109,7 @@ function search(){
 					html = html + "</tr>";
 				}
 				html = html + "<tr>";
-				html = html + "<td><img class='thumb' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
+				html = html + "<td><img class='thumbImg' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
 				html = html + "<td width=200px><div class='cardname'>" + card.name + "</div></td>";
 				html = html + "</tr>";
 				if(((i+1)%table_row==0) || (i==result.length)){
@@ -122,7 +122,7 @@ function search(){
 			page_button.style.display = 'block';
 			setPageLabel(current_page, page_num);
 			showPage(current_page);
-			var thumbs = tables.getElementsByClassName("thumb");
+			var thumbs = tables.getElementsByClassName("thumbImg");
 			for (var i=0; i< thumbs.length;i++){
 				makeDraggable(thumbs[i]);
 			}
@@ -143,7 +143,7 @@ function initField(){
 		addField(player,EXTRA,0);
 		addField(player,REMOVED,0);
 	}
-	var fields = document.getElementById("fields").getElementsByTagName("div");
+	var fields = GetAllFields();
 	for(var i=0; i< fields.length;i++){
 		var card_list = [];
 		$.data(fields[i], 'card_list', card_list);
@@ -153,6 +153,7 @@ function initField(){
 				var dragImage  = document.getElementById('DragImage');
 				var card_info = $.data(dragImage, 'card_info');
 				addCard(this, card_info);
+				$(document).tooltip({track: true});
 			}
 		}
 	}
@@ -173,6 +174,7 @@ function initField(){
 		}
 	};
 	_popmenu = new PopMenu;
+	$(document).tooltip({track: true});
 /*
 
 	current_page = 1;
@@ -191,7 +193,7 @@ function initField(){
 			html = html + "</tr>";
 		}
 		html = html + "<tr>";
-		html = html + "<td><img class='thumb' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
+		html = html + "<td><img class='thumbImg' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
 		html = html + "<td width=200px><div class='cardname'>" + card.name + "</div></td>";
 		html = html + "</tr>";
 		if(((i+1)%table_row==0) || (i==default_result.length)){
@@ -204,7 +206,7 @@ function initField(){
 	page_button.style.display = 'block';
 	setPageLabel(current_page, page_num);
 	showPage(current_page);
-	var thumbs = tables.getElementsByClassName("thumb");
+	var thumbs = tables.getElementsByClassName("thumbImg");
 	for (var i=0; i< thumbs.length;i++){
 		makeDraggable(thumbs[i]);
 	}
@@ -277,6 +279,10 @@ function updateField(field){
 	var tmplItem = $(field).tmplItem().data;
 	var location = tmplItem.location;
 	var card_list = $.data(field, 'card_list');
+	var thumbs = field.getElementsByClassName("thumb");
+	for (var i=0; i<thumbs.length; i++){
+		thumbs[i].removeAllRelation();
+	}
 	$(field).empty();
 	var width = $(field).width();
 	var length = card_list.length;
@@ -336,25 +342,27 @@ function updateCards(thumbs){
 		var card_info = tmplItem.card_info;
 		var location = card_info.location;
 		var card_id = card_info.card_id;
+		var thumbImg = thumb.getElementsByTagName("img")[0];
+		thumb.addAllRelation();
 		if(location == "szone" || location == "field"){ //魔陷区和场地区只分表侧和里侧
 			if(card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENCE")
-				tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
+				card_info.position = "POS_FACEDOWN_ATTACK";
 			else
-				tmplItem.card_info.position = "POS_FACEUP_ATTACK";
+				card_info.position = "POS_FACEUP_ATTACK";
 		}
 		else if(location == "mzone"){
 			if(1 < thumbs.length && i < thumbs.length-1){//超量素材
-				tmplItem.card_info.position = "POS_FACEUP_ATTACK";
-				tmplItem.card_info.IsXYZmaterial = true;
+				card_info.position = "POS_FACEUP_ATTACK";
+				card_info.IsXYZmaterial = true;
 			}
 			else {
-				tmplItem.card_info.IsXYZmaterial = false;
+				card_info.IsXYZmaterial = false;
 			}
 		}
 		else if(location != "mzone"){//除魔陷和怪兽区
-			tmplItem.card_info.position = "POS_FACEUP_ATTACK";
+			card_info.position = "POS_FACEUP_ATTACK";
 		}
-		if(tmplItem.card_info.position == "POS_FACEUP_ATTACK"){
+		if(card_info.position == "POS_FACEUP_ATTACK"){
 			if(isIE){
 				thumb.style.top = tmplItem.top + "px";
 				thumb.style.left = tmplItem.left + "px";
@@ -362,10 +370,10 @@ function updateCards(thumbs){
 			else {
 				thumb.style.left = tmplItem.left + "px";
 			}
-			thumb.src = card_img_thumb_url + card_id + ".jpg";
+			thumbImg.src = card_img_thumb_url + card_id + ".jpg";
 			Img.rotate(thumb, 0, true);
 		}
-		else if(tmplItem.card_info.position == "POS_FACEUP_DEFENCE"){
+		else if(card_info.position == "POS_FACEUP_DEFENCE"){
 			if(isIE){
 				thumb.style.top = 13 + "px";
 				thumb.style.left = 0 + "px";
@@ -373,10 +381,10 @@ function updateCards(thumbs){
 			else {
 				thumb.style.left = 10 + "px";
 			}
-			thumb.src = card_img_thumb_url + card_id + ".jpg";
+			thumbImg.src = card_img_thumb_url + card_id + ".jpg";
 			Img.rotate(thumb, -90, true);
 		}
-		else if(tmplItem.card_info.position == "POS_FACEDOWN_DEFENCE"){
+		else if(card_info.position == "POS_FACEDOWN_DEFENCE"){
 			if(isIE){
 				thumb.style.top = 13 + "px";
 				thumb.style.left = 0 + "px";
@@ -384,10 +392,10 @@ function updateCards(thumbs){
 			else {
 				thumb.style.left = 10 + "px";
 			}
-			thumb.src = "images/unknow.jpg";
+			thumbImg.src = "images/unknow.jpg";
 			Img.rotate(thumb, -90, true);
 		}
-		else if(tmplItem.card_info.position == "POS_FACEDOWN_ATTACK"){
+		else if(card_info.position == "POS_FACEDOWN_ATTACK"){
 			if(isIE){
 				thumb.style.top = tmplItem.top + "px";
 				thumb.style.left = tmplItem.left + "px";
@@ -395,12 +403,29 @@ function updateCards(thumbs){
 			else {
 				thumb.style.left = tmplItem.left + "px";
 			}
-			thumb.src = "images/unknow.jpg";
+			thumbImg.src = "images/unknow.jpg";
 			Img.rotate(thumb, 0, true);
 		}
 	}
 }
-
+function GetAllFields(){
+	var fields = [];
+	addToFields(fields, "location_szone");
+	addToFields(fields, "location_mzone");
+	addToFields(fields, "location_field");
+	addToFields(fields, "location_hand");
+	addToFields(fields, "location_deck");
+	addToFields(fields, "location_grave");
+	addToFields(fields, "location_removed");
+	addToFields(fields, "location_extra");
+	return fields;
+}
+function addToFields(fields, classname){
+	var temp = document.getElementsByClassName(classname);
+	for(var i =0; i < temp.length; i++){
+		fields.push(temp[i]);
+	}
+}
 function showDetail(card_id){
 	var img = document.getElementById("detail_image");
 	img.src = card_img_url + card_id + ".jpg";
@@ -435,6 +460,7 @@ function mouseUp(ev){
 		if(selectingEquip || selectingContinuous){
 			selectingEquip = false;
 			selectingContinuous = false;
+			$(document).tooltip({track: true});
 			var thumbs = document.getElementsByClassName('thumb');
 			for(var i = 0; i < thumbs.length; i++)
 				thumbs[i].style.border = "none";
@@ -448,14 +474,15 @@ function mouseUp(ev){
 function mouseMove(ev){
 	ev         = ev || window.event;
 	var target   = ev.target || ev.srcElement;
-	var mousePos = getMousePos(ev);
 	if(dragging){
+		var mousePos = getMousePos(ev);
 		var dragImage  = document.getElementById('DragImage');
 		dragImage.style.position = 'absolute';
 		dragImage.style.left     = mousePos.x - 22 + "px";
 		dragImage.style.top      = mousePos.y - 32 + "px";
 		dragImage.style.display  = "block";
 	}
+	
 	if(!up)
 		putting = false;
 	else 
@@ -500,6 +527,14 @@ function del(array,n){
 	var result = [];
 	for(var i in array){
 		if(i != n)
+			result.push(array[i]);
+	}
+	return result;
+}
+function delElement(array,v){
+	var result = [];
+	for(var i in array){
+		if(array[i] != v)
 			result.push(array[i]);
 	}
 	return result;
