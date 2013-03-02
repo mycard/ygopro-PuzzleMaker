@@ -32,28 +32,27 @@ function downloadURL(){
 			var card_counters = card_info.card_counters;
 			var continuous_target = card_info.continuous_target;
 			var equip_target = card_info.equip_target;
+			var be_continuous_target = card_info.be_continuous_target;
+			var be_equip_target = card_info.be_equip_target;
+			if(card_counters.length || continuous_target.length || equip_target.length || be_continuous_target.length || be_equip_target.length){
+				str += card_info.cn + "=";
+			}
 			if(card_counters.length){
-				str += card_info.cn + "=";//卡片添加标记
 				for(var k = 0; k < card_counters.length; k++){
 					action += "Debug.PreAddCounter(" + card_info.cn + "," + card_counters[k].code + "," + card_counters[k].number + ")\r\n";
 				}
 			}
-			else if(continuous_target.length){
-				str += card_info.cn + "=";
+			if(continuous_target.length){
 				for(var k = 0;k < continuous_target.length; k++){
 					var target_info = $(continuous_target[k]).tmplItem().data.card_info;
 					action += "Debug.PreSetTarget(" + card_info.cn + "," + target_info.cn + ")\r\n";
 				}
 			}
-			else if(equip_target.length){
-				str += card_info.cn + "=";
+			if(equip_target.length){
 				for(var k = 0;k < equip_target.length; k++){
 					var target_info = $(equip_target[k]).tmplItem().data.card_info;
 					action += "Debug.PreEquip(" + card_info.cn + "," + target_info.cn + ")\r\n";
 				}
-			}
-			else if(card_info.be_continuous_target.length || card_info.be_equip_target.length){
-				str += card_info.cn + "=";
 			}
 			if(card_info.disable_revivelimit){
 				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
