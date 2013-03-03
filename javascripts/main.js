@@ -58,7 +58,7 @@ function search(){
 	if(name == "")
 		return false;
 	var q = JSON.stringify( {name: {$regex: name.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), $options: 'i'}});
-	var url = locale_url + '?q=' + q;
+	var url = locale_url + '?q=' + encodeURIComponent(q);
     $.getJSON(url,function(result){
 		var html = "";
 		if(result.length == 0){
