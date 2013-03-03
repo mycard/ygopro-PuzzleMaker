@@ -250,6 +250,8 @@ function getC_number(){
 	return "c" + c_number;
 }
 function createEquipRelation(thumb_equip, thumb_equip_target){
+	var pre_equip_target = $(thumb_equip).tmplItem().data.card_info.equip_target[0];
+	removeBeEquipRelation(pre_equip_target, thumb_equip);
 	addEquipRelation(thumb_equip, thumb_equip_target);
 	addBeEquipRelation(thumb_equip_target, thumb_equip);
 }
