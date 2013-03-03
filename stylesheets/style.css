@@ -3,7 +3,7 @@ html,body{
   height:100%;
 }
 body{
-  font:12px/1.5 \5fae\8f6f\96c5\9ed1;
+  font:12px \5fae\8f6f\96c5\9ed1;
   background: url(../images/body-background.png) #eae6d1;
 }
 button,
@@ -29,7 +29,8 @@ input[type="submit"] {
   min-height: 56px;
 }
 #header h1 {
-  font: 30px/36px "Copse", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family:"KaiTi";
+  font-size: 30px;
   color: #f3f3f3;
   text-shadow: 0px 2px 0px #235796;
   margin: 0px;
@@ -212,10 +213,10 @@ header p {
   border-radius: 5px;
   background-color: #dddddd;
   margin-left: 5px;
-  padding: 10px 12px;
+  padding: 5px 6px;
   margin-top: 6px;
-  line-height: 14px;
-  font-size: 18px;
+  line-height: 18px;
+  font: 20px "KaiTi","STKaiti";
   color: #333333;
   font-weight: bold;
   display: inline-block;
@@ -249,7 +250,7 @@ header p {
   background-color: #ffffff;
   margin-left: 5px;
   margin-top: 12px;
-  font-size: 18px;
+  font: 20px "KaiTi","STKaiti";
   color: #333333;
   text-align: left;
   width: 60%;
@@ -347,16 +348,14 @@ table{
   margin:5px 5px;
   padding: 5px 5px;
 }
+th, td {
+  font:bold 14px  \5fae\8f6f\96c5\9ed1;
+  text-align: left;
+  border: 1px solid #4276b6;
+  background: #64c8c8;
+}
 table, td{
   font:100% Arial, Helvetica, sans-serif; 
-}
-th, td {
-  text-align: left;
-  border-left: 1px solid #4276b6;
-  border-right: 1px solid #4276b6;
-  border-top: 1px solid #4276b6;
-  border-bottom: 1px solid #4276b6;
-  background: #64c8c8;
 }
 .select {
   height: 28px;
@@ -380,19 +379,6 @@ th, td {
   height: 64px;
   text-align: center;
 }
-.tooltip { 
-background-color:#000; 
-border:1px solid #fff; 
-padding:10px 15px; 
-width:200px; 
-display:none; 
-color:#fff; 
-text-align:left; 
-font-size:12px; 
-/* outline radius for mozilla/firefox only */ 
--moz-box-shadow:0 0 10px #000; 
--webkit-box-shadow:0 0 10px #000; 
-} 
 /* tablecloth styles */
 
 tr.even td{background:#e5f1f4;}
