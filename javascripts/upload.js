@@ -10,6 +10,27 @@ patterns[6] = new RegExp("\\s*Debug\\.ShowHint\\(\\s*\".*\"\\s*\\).*");
 patterns[7] = new RegExp("\\s*aux\\.BeginPuzzle\\(\\s*\\).*");
 
 upload = function(files) {
+	if(isIE){
+		var file = document.getElementById("upload").value;
+		if(typeof window.ActiveXObject != 'undefined') {
+			var content = "";
+			try {
+				var fso = new ActiveXObject("Scripting.FileSystemObject");  
+				var reader = fso.openTextFile(file, 1);
+				while(!reader.AtEndofStream) {
+					content += reader.readline();
+					content += "\n";
+				} 
+				reader.close();
+			}
+			catch (e) { 
+				alert("Internet Explore read local file error: \n" + e); 
+			}
+		
+			readPuzzle(content);
+			return ;
+		}
+	}
 	if (files.length) {
 		var file = files[0]; 
 		var reader = new FileReader(); 
