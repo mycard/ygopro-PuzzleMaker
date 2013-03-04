@@ -219,7 +219,7 @@ var PopMenu = function createPopMenu(){
 		var card_info = tmplItem.card_info;
 		var location = card_info.location;
 		var menuItems = 0;
-		if(location == 'mzone'){
+		if(location == 'location_mzone'){
 			if(!card_info.IsXYZmaterial){
 				menuItems = menu_position + menu_pos_faceup_attack + menu_pos_faceup_defence + menu_pos_facedown_defence + menu_pos_facedown_attack
 				+ menu_target + menu_counter;
@@ -232,7 +232,7 @@ var PopMenu = function createPopMenu(){
 			}
 			menuItems += menu_show_list;
 		}
-		else if(location == 'szone'){
+		else if(location == 'location_szone'){
 			menuItems = menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_target + menu_equip + menu_counter;
 			if(card_info.disable_revivelimit){
 				menuItems += menu_enable_revivelimit;
@@ -241,10 +241,10 @@ var PopMenu = function createPopMenu(){
 				menuItems += menu_disable_revivelimit;
 			}
 		}
-		else if(location == 'field'){
+		else if(location == 'location_field'){
 			menuItems += menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_target + menu_counter;
 		}
-		else if(location == 'grave'){
+		else if(location == 'location_grave'){
 			if(card_info.disable_revivelimit){
 				menuItems += menu_enable_revivelimit;
 			}
@@ -253,16 +253,16 @@ var PopMenu = function createPopMenu(){
 			}
 			menuItems += menu_show_list;
 		}
-		else if(location == 'hand'){
+		else if(location == 'location_hand'){
 			menuItems = 0;
 		}
-		else if(location == 'deck'){
+		else if(location == 'location_deck'){
 			menuItems += menu_show_list;
 		}
-		else if(location == 'extra'){
+		else if(location == 'location_extra'){
 			menuItems += menu_show_list;
 		}
-		else if(location == 'removed'){
+		else if(location == 'location_removed'){
 			if(card_info.disable_revivelimit){
 				menuItems += menu_enable_revivelimit;
 			}

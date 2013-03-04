@@ -13,7 +13,7 @@ function downloadURL(){
 	for(var i=0; i< fields.length;i++){
 		var tmplItem = $(fields[i]).tmplItem().data;
 		var player = tmplItem.player;
-		var location = "LOCATION_" + tmplItem.location.toUpperCase();
+		var location = tmplItem.location.toUpperCase();
 		var place = tmplItem.place;
 		if(location == "LOCATION_FIELD"){
 			location = "LOCATION_SZONE";
@@ -63,6 +63,7 @@ function downloadURL(){
 		}
 	}
 	str += "Debug.ReloadFieldEnd()\r\n" ;
+	str += "Debug.ShowHint(\"在这个回合取得胜利！\")\r\n" ;
 	str += "aux.BeginPuzzle()\r\n";
 	str += action;
 	//this.href = "http://my-card.in/singles/new.lua?name=Untitled&script=" + encodeURIComponent(str);

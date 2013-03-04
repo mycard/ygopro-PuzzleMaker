@@ -175,7 +175,7 @@ function initField(){
 	};
 	_popmenu = new PopMenu;
 	$(document).tooltip({track: true});
-/*
+//*test 黑羽
 
 	current_page = 1;
 	page_num = 0;
@@ -257,7 +257,7 @@ function addField(player, location, place) {//画场地
 	}
 	$('#field-tmpl').tmpl({
 		player: player || 0,
-		location: LOCATION_STRING[location] || 0,
+		location: "location_" + LOCATION_STRING[location] || 0,
 		place: place || 0,
 		top: top,
 		left: left
@@ -267,7 +267,7 @@ function addCard(field, card_info){
 	var tmplItem = $(field).tmplItem().data;
 	var location = tmplItem.location;
 	var card_list = $.data(field, 'card_list');
-	if(location == "szone" || location == "field"){ //魔陷区和场地区最多只能有1张卡
+	if(location == "location_szone" || location == "location_field"){ //魔陷区和场地区最多只能有1张卡
 		card_list = [];
 	}
 	card_list.push(card_info);
@@ -315,11 +315,11 @@ function updateField(field){
 	if(0 != length){
 		var type;
 		var text = "";
-		if(location == "grave" || location == "deck" || location == "extra" || location == "removed"){
+		if(location == "location_grave" || location == "location_deck" || location == "location_extra" || location == "location_removed"){
 			type = "field_group_count";
 			text = length;
 		}
-		else if(location == "mzone"){
+		else if(location == "location_mzone"){
 			type = "monster_ad";
 			var card_info = card_list[length-1];
 			var data = datas[card_info.card_id];
@@ -344,13 +344,13 @@ function updateCards(thumbs){
 		var card_id = card_info.card_id;
 		var thumbImg = thumb.getElementsByTagName("img")[0];
 		thumb.addAllRelation();
-		if(location == "szone" || location == "field"){ //魔陷区和场地区只分表侧和里侧
+		if(location == "location_szone" || location == "location_field"){ //魔陷区和场地区只分表侧和里侧
 			if(card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENCE")
 				card_info.position = "POS_FACEDOWN_ATTACK";
 			else
 				card_info.position = "POS_FACEUP_ATTACK";
 		}
-		else if(location == "mzone"){
+		else if(location == "location_mzone"){
 			if(1 < thumbs.length && i < thumbs.length-1){//超量素材
 				card_info.position = "POS_FACEUP_ATTACK";
 				card_info.IsXYZmaterial = true;
@@ -359,7 +359,7 @@ function updateCards(thumbs){
 				card_info.IsXYZmaterial = false;
 			}
 		}
-		else if(location != "mzone"){//除魔陷和怪兽区
+		else if(location != "location_mzone"){//除魔陷和怪兽区
 			card_info.position = "POS_FACEUP_ATTACK";
 		}
 		if(card_info.position == "POS_FACEUP_ATTACK"){
@@ -428,6 +428,7 @@ function addToFields(fields, classname){
 }
 function showDetail(card_id){
 	var img = document.getElementById("detail_image");
+	//img.src = "images/unknow.jpg";
 	img.src = card_img_url + card_id + ".jpg";
 	var data = datas[card_id];
 	//$('#detail_label').html($('#detail-tmpl').tmpl({detail: data}));

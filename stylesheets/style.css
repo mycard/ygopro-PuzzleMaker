@@ -29,11 +29,13 @@ input[type="submit"] {
   min-height: 56px;
 }
 #header h1 {
+  top: 15px;
+  left: 560px;
+  position: absolute;
   font-family:"KaiTi";
   font-size: 30px;
   color: #f3f3f3;
   text-shadow: 0px 2px 0px #235796;
-  margin: 0px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -283,17 +285,6 @@ header p {
   margin: 5px 30px 5px 30px;
   position: relative;
 }
-
-#downloadButton{
-  z-index: 1000;
-  top: 70px;
-  left: 280px;
-  cursor: pointer;
-  width:80px;
-  height:80px;
-  margin: 5px 30px 5px 30px;
-  position: absolute;
-}
 #popMenu{
   position:absolute;
   top:-9999px;
@@ -389,3 +380,32 @@ td.down, tr.even td.down, tr.odd td.down{background:#bce774;color:#fff;}
 
 /* use this if you want to apply different styleing to empty table cells*/
 td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
+
+
+#downloadButton{
+  z-index: 1000;
+  top: 150px;
+  left: 270px;
+  cursor: pointer;
+  width:80px;
+  height:80px;
+  margin: 5px 30px 5px 30px;
+  position: absolute;
+}
+#upload_div{
+  z-index: 1000;
+  top: 70px;
+  left: 270px;
+  cursor: pointer;
+  width:80px;
+  height:80px;
+  margin: 5px 30px 5px 30px;
+  position: absolute;
+  background-image: url(../images/upload.png);
+}
+#upload {
+  width:80px;
+  height:80px;
+  opacity: 0;
+  cursor: pointer;
+}

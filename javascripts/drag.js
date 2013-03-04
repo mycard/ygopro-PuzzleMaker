@@ -53,21 +53,21 @@ function makeMoveable(thumb){
 			if(selectingEquip && card_info.IsSelectable){
 				createEquipRelation(thumb_equip, thumb);
 				selectingEquip = false;
-				$(document).tooltip({track: true});
 				card_info.IsSelectable = false;
 				var thumbs = document.getElementsByClassName('thumb');
 				for(var i = 0; i < thumbs.length; i++)
 					thumbs[i].style.border = "none";
+				$(document).tooltip({track: true});
 				return false;
 			}
 			if(selectingContinuous && card_info.IsSelectable){
 				createContinuousRelation(thumb_continuous, thumb);
 				selectingContinuous = false;
-				$(document).tooltip({track: true});
 				card_info.IsSelectable = false;
 				var thumbs = document.getElementsByClassName('thumb');
 				for(var i = 0; i < thumbs.length; i++)
 					thumbs[i].style.border = "none";
+				$(document).tooltip({track: true});
 				return false;
 			}
 			else if(selectingEquip || selectingContinuous)
@@ -236,7 +236,7 @@ function newCard_Info(card_id){
 	card_info.card_id = card_id;
 	card_info.position = "POS_FACEUP_ATTACK";
 	card_info.disable_revivelimit = false;
-	card_info.cn = getC_number();
+	card_info.cn = getCardName();
 	card_info.equip_target = [];
 	card_info.be_equip_target = [];
 	card_info.continuous_target = [];
@@ -245,7 +245,7 @@ function newCard_Info(card_id){
 	return card_info;
 }
 var c_number = 0;
-function getC_number(){
+function getCardName(){
 	c_number++;
 	return "c" + c_number;
 }
