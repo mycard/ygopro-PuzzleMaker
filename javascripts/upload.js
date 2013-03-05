@@ -14,8 +14,10 @@ patterns[7] = new RegExp("\\s*aux\\.BeginPuzzle\\(\\s*\\).*");
 
 upload = function(files) {
 	if(isIE){
-		var file = document.getElementById("upload").value;
-		
+		//var file = document.getElementById("upload").value;
+		var file_upl = document.getElementById('upload');
+		file_upl.select();
+		var file = document.selection.createRange().text;
 		alert(file)
 		if(typeof window.ActiveXObject != 'undefined') {
 			var content = "";
@@ -32,6 +34,7 @@ upload = function(files) {
 				alert("Internet Explore read local file error: \n" + e); 
 			}
 		
+			alert(content)
 			readPuzzle(content);
 			return ;
 		}
@@ -46,7 +49,6 @@ upload = function(files) {
 	} 
 };
 function readPuzzle(result){
-		alert(result)
 	var results = result.split('\n'); 
 	var cards = [];
 	var cards_id = [];
