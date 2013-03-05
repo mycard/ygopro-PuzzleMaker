@@ -4,6 +4,7 @@ var dragging = false;
 var putting = false;
 var selectingEquip;
 var selectingContinuous;
+var removeContinuous;
 var thumb_equip;
 var thumb_equip_target;
 var thumb_continuous;
@@ -458,9 +459,10 @@ function mouseUp(ev){
 		}
 	}
 	else {
-		if(selectingEquip || selectingContinuous){
+		if(selectingEquip || selectingContinuous || removeContinuous){
 			selectingEquip = false;
 			selectingContinuous = false;
+			removeContinuous = false;
 			$(document).tooltip({track: true});
 			var thumbs = document.getElementsByClassName('thumb');
 			for(var i = 0; i < thumbs.length; i++)

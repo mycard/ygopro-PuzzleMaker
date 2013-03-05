@@ -6,7 +6,7 @@ function makeDraggable(thumb){
 	thumb.onmousedown = function(ev){
 		ev = ev || window.event;
 		if(ev.button == 0 || ev.button == 1){
-			if(selectingEquip || selectingContinuous){
+			if(selectingEquip || selectingContinuous || removeContinuous){
 				return false;
 			}
 			dragImage.src  = thumb.src;
@@ -70,7 +70,19 @@ function makeMoveable(thumb){
 				$(document).tooltip({track: true});
 				return false;
 			}
-			else if(selectingEquip || selectingContinuous)
+			if(removeContinuous && card_info.IsSelectable){
+				thumbImg.onmouseout();
+				removeContinuousRelation(thumb_continuous, thumb);
+				removeBeContinuousRelation(thumb, thumb_continuous);
+				removeContinuous = false;
+				card_info.IsSelectable = false;
+				var thumbs = document.getElementsByClassName('thumb');
+				for(var i = 0; i < thumbs.length; i++)
+					thumbs[i].style.border = "none";
+				$(document).tooltip({track: true});
+				return false;
+			}
+			else if(selectingEquip || selectingContinuous || removeContinuous)
 				return false;
 			dragImage.src = thumbImg.src;
 			var degree = $.data(thumb, "degree");
@@ -84,7 +96,7 @@ function makeMoveable(thumb){
 			dragImage.style.display  = "block";
 			
 			//remove this card forn field
-		//	parent.onmouseout();
+			thumbImg.onmouseout();
 			thumb.removeAllRelation();
 			$(document).tooltip({track: true});
 			$(document).tooltip( "destroy" );

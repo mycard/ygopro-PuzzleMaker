@@ -5,10 +5,12 @@ var menu_pos_facedown_defence = 1 << 3;
 var menu_pos_facedown_attack = 1 << 4;
 var menu_enable_revivelimit = 1 << 5;
 var menu_disable_revivelimit = 1 << 6;
-var menu_target = 1 << 7;
-var menu_equip = 1 << 8;
-var menu_counter = 1 << 9;
-var menu_show_list = 1 << 10;
+var menu_add_target = 1 << 7;
+var menu_remove_target = 1 << 8;
+var menu_add_equip = 1 << 9;
+var menu_remove_equip = 1 << 10;
+var menu_counter = 1 << 11;
+var menu_show_list = 1 << 12;
 
 var PopMenu = function createPopMenu(){
 	var popMenu = document.getElementById("popMenu");
@@ -130,7 +132,7 @@ var PopMenu = function createPopMenu(){
 		var tmplItem = $(thumb).tmplItem().data;
 		tmplItem.card_info.disable_revivelimit = true;
 	}
-	aLi[7].onmousedown = function(event){//设置永续效果对象
+	aLi[7].onmousedown = function(event){//添加永续效果对象
 		thumb_continuous = thumb;
 		var fields = GetAllFields();
 		for(var i=0; i< fields.length;i++){
@@ -153,7 +155,21 @@ var PopMenu = function createPopMenu(){
 			alert("场上不存在合适的永续效果对象！");
 		}
 	}
-	aLi[8].onmousedown = function(event){//设置装备对象
+	aLi[8].onmousedown = function(event){//删除永续效果对象
+		thumb_continuous = thumb;
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var thumbs = card_info.continuous_target;
+		for(var i = 0; i < thumbs.length; i++){
+			var temp = thumbs[i];
+			temp.style.border = "1px dashed #ffff00";
+			var thumb_info = $(temp).tmplItem().data.card_info;
+			thumb_info.IsSelectable = true;
+			removeContinuous = true;
+			$(document).tooltip({track: true});
+			$(document).tooltip( "destroy" );
+		}
+	}
+	aLi[9].onmousedown = function(event){//设置装备对象
 		thumb_equip = thumb;
 		var fields = GetAllFields();
 		for(var i=0; i< fields.length;i++){
@@ -178,7 +194,13 @@ var PopMenu = function createPopMenu(){
 			alert("场上不存在合适的装备对象！");
 		}
 	}
-	aLi[9].onmousedown = function(event){//放置指示物
+	aLi[10].onmousedown = function(event){//删除装备对象
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var equip_target = card_info.equip_target[0];
+		removeEquipRelation(thumb, equip_target);
+		removeBeEquipRelation(equip_target, thumb);
+	}
+	aLi[11].onmousedown = function(event){//放置指示物
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_counters = tmplItem.card_info.card_counters;
 		var counterSelectors = $('#counterSelectors');
@@ -194,7 +216,7 @@ var PopMenu = function createPopMenu(){
 		$('#add_counter_dialog').dialog('open');
 		return false;
 	}
-	aLi[10].onmousedown = function(event){//调整顺序
+	aLi[12].onmousedown = function(event){//调整顺序
 		var field = thumb.parentNode;
 		var sortable = $('#sortable');
 		sortable.empty();
@@ -222,27 +244,39 @@ var PopMenu = function createPopMenu(){
 		if(location == 'location_mzone'){
 			if(!card_info.IsXYZmaterial){
 				menuItems = menu_position + menu_pos_faceup_attack + menu_pos_faceup_defence + menu_pos_facedown_defence + menu_pos_facedown_attack
-				+ menu_target + menu_counter;
+				+ menu_add_target + menu_counter;
 			}
 			if(card_info.disable_revivelimit){
 				menuItems += menu_enable_revivelimit;
 			}
 			else {
 				menuItems += menu_disable_revivelimit;
+			}
+			if(card_info.continuous_target.length){
+				menuItems += menu_remove_target;
 			}
 			menuItems += menu_show_list;
 		}
 		else if(location == 'location_szone'){
-			menuItems = menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_target + menu_equip + menu_counter;
+			menuItems = menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_add_target + menu_add_equip + menu_counter;
 			if(card_info.disable_revivelimit){
 				menuItems += menu_enable_revivelimit;
 			}
 			else {
 				menuItems += menu_disable_revivelimit;
 			}
+			if(card_info.continuous_target.length){
+				menuItems += menu_remove_target;
+			}
+			if(card_info.equip_target.length){
+				menuItems += menu_remove_equip;
+			}
 		}
 		else if(location == 'location_field'){
-			menuItems += menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_target + menu_counter;
+			menuItems += menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_add_target + menu_counter;
+			if(card_info.continuous_target.length){
+				menuItems += menu_remove_target;
+			}
 		}
 		else if(location == 'location_grave'){
 			if(card_info.disable_revivelimit){

@@ -28,7 +28,7 @@ function downloadURL(){
 			else {
 				index = j;
 			}
-			var card_info = $(thumbs[j]).tmplItem().data.card_info;
+			var card_info = $(thumbs[index]).tmplItem().data.card_info;
 			var card_counters = card_info.card_counters;
 			var continuous_target = card_info.continuous_target;
 			var equip_target = card_info.equip_target;

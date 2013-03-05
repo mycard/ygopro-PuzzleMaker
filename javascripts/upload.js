@@ -112,6 +112,7 @@ function readPuzzle(result){
 			break;
 		}
 	}
+	//清空之前的残局
 	var fields = GetAllFields();
 	for(var i in fields){
 		$(fields[i]).empty();
@@ -175,12 +176,12 @@ function loadCards(cards_id,cards){
 				datas[card._id] = data;
 			}
 			for(var i in cards){
-				newCard(cards[i]);
+				loadCard(cards[i]);
 			}
 		});
 	});
 }
-function newCard(card){
+function loadCard(card){
 	var card_info = new Object();
 	card_info.card_id = card.card_id;
 	card_info.position = card.position;
@@ -194,5 +195,21 @@ function newCard(card){
 	var location = card.location.toLowerCase();
 	var field_id = card.owner + "_" + location + "_" + card.place;
 	var field = document.getElementById(field_id);
-	addCard(field,card_info);
+	addNewCard(field,card_info);
+}
+function addNewCard(field, card_info){
+	var tmplItem = $(field).tmplItem().data;
+	var location = tmplItem.location;
+	var card_list = $.data(field, 'card_list');
+	if(location == "location_szone" || location == "location_field"){ //魔陷区和场地区最多只能有1张卡
+		card_list = [];
+	}
+	if(location == "location_mzone"){
+		card_list.unshift(card_info);
+	}
+	else{
+		card_list.push(card_info);
+	}
+	$.data(field, 'card_list', card_list);
+	updateField(field);
 }
