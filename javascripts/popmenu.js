@@ -136,7 +136,7 @@ var PopMenu = function createPopMenu(){
 		for(var i=0; i< fields.length;i++){
 			var tmplItem = $(fields[i]).tmplItem().data;
 			var location = tmplItem.location;
-			if(location == 'mzone' || location == 'szone' || location == 'field'){
+			if(location == 'location_mzone' || location == 'location_szone' || location == 'location_field'){
 				var thumbs = fields[i].getElementsByClassName("thumb");
 				if(thumbs.length != 0){
 					var temp = thumbs[thumbs.length-1];
@@ -159,7 +159,7 @@ var PopMenu = function createPopMenu(){
 		for(var i=0; i< fields.length;i++){
 			var tmplItem = $(fields[i]).tmplItem().data;
 			var location = tmplItem.location;
-			if(location == 'mzone'){
+			if(location == 'location_mzone'){
 				var thumbs = fields[i].getElementsByClassName("thumb");
 				if(thumbs.length != 0){
 					var temp = thumbs[thumbs.length-1];

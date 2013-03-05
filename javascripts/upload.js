@@ -9,9 +9,14 @@ patterns[5] = new RegExp("\\s*Debug\\.ReloadFieldEnd\\(\\s*\\).*");
 patterns[6] = new RegExp("\\s*Debug\\.ShowHint\\(\\s*\".*\"\\s*\\).*");
 patterns[7] = new RegExp("\\s*aux\\.BeginPuzzle\\(\\s*\\).*");
 
+
+
+
 upload = function(files) {
 	if(isIE){
 		var file = document.getElementById("upload").value;
+		
+		alert(file)
 		if(typeof window.ActiveXObject != 'undefined') {
 			var content = "";
 			try {
@@ -41,6 +46,7 @@ upload = function(files) {
 	} 
 };
 function readPuzzle(result){
+		alert(result)
 	var results = result.split('\n'); 
 	var cards = [];
 	var cards_id = [];
