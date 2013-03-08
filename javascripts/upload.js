@@ -151,8 +151,8 @@ function loadCards(cards_id,cards){
 	var url = locale_url + '?q=' + JSON.stringify({_id: {$in: cards_id}});
     $.getJSON(url,function(result){
 		$.getJSON(cards_url + "?q=" + (JSON.stringify({_id: {$in: cards_id}})), function(_cards) {
-			for(var i in cards){
-				var card = cards[i];
+			for(var i in _cards){
+				var card = _cards[i];
 				var name = '';
 				var desc = '';
 				for(var j in result){

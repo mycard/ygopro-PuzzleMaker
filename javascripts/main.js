@@ -442,7 +442,7 @@ function showDetail(card_id){
 	if(card.race){
 		text += card.race + " / " + card.attribute + "\r\n" ;
 		text += "[" + card.star + "]" + card.level + "\r\n";
-		text += "ATK/" + card.atk + "  DEF/" + card.def + "\r\n";
+		text += "ATK/" + (card.atk<0?"?":card.atk) + "  DEF/" + (card.def<0?"?":card.def) + "\r\n";
 	}
 	else {
 		text += "\r\n";
