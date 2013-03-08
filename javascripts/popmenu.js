@@ -167,6 +167,7 @@ var PopMenu = function createPopMenu(){
 			removeContinuous = true;
 			$(document).tooltip({track: true});
 			$(document).tooltip( "destroy" );
+			$(document).tooltip({track: true});
 		}
 	}
 	aLi[9].onmousedown = function(event){//设置装备对象
@@ -186,6 +187,7 @@ var PopMenu = function createPopMenu(){
 						selectingEquip = true;
 						$(document).tooltip({track: true});
 						$(document).tooltip( "destroy" );
+						$(document).tooltip({track: true});
 					}
 				}
 			}

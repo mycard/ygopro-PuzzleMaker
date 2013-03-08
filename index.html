@@ -52,7 +52,7 @@
 	<label class=${type} >${text}</label>
 </script>
 <script type="text/x-jquery-tmpl" id="sortable-tmpl">
-	<li class="ui-state-default"><img class='thumb' style='cursor:move;' src='${card_img_thumb_url}${card_info.card_id}.jpg'/></li>
+	<li class="ui-state-default"><img class='thumbImg' style='cursor:move;' src='${card_img_thumb_url}${card_info.card_id}.jpg' onmouseover="showDetail(${card_info.card_id})"/></li>
 </script>
 <script type="text/x-jquery-tmpl" id="CounterSelector-tmpl">
 	<div class="CounterSelector">

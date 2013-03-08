@@ -98,8 +98,8 @@ function makeMoveable(thumb){
 			//remove this card forn field
 			thumbImg.onmouseout();
 			thumb.removeAllRelation();
-			$(document).tooltip({track: true});
 			$(document).tooltip( "destroy" );
+			$(document).tooltip({track: true});
 			var card_list = $.data(parent, 'card_list');
 			var i = card_info.index;
 			var list = del(card_list,i);

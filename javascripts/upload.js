@@ -151,8 +151,8 @@ function loadCards(cards_id,cards){
 	var url = locale_url + '?q=' + JSON.stringify({_id: {$in: cards_id}});
     $.getJSON(url,function(result){
 		$.getJSON(cards_url + "?q=" + (JSON.stringify({_id: {$in: cards_id}})), function(_cards) {
-			for(var i in _cards){
-				var card = _cards[i];
+			for(var i in cards){
+				var card = cards[i];
 				var name = '';
 				var desc = '';
 				for(var j in result){
@@ -162,6 +162,10 @@ function loadCards(cards_id,cards){
 						break;
 					}
 				}
+				var star = "";
+				for(var i=0; i<card.level; i++){
+					star += "★";
+				}
 				var data = {
 					"_id": card._id,
 					"name": name,
@@ -169,11 +173,12 @@ function loadCards(cards_id,cards){
 					"atk": card.atk,
 					"def": card.def,
 					"level": card.level,
+					"star": star,
 					"race": getRace(card),
 					"attribute": getAttribute(card),
 					"desc": desc
 				};
-				datas[card._id] = data;
+				datas[card._id]=data;
 			}
 			for(var i in cards){
 				loadCard(cards[i]);

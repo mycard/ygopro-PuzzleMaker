@@ -85,6 +85,10 @@ function search(){
 						break;
 					}
 				}
+				var star = "";
+				for(var i=0; i<card.level; i++){
+					star += "★";
+				}
 				var data = {
 					"_id": card._id,
 					"name": name,
@@ -92,6 +96,7 @@ function search(){
 					"atk": card.atk,
 					"def": card.def,
 					"level": card.level,
+					"star": star,
 					"race": getRace(card),
 					"attribute": getAttribute(card),
 					"desc": desc
@@ -429,12 +434,21 @@ function addToFields(fields, classname){
 }
 function showDetail(card_id){
 	var img = document.getElementById("detail_image");
-	//img.src = "images/unknow.jpg";
 	img.src = card_img_url + card_id + ".jpg";
-	var data = datas[card_id];
-	//$('#detail_label').html($('#detail-tmpl').tmpl({detail: data}));
+	var card = datas[card_id];
 	var textarea = document.getElementById("detail_textarea");
-	textarea.value = data.desc;
+	var text = card.name + "["+ card._id + "]" + "\r\n";
+	text += "[" + card.type + "]   "
+	if(card.race){
+		text += card.race + " / " + card.attribute + "\r\n" ;
+		text += "[" + card.star + "]" + card.level + "\r\n";
+		text += "ATK/" + card.atk + "  DEF/" + card.def + "\r\n";
+	}
+	else {
+		text += "\r\n";
+	}
+	text +=  card.desc;
+	textarea.innerText = text;
 }
 function mouseDown(ev){
 	ev         = ev || window.event;
