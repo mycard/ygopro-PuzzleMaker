@@ -437,7 +437,7 @@ function addCounter(dialog, thumb){//根据dialog的内容更新thumb
 	}
 }
 function sort(dialog, field){//根据dialog的顺序更新field
-	var thumbs = dialog.getElementsByClassName("thumb");
+	var thumbs = dialog.getElementsByClassName("thumbImg");
 	var card_list = [];
 	for(var i =0; i < thumbs.length; i++){
 		var tmplItem = $(thumbs[i]).tmplItem().data;
