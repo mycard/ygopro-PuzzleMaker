@@ -1,10 +1,15 @@
 
 
 function downloadURL(){
+	var newfilename = prompt("输入文件名！",filename);
+	if(!newfilename){
+		return ;
+	}
+	filename = newfilename;
 	var player_LP = document.getElementById("Player_LP").value;
 	var AI_LP = document.getElementById("AI_LP").value;
 	var str = "--created by ygopro puzzle maker (web) \r\n";
-	str += "Debug.SetAIName('高性能电子头脑')\r\n";
+	str += "Debug.SetAIName(\"" + AI_name + "\")\r\n";
 	str += "Debug.ReloadFieldBegin(DUEL_ATTACK_FIRST_TURN+DUEL_SIMPLE_AI)\r\n";
 	str += "Debug.SetPlayerInfo(0," + player_LP + ",0,0)\r\n";
 	str += "Debug.SetPlayerInfo(1," + AI_LP + ",0,0)\r\n" ;
@@ -63,11 +68,13 @@ function downloadURL(){
 		}
 	}
 	str += "Debug.ReloadFieldEnd()\r\n" ;
-	str += "Debug.ShowHint(\"在这个回合取得胜利！\")\r\n" ;
+	for(var i = 0; i < hintMsgs.length; i++){
+		str += "Debug.ShowHint(\"" + hintMsgs[i] + "\")\r\n" ;
+	}
 	str += "aux.BeginPuzzle()\r\n";
 	str += action;
 	//this.href = "http://my-card.in/singles/new.lua?name=Untitled&script=" + encodeURIComponent(str);
-	document.getElementById("single_name").value = "Untitled";
+	document.getElementById("single_name").value = filename;
 	document.getElementById("single_script").value = str;
 	document.getElementById("download_form").submit();
 }

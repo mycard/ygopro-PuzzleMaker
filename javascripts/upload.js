@@ -13,6 +13,15 @@ patterns[7] = new RegExp("\\s*aux\\.BeginPuzzle\\(\\s*\\).*");
 
 
 upload = function(files) {
+	//清空之前的残局
+	hintMsgs = [];
+	var fields = GetAllFields();
+	for(var i in fields){
+		$(fields[i]).empty();
+		var card_list = $.data(fields[i], 'card_list');
+		card_list = [];
+		$.data(fields[i], 'card_list', card_list);
+	}
 	if(isIE){
 		//var file = document.getElementById("upload").value;
 		var file_upl = document.getElementById('upload');
@@ -41,6 +50,7 @@ upload = function(files) {
 	}
 	if (files.length) {
 		var file = files[0]; 
+		filename = file.name;
 		var reader = new FileReader(); 
 		reader.onload = function() {
 			readPuzzle(this.result)
@@ -60,8 +70,7 @@ function readPuzzle(result){
 		case 0:
 			break;
 		case 1://SetAIName
-			strings = tempString.split("\"");
-			//AIName = strings[1];
+			AI_name = tempString.split("\"")[1];
 			break;
 		case 2://ReloadFieldBegin(DUEL_ATTACK_FIRST_TURN+DUEL_SIMPLE_AI)
 			//Use_Simple_AI = tempString.contains("DUEL_SIMPLE_AI");
@@ -105,20 +114,12 @@ function readPuzzle(result){
 			break;
 		case 6://ShowHint
 			var strings = tempString.split("\"");
-		//	PuzzleMaker.hintStrings.add(strings[1]);
+			hintMsgs.push(strings[1]);
 			break;
 		case 7://BeginPuzzle
 		//	PuzzleMaker.BeginPuzzle = true;
 			break;
 		}
-	}
-	//清空之前的残局
-	var fields = GetAllFields();
-	for(var i in fields){
-		$(fields[i]).empty();
-		var card_list = $.data(fields[i], 'card_list');
-		card_list = [];
-		$.data(fields[i], 'card_list', card_list);
 	}
 	loadCards(cards_id,cards);
 }

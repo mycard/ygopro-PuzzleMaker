@@ -1,4 +1,7 @@
-
+var filename = "Untitled";
+var AI_name = "高性能电子头脑";
+var hintMsgs = [];
+hintMsgs[0] = "在这个回合取得胜利！";
 var _popmenu;
 var dragging = false;
 var putting = false;
@@ -169,8 +172,6 @@ function initField(){
 		var card_id = card_info.card_id;
 		showDetail(card_id);
 	}
-	var download = document.getElementById('downloadButton');
-	download.onclick = downloadURL;
 	var keyword = document.getElementById('keyword');
 	keyword.onkeypress = function(ev){
 		var ev = ev || window.event;
@@ -181,6 +182,26 @@ function initField(){
 	};
 	_popmenu = new PopMenu;
 	$(document).tooltip({track: true});
+	
+	$("#setting_dialog").dialog({
+		autoOpen: false,
+		resizable: false,
+		hide: "puff",
+		modal: true,
+		width: 350,
+		buttons: {
+			"确定": function() {
+				settingOK(this);
+				$( this ).dialog({hide: "clip"});
+				$( this ).dialog( "close" );
+				$( this ).dialog({hide: "puff"});
+			},
+			"取消": function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+	
 //*test 黑羽
 
 	current_page = 1;

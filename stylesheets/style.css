@@ -392,6 +392,16 @@ td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
   margin: 5px 30px 5px 30px;
   position: absolute;
 }
+#settingButton{
+  z-index: 1000;
+  top: 230px;
+  left: 270px;
+  cursor: pointer;
+  width:80px;
+  height:80px;
+  margin: 5px 30px 5px 30px;
+  position: absolute;
+}
 #upload_div{
   z-index: 1000;
   top: 70px;
