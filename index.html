@@ -10,8 +10,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <title>残局编辑器</title>
 <link href="stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheets/jquery-ui-1.9.2.min.css" rel="stylesheet" type="text/css"/>
 <link href="stylesheets/style.css" rel="stylesheet" type="text/css"/>
-<link rel="stylesheet" href="stylesheets/jquery-ui-1.9.2.min.css">
 <script src="javascripts/jquery-1.8.3.min.js" type="text/javascript">></script>
 <script src="javascripts/bootstrap.min.js" type="text/javascript">></script>
 <script src="javascripts/jquery.tmpl.min.js" type="text/javascript">></script>
@@ -100,6 +100,11 @@
 	<textarea id="detail_textarea" readonly></textarea>
 
 	<div id="fields"></div>
+	<div id="radio">
+		<input type="radio" id="radio1" name="radio" onclick="locale = 'zh'" checked="checked" /><label for="radio1">简体中文</label>
+		<input type="radio" id="radio2" name="radio" onclick="locale = 'zh-TW'" /><label for="radio2" >繁体中文</label>
+	</div>
+	
 	<div id="search_bar">
 		<input class="textfield" id="keyword" type="text" placeholder="请输入关键字" value="黑羽"/>
 		<button class="button" id="search" onmouseup="search()">搜索</button>
@@ -115,8 +120,7 @@
 	
 	<div id="popMenu">
 		<ul>
-			<li>
-				更改表示形式
+			<li>更改表示形式
 				<ul>
 					<li>表侧攻击表示</li>
 					<li>表侧守备表示</li>
@@ -124,30 +128,14 @@
 					<li>里侧攻击表示</li>
 				</ul>
 			</li>
-			<li>
-				不解除苏生限制
-			</li>
-			<li>
-				解除苏生限制
-			</li>
-			<li>
-				添加永续效果对象
-			</li>
-			<li>
-				删除永续效果对象
-			</li>
-			<li>
-				设置装备对象
-			</li>
-			<li>
-				删除装备对象
-			</li>
-			<li>
-				放置指示物
-			</li>
-			<li>
-				调整顺序
-			</li>
+			<li>不解除苏生限制</li>
+			<li>解除苏生限制</li>
+			<li>添加永续效果对象</li>
+			<li>删除永续效果对象</li>
+			<li>设置装备对象</li>
+			<li>删除装备对象</li>
+			<li>放置指示物</li>
+			<li>调整顺序</li>
 		</ul>
 	</div>
 	<div id="show_list_dialog" title="调整顺序">
@@ -180,5 +168,38 @@
 		<input type="file" id="upload" onchange="upload(this.files)" />
 		<div id="test" style="display:none"></div>
     </div>
+	
+	
+<div class="box_wrap">
+
+	<div class="box_main">
+		<ul id="menu">
+			<li>
+				<a href="javascript:void(0);"><img src="images/faq.png"/>使用说明</a>
+				<ul>
+					<li><a href="http://tieba.baidu.com/p/2195212368" target="_black">游戏王ygocore吧</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:void(0);"><img src="images/links.png" />友情链接</a>
+				<ul>
+					<li><a href="http://ygocore.ys168.com/" target="_black">残局分享地址</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="javascript:void(0);"><img src="images/contact.png"/>联系作者</a>
+				<ul>
+					<li>作者QQ：350002947</li>
+					<li>残局交流QQ群：181175613</li>
+				</ul>
+			</li>
+		</ul>
+	</div><!--box_main end-->
+	
+	<div class="box_button"><a style="display:block;" href="#" id="box_link"><img id="box_img" src="images/qm.png" width="50" height="50" border="0" /></a></div>
+	
+</div>
+
+
 </body>
 </html>

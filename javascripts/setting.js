@@ -4,7 +4,7 @@ function settings(){
 	HintMsg.empty();
 	
 	var _AI_name = document.getElementById("AI_name");
-	_AI_name.value = AI_name
+	_AI_name.value = AI_name;
 	
 	for(var i=0; i< hintMsgs.length; i++){
 		addHintMsg(hintMsgs[i]);

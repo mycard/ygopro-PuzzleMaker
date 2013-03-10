@@ -27,7 +27,6 @@ upload = function(files) {
 		var file_upl = document.getElementById('upload');
 		file_upl.select();
 		var file = document.selection.createRange().text;
-		alert(file)
 		if(typeof window.ActiveXObject != 'undefined') {
 			var content = "";
 			try {
@@ -43,14 +42,13 @@ upload = function(files) {
 				alert("Internet Explore read local file error: \n" + e); 
 			}
 		
-			alert(content)
 			readPuzzle(content);
 			return ;
 		}
 	}
 	if (files.length) {
 		var file = files[0]; 
-		filename = file.name;
+		filename = file.name.split(".")[0];
 		var reader = new FileReader(); 
 		reader.onload = function() {
 			readPuzzle(this.result)
