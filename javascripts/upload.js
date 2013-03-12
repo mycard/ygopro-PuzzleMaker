@@ -147,6 +147,7 @@ function SetPlayerInfo(player, lp, firstTurnDraw, everyTurnDraw){
 	}
 }
 function loadCards(cards_id,cards){
+	var locale_url = "http://my-card.in/cards_" + locale;
 	var url = locale_url + '?q=' + JSON.stringify({_id: {$in: cards_id}});
     $.getJSON(url,function(result){
 		$.getJSON(cards_url + "?q=" + (JSON.stringify({_id: {$in: cards_id}})), function(_cards) {
