@@ -118,13 +118,29 @@ function makeMoveable(thumb){
 		showDetail(card_id);
 	//	equipImg.style.display = "none";
 	//	targetImg.style.display = "none";
-		if(card_counters.length){
-			var str="";
-			for(var k = 0; k < card_counters.length; k++){
-				str += GetCounterStrByCode(card_counters[k].code) + " ：" + card_counters[k].number + "</br>"
-			}
-			thumb.title = str;
+	
+		var str="";
+		if(card_info.attack != undefined){
+			str += "攻击力：" + card_info.attack + "</br>";
 		}
+		if(card_info.base_attack != undefined){
+			str += "原本攻击力：" + card_info.base_attack + "</br>";
+		}
+		if(card_info.defence != undefined){
+			str += "防御力：" + card_info.defence + "</br>";
+		}
+		if(card_info.base_defence != undefined){
+			str += "原本防御力：" + card_info.base_defence + "</br>";
+		}
+		if(card_info.level != undefined){
+			str += "怪兽等级：" + card_info.level + "</br>";
+		}
+		if(card_counters.length){
+			for(var k = 0; k < card_counters.length; k++){
+				str += GetCounterStrByCode(card_counters[k].code) + " ：" + card_counters[k].number + "</br>";
+			}
+		}
+		thumb.title = str;
 		if(continuous_target.length){
 		//	targetImg.style.display = "block";
 			for(var k = 0;k < continuous_target.length; k++){

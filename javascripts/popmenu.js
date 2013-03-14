@@ -1,16 +1,24 @@
-var menu_position = 1;
-var menu_pos_faceup_attack = 1 << 1;
-var menu_pos_faceup_defence = 1 << 2;
-var menu_pos_facedown_defence = 1 << 3;
-var menu_pos_facedown_attack = 1 << 4;
-var menu_enable_revivelimit = 1 << 5;
-var menu_disable_revivelimit = 1 << 6;
-var menu_add_target = 1 << 7;
-var menu_remove_target = 1 << 8;
-var menu_add_equip = 1 << 9;
-var menu_remove_equip = 1 << 10;
-var menu_counter = 1 << 11;
-var menu_show_list = 1 << 12;
+var menu_index = 0;
+var menu_position = 1 << menu_index++;
+var menu_pos_faceup_attack = 1 << menu_index++;
+var menu_pos_faceup_defence = 1 << menu_index++;
+var menu_pos_facedown_defence = 1 << menu_index++;
+var menu_pos_facedown_attack = 1 << menu_index++;
+var menu_enable_revivelimit = 1 << menu_index++;
+var menu_disable_revivelimit = 1 << menu_index++;
+var menu_add_target = 1 << menu_index++;
+var menu_remove_target = 1 << menu_index++;
+var menu_add_equip = 1 << menu_index++;
+var menu_remove_equip = 1 << menu_index++;
+var menu_counter = 1 << menu_index++;
+var menu_change_attack = 1 << menu_index++;
+var menu_set_attack = 1 << menu_index++;
+var menu_set_base_attack = 1 << menu_index++;
+var menu_change_defence = 1 << menu_index++;
+var menu_set_defence = 1 << menu_index++;
+var menu_set_base_defence = 1 << menu_index++;
+var menu_change_level = 1 << menu_index++;
+var menu_show_list = 1 << menu_index++;
 
 var PopMenu = function createPopMenu(){
 	var popMenu = document.getElementById("popMenu");
@@ -218,7 +226,42 @@ var PopMenu = function createPopMenu(){
 		$('#add_counter_dialog').dialog('open');
 		return false;
 	}
-	aLi[12].onmousedown = function(event){//调整顺序
+	aLi[13].onmousedown = function(event){//设置攻击力
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var attack = prompt("输入攻击力！", card_info.attack || 0);
+		if(attack != undefined && !isNaN(attack)){
+			card_info.attack = attack;
+		}
+	}
+	aLi[14].onmousedown = function(event){//设置原本攻击力
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var base_attack = prompt("输入原本攻击力！", card_info.base_attack || 0);
+		if(base_attack != undefined && !isNaN(base_attack)){
+			card_info.base_attack = base_attack;
+		}
+	}
+	aLi[16].onmousedown = function(event){//设置防御力
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var defence = prompt("输入防御力！", card_info.defence || 0);
+		if(defence != undefined && !isNaN(defence)){
+			card_info.defence = defence;
+		}
+	}
+	aLi[17].onmousedown = function(event){//设置原本防御力
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var base_defence = prompt("输入原本防御力！", card_info.base_defence || 0);
+		if(base_defence != undefined && !isNaN(base_defence)){
+			card_info.base_defence = base_defence;
+		}
+	}
+	aLi[18].onmousedown = function(event){//设置等级
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var level = prompt("输入等级！", card_info.level || 0);
+		if(level != undefined && !isNaN(levle)){
+			card_info.level = level;
+		}
+	}
+	aLi[19].onmousedown = function(event){//调整顺序
 		var field = thumb.parentNode;
 		var sortable = $('#sortable');
 		sortable.empty();
@@ -246,7 +289,7 @@ var PopMenu = function createPopMenu(){
 		if(location == 'location_mzone'){
 			if(!card_info.IsXYZmaterial){
 				menuItems = menu_position + menu_pos_faceup_attack + menu_pos_faceup_defence + menu_pos_facedown_defence + menu_pos_facedown_attack
-				+ menu_add_target + menu_counter;
+				+ menu_add_target + menu_counter + menu_change_attack + menu_set_attack + menu_set_base_attack + menu_change_defence + menu_set_defence + menu_set_base_defence + menu_change_level;
 			}
 			if(card_info.disable_revivelimit){
 				menuItems += menu_enable_revivelimit;
@@ -489,6 +532,7 @@ var Img = function() {
 			}
 		}, speed);
 		function run(angle) {
+		
 			if (isIE) { // IE
 				var Matrix; 
 				for(p in thumb.filters) {
@@ -513,7 +557,7 @@ var Img = function() {
 			} else {
 				thumb.style.transform = "rotate(" + angle + "deg)";
 			}
-			
+		
 			$.data(thumb, "degree", angle);
 		}
 	}

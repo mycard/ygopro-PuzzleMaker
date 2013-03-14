@@ -160,6 +160,19 @@
 			<li>设置装备对象</li>
 			<li>删除装备对象</li>
 			<li>放置指示物</li>
+			<li>更改攻击力
+				<ul>
+					<li>设置攻击力</li>
+					<li>设置原本攻击力</li>
+				</ul>
+			</li>
+			<li>更改防御力
+				<ul>
+					<li>设置防御力</li>
+					<li>设置原本防御力</li>
+				</ul>
+			</li>
+			<li>设置怪兽等级</li>
 			<li>调整顺序</li>
 		</ul>
 	</div>
@@ -182,11 +195,14 @@
 	<img id="settingButton" title="高级设置" src="images/setting.png"/>
 	
 	<div id="setting_dialog" title="高级设置">
+	<p>
 		<label for="name">AI 名字</label>
 		<input type="text" id="AI_name" class="text ui-widget-content ui-corner-all"/>
 		<label >消息提示</label>
 		<div id="HintMsg"></div>
-		<button class="btn" onclick="addHintMsg()">增加消息</button>
+		<button class="btn" onclick="addHintMsg()">增加消息</button></br>
+	</p>
+		<input type="checkbox" id="check_shuffle" /> 勾选此项则游戏中的洗牌不改变原本顺序
 	</div>
 	
 	<div id="upload_div" title="上传残局">

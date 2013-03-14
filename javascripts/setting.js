@@ -1,3 +1,4 @@
+
 function settings(){
 
 	var HintMsg = $('#HintMsg');

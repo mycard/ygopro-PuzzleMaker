@@ -100,6 +100,8 @@ function initField(){
 	_popmenu = new PopMenu;
 	$(document).tooltip({track: true});
 	$( "#radio" ).buttonset();
+	//$( "#check_shuffle" ).button();
+	//$( "#check_shuffle" ).buttonset();
 	$("#setting_dialog").dialog({
 		autoOpen: false,
 		resizable: false,
