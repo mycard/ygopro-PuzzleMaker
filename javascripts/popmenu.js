@@ -82,7 +82,7 @@ var PopMenu = function createPopMenu(){
 		var card_id = tmplItem.card_info.card_id;
 		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
 		tmplItem.card_info.position = "POS_FACEUP_ATTACK";
-		if(isIE){
+		if(isIE && !IE10){
 			thumb.style.top = tmplItem.top + "px";
 			thumb.style.left = tmplItem.left + "px";
 		}
@@ -96,7 +96,7 @@ var PopMenu = function createPopMenu(){
 		var card_id = tmplItem.card_info.card_id;
 		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
 		tmplItem.card_info.position = "POS_FACEUP_DEFENCE";
-		if(isIE){
+		if(isIE && !IE10){
 			thumb.style.top = 13 + "px";
 			thumb.style.left = 0 + "px";
 		}
@@ -110,7 +110,7 @@ var PopMenu = function createPopMenu(){
 		var card_id = tmplItem.card_info.card_id;
 		thumbImg.src = "images/unknow.jpg";
 		tmplItem.card_info.position = "POS_FACEDOWN_DEFENCE";
-		if(isIE){
+		if(isIE && !IE10){
 			thumb.style.top = 13 + "px";
 			thumb.style.left = 0 + "px";
 		}
@@ -124,7 +124,7 @@ var PopMenu = function createPopMenu(){
 		var card_id = tmplItem.card_info.card_id;
 		thumbImg.src = "images/unknow.jpg";
 		tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
-		if(isIE){
+		if(isIE && !IE10){
 			thumb.style.top = tmplItem.top + "px";
 			thumb.style.left = tmplItem.left + "px";
 		}
@@ -506,7 +506,7 @@ var Img = function() {
 			run(degree);
 			return false;
 		}
-		if(isIE){
+		if(isIE && !IE10){
 			run(degree);
 			return false;
 		}
@@ -534,16 +534,25 @@ var Img = function() {
 		}, speed);
 		function run(angle) {
 		
-			if (isIE) { // IE
+			if (isIE && !IE10) { // IE
 				var Matrix; 
-				for(p in thumb.filters) {
-					if(p=="DXImageTransform.Microsoft.Matrix")Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"];
-				}
-				if(!Matrix) {
-					thumb.style.filter+="progid:DXImageTransform.Microsoft.Matrix(enabled=true,SizingMethod=clip to original,FilterType=nearest neighbor)";
-				}
-				Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"];
+				for(p in thumb.filters) 
+				{        
+					if(p=="DXImageTransform.Microsoft.Matrix")Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"];   
+				} 
+				if(!Matrix) 
+				{ 
+					thumb.style.filter+="progid:DXImageTransform.Microsoft.Matrix(enabled=true,SizingMethod=clip to original,FilterType=nearest neighbor)"; 
+				} 
+				Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"]; 
 				Matrix.SizingMethod = "auto expand";//Notice this code,it's very important
+				this.equal=function(Matrix2D_x) 
+				{ 
+					if(Matrix2D_x.M11)Matrix.M11 = Matrix2D_x.M11; 
+					if(Matrix2D_x.M12)Matrix.M12 = Matrix2D_x.M12; 
+					if(Matrix2D_x.M21)Matrix.M21 = Matrix2D_x.M21; 
+					if(Matrix2D_x.M22)Matrix.M22 = Matrix2D_x.M22; 
+				}
 				thumb.Matrix=Matrix;
 				var t=Math.PI*angle/180;
 				var c=Math.cos(t);

@@ -13,6 +13,7 @@ var thumb_equip_target;
 var thumb_continuous;
 var thumb_continuous_target;
 var isIE = /*@cc_on!@*/!1;
+var IE10 = isIE && parseInt($.browser.version) >= 10;
 var current_page ;
 var page_num;
 var table_row = 6;//Math.floor((getViewSize().h-250)/64);
@@ -409,7 +410,7 @@ function updateCards(thumbs){
 			card_info.position = "POS_FACEUP_ATTACK";
 		}
 		if(card_info.position == "POS_FACEUP_ATTACK"){
-			if(isIE){
+			if(isIE && !IE10){
 				thumb.style.top = tmplItem.top + "px";
 				thumb.style.left = tmplItem.left + "px";
 			}
@@ -420,7 +421,7 @@ function updateCards(thumbs){
 			Img.rotate(thumb, 0, true);
 		}
 		else if(card_info.position == "POS_FACEUP_DEFENCE"){
-			if(isIE){
+			if(isIE && !IE10){
 				thumb.style.top = 13 + "px";
 				thumb.style.left = 0 + "px";
 			}
@@ -431,7 +432,7 @@ function updateCards(thumbs){
 			Img.rotate(thumb, -90, true);
 		}
 		else if(card_info.position == "POS_FACEDOWN_DEFENCE"){
-			if(isIE){
+			if(isIE && !IE10){
 				thumb.style.top = 13 + "px";
 				thumb.style.left = 0 + "px";
 			}
@@ -442,7 +443,7 @@ function updateCards(thumbs){
 			Img.rotate(thumb, -90, true);
 		}
 		else if(card_info.position == "POS_FACEDOWN_ATTACK"){
-			if(isIE){
+			if(isIE && !IE10){
 				thumb.style.top = tmplItem.top + "px";
 				thumb.style.left = tmplItem.left + "px";
 			}
