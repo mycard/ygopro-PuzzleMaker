@@ -258,7 +258,7 @@ var PopMenu = function createPopMenu(){
 	aLi[19].onmousedown = function(event){//设置等级
 		var card_info = $(thumb).tmplItem().data.card_info;
 		var level = prompt("输入等级！", card_info.level || 0);
-		if(level != undefined && !isNaN(levle)){
+		if(level != undefined && !isNaN(level)){
 			card_info.level = level;
 		}
 	}
