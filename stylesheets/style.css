@@ -3,7 +3,7 @@ html,body{
   height:100%;
 }
 body{
-  font:12px/1.5 \5fae\8f6f\96c5\9ed1;
+  font:12px \5fae\8f6f\96c5\9ed1;
   background: url(../images/body-background.png) #eae6d1;
 }
 button,
@@ -29,10 +29,15 @@ input[type="submit"] {
   min-height: 56px;
 }
 #header h1 {
-  font: 30px/36px "Copse", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  top: 15px;
+  left: 400px;
+  width:478px;
+  text-align:center;
+  position: absolute;
+  font-family:"KaiTi";
+  font-size: 30px;
   color: #f3f3f3;
   text-shadow: 0px 2px 0px #235796;
-  margin: 0px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -90,8 +95,8 @@ header p {
   position: absolute;
   left: 120px;
   top: 340px;
-  width: 200px;
-  height: 250px;
+  width: 220px;
+  height: 280px;
   cursor:text;
   border: 1px solid #00ffff;
   background: #dddddd;
@@ -114,13 +119,41 @@ header p {
   height: 72px;
   background: #888888;
 }
-#fields .location_deck ,.location_extra,.location_grave,.location_removed,.location_field{
+#fields .location_deck ,.location_extra,.location_grave,.location_removed,.location_field,.location_fzone,.location_pzone{
   position: absolute;
   display: inline-block;
   border: 1px solid #00ffff;
   width: 52px;
   height: 72px;
   background: #555555;
+}
+#fields .location_deck{
+	background-image: url(../images/deck.png);
+	background-size:100% 100%; 
+}
+#fields .location_grave{
+	background-image: url(../images/grave.png);
+	background-size:100% 100%; 
+}
+#fields .location_extra{
+	background-image: url(../images/extra.png);
+	background-size:100% 100%; 
+}
+#fields .location_fzone{
+	background-image: url(../images/fzone.png);
+	background-size:100% 100%; 
+}
+#fields .location_pzone{
+	background-image: url(../images/pzone.png);
+	background-size:100% 100%; 
+}
+#fields .location_removed{
+	background-image: url(../images/removed.png);
+	background-size:100% 100%; 
+}
+#fields .location_field{
+	background-image: url(../images/fields.png);
+	background-size:100% 100%; 
 }
 #fields .location_hand{
   position: absolute;
@@ -129,7 +162,7 @@ header p {
   width: 327px;
   height: 72px;
 }
-#fields .location_hand:hover,.location_extra:hover,.location_grave:hover,.location_removed:hover{
+#fields .location_hand:hover,.location_extra:hover,.location_grave:hover,.location_removed:hover,.location_pzone:hover,.location_fzone:hover{
   border: 1px solid #ff0000;
 }
 #fields .location_deck:hover{
@@ -142,6 +175,18 @@ header p {
   z-index: 300;
   height: 64px;
   width: 44px;
+  position: absolute;
+  display: inline-block;
+}
+#fields .equipImg {
+  top: 15px;
+  left: 5px;
+  position: absolute;
+  display: inline-block;
+}
+#fields .targetImg {
+  top: 15px;
+  left: 5px;
   position: absolute;
   display: inline-block;
 }
@@ -166,6 +211,12 @@ header p {
   position: absolute;
   text-shadow: 0px 2px 0px #235796;
   color: #ffffff;
+}
+#radio{
+  z-index: 100;
+  left: 920px;
+  top: 25px;
+  position: absolute;
 }
 #search_bar {
   z-index: 100;
@@ -200,10 +251,10 @@ header p {
   border-radius: 5px;
   background-color: #dddddd;
   margin-left: 5px;
-  padding: 10px 12px;
+  padding: 5px 6px;
   margin-top: 6px;
-  line-height: 14px;
-  font-size: 18px;
+  line-height: 18px;
+  font: 20px "KaiTi","STKaiti";
   color: #333333;
   font-weight: bold;
   display: inline-block;
@@ -237,11 +288,18 @@ header p {
   background-color: #ffffff;
   margin-left: 5px;
   margin-top: 12px;
-  font-size: 18px;
+  font: 20px "KaiTi","STKaiti";
   color: #333333;
   text-align: left;
   width: 60%;
   height: 25px;
+}
+#search_bar.thumbImg {
+  z-index: 300;
+  height: 64px;
+  width: 44px;
+  position: absolute;
+  display: inline-block;
 }
 #search_bar .cardname {
   font-size: 14px;
@@ -262,17 +320,6 @@ header p {
 #content{
   margin: 5px 30px 5px 30px;
   position: relative;
-}
-
-#download{
-  z-index: 1000;
-  top: 70px;
-  left: 280px;
-  cursor: pointer;
-  width:80px;
-  height:80px;
-  margin: 5px 30px 5px 30px;
-  position: absolute;
 }
 #popMenu{
   position:absolute;
@@ -328,16 +375,14 @@ table{
   margin:5px 5px;
   padding: 5px 5px;
 }
+th, td {
+  font:bold 14px  \5fae\8f6f\96c5\9ed1;
+  text-align: left;
+  border: 1px solid #4276b6;
+  background: #64c8c8;
+}
 table, td{
   font:100% Arial, Helvetica, sans-serif; 
-}
-th, td {
-  text-align: left;
-  border-left: 1px solid #4276b6;
-  border-right: 1px solid #4276b6;
-  border-top: 1px solid #4276b6;
-  border-bottom: 1px solid #4276b6;
-  background: #64c8c8;
 }
 .select {
   height: 28px;
@@ -361,7 +406,6 @@ th, td {
   height: 64px;
   text-align: center;
 }
-
 /* tablecloth styles */
 
 tr.even td{background:#e5f1f4;}
@@ -372,3 +416,57 @@ td.down, tr.even td.down, tr.odd td.down{background:#bce774;color:#fff;}
 
 /* use this if you want to apply different styleing to empty table cells*/
 td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
+
+
+#downloadButton{
+  z-index: 1000;
+  top: 150px;
+  left: 270px;
+  cursor: pointer;
+  width:60px;
+  height:60px;
+  margin: 5px 30px 5px 30px;
+  position: absolute;
+}
+#settingButton{
+  z-index: 1000;
+  top: 210px;
+  left: 270px;
+  cursor: pointer;
+  width:60px;
+  height:60px;
+  margin: 5px 30px 5px 30px;
+  position: absolute;
+}
+#upload_div{
+  z-index: 1000;
+  top: 90px;
+  left: 270px;
+  cursor: pointer;
+  width:60px;
+  height:60px;
+  margin: 5px 30px 5px 30px;
+  position: absolute;
+  background-image: url(../images/upload.png);
+  background-size:100% 100%; 
+}
+#upload {
+  width:80px;
+  height:80px;
+  opacity: 0;
+  cursor: pointer;
+}
+*{margin:0;padding:0;list-style-type:none;}
+a,img{border:0;}
+/* box_button */
+div.box_wrap{position:fixed;z-index:100;top:0;left:0;_position:absolute;_top:expression(documentElement.scrollTop + 0 + "px");_left:expression(documentElement.scrollLeft + 0 + "px");margin:50px 0 0 0;}
+div.box_button{height:50px;width:50px;text-align:center;vertical-align:middle;float:left;cursor:help;}
+div.box_main{background:#EEE;float:left;border:solid 1px #4D4D4D;border-bottom:none;}
+/* menu */
+ul#menu,ul#menu ul{width:200px;}
+ul#menu a{display:block;text-decoration:none;}
+ul#menu li a img{margin-right:5px; width:30px; height:30px;}
+ul#menu li{width:200px;}
+ul#menu li a{color:#333;background:#eeeeee;font-family:Arial, Helvetica, sans-serif;border-bottom:solid 1px #333;font-size:18px;padding:5px; }
+ul#menu ul li{padding:10px;font-size:12px;}
+ul#menu ul li a{display:inline-block;}
