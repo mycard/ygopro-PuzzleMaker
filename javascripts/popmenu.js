@@ -1,14 +1,25 @@
-var menu_position = 1;
-var menu_pos_faceup_attack = 1 << 1;
-var menu_pos_faceup_defence = 1 << 2;
-var menu_pos_facedown_defence = 1 << 3;
-var menu_pos_facedown_attack = 1 << 4;
-var menu_enable_revivelimit = 1 << 5;
-var menu_disable_revivelimit = 1 << 6;
-var menu_target = 1 << 7;
-var menu_equip = 1 << 8;
-var menu_counter = 1 << 9;
-var menu_show_list = 1 << 10;
+var menu_index = 0;
+var menu_position = 1 << menu_index++;
+var menu_pos_faceup_attack = 1 << menu_index++;
+var menu_pos_faceup_defence = 1 << menu_index++;
+var menu_pos_facedown_defence = 1 << menu_index++;
+var menu_pos_facedown_attack = 1 << menu_index++;
+var menu_enable_revivelimit = 1 << menu_index++;
+var menu_disable_revivelimit = 1 << menu_index++;
+var menu_add_target = 1 << menu_index++;
+var menu_remove_target = 1 << menu_index++;
+var menu_add_equip = 1 << menu_index++;
+var menu_remove_equip = 1 << menu_index++;
+var menu_counter = 1 << menu_index++;
+var menu_change_value = 1 << menu_index++;
+var menu_change_attack = 1 << menu_index++;
+var menu_set_attack = 1 << menu_index++;
+var menu_set_base_attack = 1 << menu_index++;
+var menu_change_defence = 1 << menu_index++;
+var menu_set_defence = 1 << menu_index++;
+var menu_set_base_defence = 1 << menu_index++;
+var menu_change_level = 1 << menu_index++;
+var menu_show_list = 1 << menu_index++;
 
 var PopMenu = function createPopMenu(){
 	var popMenu = document.getElementById("popMenu");
@@ -19,6 +30,7 @@ var PopMenu = function createPopMenu(){
 	var maxWidth = maxHeight = 0;
 	var aDoc = [document.documentElement.offsetWidth, document.documentElement.offsetHeight];
 	var thumb;//弹出右键菜单的thumb
+	var thumbImg;
 	popMenu.style.display = "none";
 	for (i = 0; i < aLi.length; i++){
 		//为含有子菜单的li加上箭头
@@ -68,9 +80,9 @@ var PopMenu = function createPopMenu(){
 	aLi[1].onmousedown = function(event){//表侧攻击表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		thumb.src = card_img_thumb_url + card_id + ".jpg";
+		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
 		tmplItem.card_info.position = "POS_FACEUP_ATTACK";
-		if(isIE){
+		if(isIE && !IE10){
 			thumb.style.top = tmplItem.top + "px";
 			thumb.style.left = tmplItem.left + "px";
 		}
@@ -82,9 +94,9 @@ var PopMenu = function createPopMenu(){
 	aLi[2].onmousedown = function(event){//表侧守备表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		thumb.src = card_img_thumb_url + card_id + ".jpg";
+		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
 		tmplItem.card_info.position = "POS_FACEUP_DEFENCE";
-		if(isIE){
+		if(isIE && !IE10){
 			thumb.style.top = 13 + "px";
 			thumb.style.left = 0 + "px";
 		}
@@ -96,9 +108,9 @@ var PopMenu = function createPopMenu(){
 	aLi[3].onmousedown = function(event){//里侧守备表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		thumb.src = "images/unknow.jpg";
+		thumbImg.src = "images/unknow.jpg";
 		tmplItem.card_info.position = "POS_FACEDOWN_DEFENCE";
-		if(isIE){
+		if(isIE && !IE10){
 			thumb.style.top = 13 + "px";
 			thumb.style.left = 0 + "px";
 		}
@@ -110,9 +122,9 @@ var PopMenu = function createPopMenu(){
 	aLi[4].onmousedown = function(event){//里侧攻击表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		thumb.src = "images/unknow.jpg";
+		thumbImg.src = "images/unknow.jpg";
 		tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
-		if(isIE){
+		if(isIE && !IE10){
 			thumb.style.top = tmplItem.top + "px";
 			thumb.style.left = tmplItem.left + "px";
 		}
@@ -129,39 +141,77 @@ var PopMenu = function createPopMenu(){
 		var tmplItem = $(thumb).tmplItem().data;
 		tmplItem.card_info.disable_revivelimit = true;
 	}
-	aLi[7].onmousedown = function(event){//设置永续效果对象
+	aLi[7].onmousedown = function(event){//添加永续效果对象
 		thumb_continuous = thumb;
-		selectingContinuous = true;
-		var fields = document.getElementById("fields").getElementsByTagName("div");
+		var fields = GetAllFields();
 		for(var i=0; i< fields.length;i++){
 			var tmplItem = $(fields[i]).tmplItem().data;
 			var location = tmplItem.location;
-			if(location == 'mzone' || location == 'szone'){
+			if(location == 'location_mzone' || location == 'location_szone' || location == 'location_field'){
 				var thumbs = fields[i].getElementsByClassName("thumb");
 				if(thumbs.length != 0){
-					var card_info = $(thumbs[thumbs.length-1]).tmplItem().data.card_info;
+					var temp = thumbs[thumbs.length-1];
+					temp.style.border = "1px dashed #ffff00";
+					var card_info = $(temp).tmplItem().data.card_info;
 					card_info.IsSelectable = true;
+					selectingContinuous = true;
+					$(document).tooltip({track: true});
+					$(document).tooltip( "destroy" );
 				}
 			}
 		}
+		if(!selectingContinuous){
+			alert("场上不存在合适的永续效果对象！");
+		}
 	}
-	aLi[8].onmousedown = function(event){//设置装备对象
+	aLi[8].onmousedown = function(event){//删除永续效果对象
+		thumb_continuous = thumb;
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var thumbs = card_info.continuous_target;
+		for(var i = 0; i < thumbs.length; i++){
+			var temp = thumbs[i];
+			temp.style.border = "1px dashed #ffff00";
+			var thumb_info = $(temp).tmplItem().data.card_info;
+			thumb_info.IsSelectable = true;
+			removeContinuous = true;
+			$(document).tooltip({track: true});
+			$(document).tooltip( "destroy" );
+			$(document).tooltip({track: true});
+		}
+	}
+	aLi[9].onmousedown = function(event){//设置装备对象
 		thumb_equip = thumb;
-		selectingEquip = true;
-		var fields = document.getElementById("fields").getElementsByTagName("div");
+		var fields = GetAllFields();
 		for(var i=0; i< fields.length;i++){
 			var tmplItem = $(fields[i]).tmplItem().data;
 			var location = tmplItem.location;
-			if(location == 'mzone'){
+			if(location == 'location_mzone'){
 				var thumbs = fields[i].getElementsByClassName("thumb");
 				if(thumbs.length != 0){
-					var card_info = $(thumbs[thumbs.length-1]).tmplItem().data.card_info;
-					card_info.IsSelectable = true;
+					var temp = thumbs[thumbs.length-1];
+					if(temp != thumb){
+						temp.style.border = "1px dashed #ffff00";
+						var card_info = $(temp).tmplItem().data.card_info;
+						card_info.IsSelectable = true;
+						selectingEquip = true;
+						$(document).tooltip({track: true});
+						$(document).tooltip( "destroy" );
+						$(document).tooltip({track: true});
+					}
 				}
 			}
 		}
+		if(!selectingEquip){
+			alert("场上不存在合适的装备对象！");
+		}
 	}
-	aLi[9].onmousedown = function(event){//放置指示物
+	aLi[10].onmousedown = function(event){//删除装备对象
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var equip_target = card_info.equip_target[0];
+		removeEquipRelation(thumb, equip_target);
+		removeBeEquipRelation(equip_target, thumb);
+	}
+	aLi[11].onmousedown = function(event){//放置指示物
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_counters = tmplItem.card_info.card_counters;
 		var counterSelectors = $('#counterSelectors');
@@ -177,7 +227,42 @@ var PopMenu = function createPopMenu(){
 		$('#add_counter_dialog').dialog('open');
 		return false;
 	}
-	aLi[10].onmousedown = function(event){//调整顺序
+	aLi[14].onmousedown = function(event){//设置攻击力
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var attack = prompt("输入攻击力！", card_info.attack || 0);
+		if(attack != undefined && !isNaN(attack)){
+			card_info.attack = attack;
+		}
+	}
+	aLi[15].onmousedown = function(event){//设置原本攻击力
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var base_attack = prompt("输入原本攻击力！", card_info.base_attack || 0);
+		if(base_attack != undefined && !isNaN(base_attack)){
+			card_info.base_attack = base_attack;
+		}
+	}
+	aLi[17].onmousedown = function(event){//设置防御力
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var defence = prompt("输入防御力！", card_info.defence || 0);
+		if(defence != undefined && !isNaN(defence)){
+			card_info.defence = defence;
+		}
+	}
+	aLi[18].onmousedown = function(event){//设置原本防御力
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var base_defence = prompt("输入原本防御力！", card_info.base_defence || 0);
+		if(base_defence != undefined && !isNaN(base_defence)){
+			card_info.base_defence = base_defence;
+		}
+	}
+	aLi[19].onmousedown = function(event){//设置等级
+		var card_info = $(thumb).tmplItem().data.card_info;
+		var level = prompt("输入等级！", card_info.level || 0);
+		if(level != undefined && !isNaN(level)){
+			card_info.level = level;
+		}
+	}
+	aLi[20].onmousedown = function(event){//调整顺序
 		var field = thumb.parentNode;
 		var sortable = $('#sortable');
 		sortable.empty();
@@ -196,15 +281,16 @@ var PopMenu = function createPopMenu(){
 	
 	this.show = function (event){
 		var event = event || window.event;
-		thumb = event.target;
+		thumb = event.target.parentNode;
+		thumbImg = thumb.getElementsByTagName("img")[0];
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_info = tmplItem.card_info;
 		var location = card_info.location;
 		var menuItems = 0;
-		if(location == 'mzone'){
+		if(location == 'location_mzone'){
 			if(!card_info.IsXYZmaterial){
 				menuItems = menu_position + menu_pos_faceup_attack + menu_pos_faceup_defence + menu_pos_facedown_defence + menu_pos_facedown_attack
-				+ menu_target + menu_counter;
+				+ menu_add_target + menu_counter + menu_change_value + menu_change_attack + menu_set_attack + menu_set_base_attack + menu_change_defence + menu_set_defence + menu_set_base_defence + menu_change_level;
 			}
 			if(card_info.disable_revivelimit){
 				menuItems += menu_enable_revivelimit;
@@ -212,34 +298,65 @@ var PopMenu = function createPopMenu(){
 			else {
 				menuItems += menu_disable_revivelimit;
 			}
+			if(card_info.continuous_target.length){
+				menuItems += menu_remove_target;
+			}
+			menuItems += menu_show_list;
 		}
-		else if(location == 'szone'){
-			menuItems = menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_target + menu_equip + menu_counter;
-		}
-		else if(location == 'field'){
-			menuItems = menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_target + menu_counter;
-		}
-		else if(location == 'grave'){
+		else if(location == 'location_szone'){
+			menuItems = menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_add_target + menu_add_equip + menu_counter;
 			if(card_info.disable_revivelimit){
 				menuItems += menu_enable_revivelimit;
 			}
 			else {
 				menuItems += menu_disable_revivelimit;
 			}
+			if(card_info.continuous_target.length){
+				menuItems += menu_remove_target;
+			}
+			if(card_info.equip_target.length){
+				menuItems += menu_remove_equip;
+			}
 		}
-		else if(location == 'hand'){
+		else if(location == 'location_field'){
+			menuItems += menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_add_target + menu_counter;
+			if(card_info.continuous_target.length){
+				menuItems += menu_remove_target;
+			}
+		}
+		else if(location == 'location_fzone' || location == 'location_pzone' ){
+			menuItems += menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack;
+			if(card_info.continuous_target.length){
+				menuItems += menu_remove_target;
+			}
+		}
+		else if(location == 'location_grave'){
+			if(card_info.disable_revivelimit){
+				menuItems += menu_enable_revivelimit;
+			}
+			else {
+				menuItems += menu_disable_revivelimit;
+			}
+			menuItems += menu_show_list;
+		}
+		else if(location == 'location_hand'){
 			menuItems = 0;
 		}
-		else if(location == 'deck'){
-			menuItems = 0;
+		else if(location == 'location_deck'){
+			menuItems += menu_show_list;
 		}
-		else if(location == 'extra'){
-			menuItems = 0;
+		else if(location == 'location_extra'){
+			menuItems += menu_show_list;
 		}
-		else if(location == 'removed'){
-			menuItems = 0;
+		else if(location == 'location_removed'){
+			if(card_info.disable_revivelimit){
+				menuItems += menu_enable_revivelimit;
+			}
+			else {
+				menuItems += menu_disable_revivelimit;
+			}
+			menuItems += menu_show_list;
 		}
-		menuItems += menu_show_list;
 		if(menuItems == 0) return false;
 		setMenu(menuItems);
 		for(var i=1;i<5;i++){
@@ -302,7 +419,6 @@ var PopMenu = function createPopMenu(){
 	$("#add_counter_dialog").dialog({
 		autoOpen: false,
 		resizable: false,
-		show: "clip",
 		hide: "puff",
 		modal: true,
 		width: 450,
@@ -321,7 +437,6 @@ var PopMenu = function createPopMenu(){
 	$("#show_list_dialog").dialog({
 		autoOpen: false,
 		resizable: false,
-		show: "clip",
 		hide: "puff",
 		modal: true,
 		width: 450,
@@ -348,7 +463,7 @@ function addCounterSelector(code, number){//添加选择器
 	$("#CounterSelector-tmpl").tmpl({
 		counters: counters,
 		_code: code || "0x3001",
-		_number: number || 1
+		_number: number || 0
 	}).appendTo($('#counterSelectors'));
 	$('.spinner').spinner({//设置指示物的数量不能小于1
 		spin: function( event, ui ) {
@@ -359,8 +474,7 @@ function addCounterSelector(code, number){//添加选择器
 	});
 }
 function addCounter(dialog, thumb){//根据dialog的内容更新thumb
-	var tmplItem = $(thumb).tmplItem().data;
-	var card_info = tmplItem.card_info;
+	var card_info = $(thumb).tmplItem().data.card_info;
 	card_info.card_counters = [];
 	var CounterSelectors = dialog.getElementsByClassName("CounterSelector");
 	for(var i=0; i<CounterSelectors.length; i++){
@@ -368,11 +482,12 @@ function addCounter(dialog, thumb){//根据dialog的内容更新thumb
 		var input = CounterSelectors[i].getElementsByTagName("input")[0];
 		var code = select.value;
 		var number = input.value;
-		card_info.card_counters[i] = {code : code , number : number};
+		if(number > 0)
+			card_info.card_counters.push({code : code , number : number});
 	}
 }
 function sort(dialog, field){//根据dialog的顺序更新field
-	var thumbs = dialog.getElementsByClassName("thumb");
+	var thumbs = dialog.getElementsByClassName("thumbImg");
 	var card_list = [];
 	for(var i =0; i < thumbs.length; i++){
 		var tmplItem = $(thumbs[i]).tmplItem().data;
@@ -397,7 +512,7 @@ var Img = function() {
 			run(degree);
 			return false;
 		}
-		if(isIE){
+		if(isIE && !IE10){
 			run(degree);
 			return false;
 		}
@@ -424,16 +539,26 @@ var Img = function() {
 			}
 		}, speed);
 		function run(angle) {
-			if (isIE) { // IE
+		
+			if (isIE && !IE10) { // IE
 				var Matrix; 
-				for(p in thumb.filters) {
-					if(p=="DXImageTransform.Microsoft.Matrix")Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"];
-				}
-				if(!Matrix) {
-					thumb.style.filter+="progid:DXImageTransform.Microsoft.Matrix(enabled=true,SizingMethod=clip to original,FilterType=nearest neighbor)";
-				}
-				Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"];
+				for(p in thumb.filters) 
+				{        
+					if(p=="DXImageTransform.Microsoft.Matrix")Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"];   
+				} 
+				if(!Matrix) 
+				{ 
+					thumb.style.filter+="progid:DXImageTransform.Microsoft.Matrix(enabled=true,SizingMethod=clip to original,FilterType=nearest neighbor)"; 
+				} 
+				Matrix=thumb.filters["DXImageTransform.Microsoft.Matrix"]; 
 				Matrix.SizingMethod = "auto expand";//Notice this code,it's very important
+				this.equal=function(Matrix2D_x) 
+				{ 
+					if(Matrix2D_x.M11)Matrix.M11 = Matrix2D_x.M11; 
+					if(Matrix2D_x.M12)Matrix.M12 = Matrix2D_x.M12; 
+					if(Matrix2D_x.M21)Matrix.M21 = Matrix2D_x.M21; 
+					if(Matrix2D_x.M22)Matrix.M22 = Matrix2D_x.M22; 
+				}
 				thumb.Matrix=Matrix;
 				var t=Math.PI*angle/180;
 				var c=Math.cos(t);
@@ -448,7 +573,7 @@ var Img = function() {
 			} else {
 				thumb.style.transform = "rotate(" + angle + "deg)";
 			}
-			
+		
 			$.data(thumb, "degree", angle);
 		}
 	}

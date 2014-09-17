@@ -1,14 +1,19 @@
-
+var filename = "Untitled";
+var AI_name = "高性能电子头脑";
+var hintMsgs = [];
+hintMsgs[0] = "在这个回合取得胜利！";
 var _popmenu;
 var dragging = false;
 var putting = false;
 var selectingEquip;
 var selectingContinuous;
+var removeContinuous;
 var thumb_equip;
 var thumb_equip_target;
 var thumb_continuous;
 var thumb_continuous_target;
 var isIE = /*@cc_on!@*/!1;
+var IE10 = isIE && parseInt($.browser.version) >= 10;
 var current_page ;
 var page_num;
 var table_row = 6;//Math.floor((getViewSize().h-250)/64);
@@ -20,45 +25,175 @@ var HAND = 4;
 var GRAVE = 5;
 var EXTRA = 6;
 var REMOVED = 7;
-var LOCATION_STRING = ['mzone','szone','field','deck','hand','grave','extra','removed'];
+var FZONE= 8;
+var PZONE = 9;
+
+var LOCATION_STRING = ['mzone','szone','field','deck','hand','grave','extra','removed','fzone','pzone'];
 var PLAYER_1 = [
 {"top": 138, "left": 71}, //mzone
 {"top": 64, "left": 71},  //szone
-{"top": 99, "left": 408}, //field
-{"top": 20, "left": 8},   //deck
+{"top": 138, "left": 403}, //field
+{"top": -13, "left": 12},   //deck
 {"top": -13, "left": 71}, //hand
-{"top": 99, "left": 8},   //grave
-{"top": 20, "left": 408}, //extra
-{"top": 178, "left": 8},  //removed
+{"top": 138, "left": 12},    //grave
+{"top": -13, "left": 403}, //extra
+{"top": 138, "left": -45},  //removed
+{"top": 64, "left": 12},//fzone
+{"top": 64, "left": 403},//pzone
 ];
 var PLAYER_0 = [
 {"top": 265, "left": 71}, //mzone
 {"top": 339, "left": 71}, //szone
-{"top": 302, "left": 8},  //field
-{"top": 382, "left": 408},//deck
+{"top": 265, "left": 12}, //field
+{"top": 416, "left": 403},//deck
 {"top": 416, "left": 71}, //hand
-{"top": 302, "left": 408},//grave
-{"top": 382, "left": 8},  //extra
-{"top": 222, "left": 408},//removed
+{"top": 265, "left": 403},//grave
+{"top": 416, "left": 12},  //extra
+{"top": 265, "left": 460},//removed
+{"top": 339, "left": 403},//fzone
+{"top": 339, "left": 12},//pzone
 ];
 var COORDINATE = [PLAYER_0,PLAYER_1];
 
 var locale = 'zh';
 var cards_url = "http://my-card.in/cards";
-var locale_url = "http://my-card.in/cards_" + locale;
 
 var card_img_url = "http://my-card.in/images/cards/ygocore/";
 var card_img_thumb_url = "http://my-card.in/images/cards/ygocore/thumbnail/";
 
 var datas = new Object();
 
+function initField(){
+	var player, place;
+	for(player=0;player<2;player++){
+		for(place=0;place<5;place++)
+			addField(player,SZONE,place);
+		for(place=0;place<5;place++)
+			addField(player,MZONE,place);
+		addField(player,FIELD,0);
+		addField(player,DECK,0);
+		addField(player,HAND,0);
+		addField(player,GRAVE,0);
+		addField(player,EXTRA,0);
+		addField(player,REMOVED,0);
+		addField(player,FZONE,0);
+		addField(player,PZONE,0);
+	}
+	var fields = GetAllFields();
+	for(var i=0; i< fields.length;i++){
+		var card_list = [];
+		$.data(fields[i], 'card_list', card_list);
+		fields[i].onmouseover = function(){
+			if(dragging == false && putting == true){
+				putting = false;
+				var dragImage  = document.getElementById('DragImage');
+				var card_info = $.data(dragImage, 'card_info');
+				addCard(this, card_info);
+				$(document).tooltip({track: true});
+			}
+		}
+	}
+	var dragImage  = document.getElementById('DragImage');
+	dragImage.onmouseover = function(){
+		var card_info = $.data(dragImage, 'card_info');
+		var card_id = card_info.card_id;
+		showDetail(card_id);
+	}
+	var keyword = document.getElementById('keyword');
+	keyword.onkeypress = function(ev){
+		var ev = ev || window.event;
+		var key = ev.keyCode;
+		if(key == 13){
+			search();
+		}
+	};
+	_popmenu = new PopMenu;
+	$(document).tooltip({track: true});
+	$( "#radio" ).buttonset();
+	//$( "#check_shuffle" ).button();
+	//$( "#check_shuffle" ).buttonset();
+	$("#setting_dialog").dialog({
+		autoOpen: false,
+		resizable: false,
+		hide: "puff",
+		modal: true,
+		width: 350,
+		buttons: {
+			"确定": function() {
+				settingOK(this);
+				$( this ).dialog({hide: "clip"});
+				$( this ).dialog( "close" );
+				$( this ).dialog({hide: "puff"});
+			},
+			"取消": function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+	
+	$(".box_main").hide();
+	$('#menu ul').hide();
+	$('#menu li a').click(function(){
+		$(this).next().slideToggle('normal');
+	});
+	
+	$('#box_link').toggle(function(){
+		$('.box_main').show(function(){
+			$('.box_main').animate({width:'200px'},500);
+		});
+		$('#box_img').attr("src", "images/close.png");
+	},function(){
+		$('.box_main').hide(function(){
+			$('.box_main').animate({width:'200px'},500);
+		});
+		$('#box_img').attr("src", "images/qm.png");
+	});
+//*test 黑羽
+
+	current_page = 1;
+	page_num = 0;
+	html = "";
+	for( var i in default_result){
+	
+		var card = default_result[i];
+		datas[card._id]=card;
+		if(i%table_row==0){
+			page_num ++;
+			html = html + "<table class='page' style='display:none'>";
+			html = html + "<tr>";
+			html = html + "<th width='46px'>卡图</th>";
+			html = html + "<th >卡名</th>";
+			html = html + "</tr>";
+		}
+		html = html + "<tr>";
+		html = html + "<td><img class='thumbImg' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
+		html = html + "<td width=200px><div class='cardname'>" + card.name + "</div></td>";
+		html = html + "</tr>";
+		if(((i+1)%table_row==0) || (i==default_result.length)){
+			html = html+ "</table>";
+		}
+	}
+	var tables = document.getElementById("result");
+	$(tables).html(html);
+	tablecloth();
+	page_button.style.display = 'block';
+	setPageLabel(current_page, page_num);
+	showPage(current_page);
+	var thumbs = tables.getElementsByClassName("thumbImg");
+	for (var i=0; i< thumbs.length;i++){
+		makeDraggable(thumbs[i]);
+	}
+//*/
+}
 function search(){
 	var name = document.getElementById("keyword").value;
 	var page_button = document.getElementById("page_button");
-	if(name == "")
+	if(name.length == 0)
 		return false;
 	var q = JSON.stringify( {name: {$regex: name.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'), $options: 'i'}});
-	var url = locale_url + '?q=' + q;
+	var locale_url = "http://my-card.in/cards_" + locale;
+	var url = locale_url + '?q=' + encodeURIComponent(q);
+	//$.ajaxSettings.async = true;
     $.getJSON(url,function(result){
 		var html = "";
 		if(result.length == 0){
@@ -84,6 +219,10 @@ function search(){
 						break;
 					}
 				}
+				var star = "";
+				for(var i=0; i<(card.level&0xff); i++){
+					star += "★";
+				}
 				var data = {
 					"_id": card._id,
 					"name": name,
@@ -91,6 +230,7 @@ function search(){
 					"atk": card.atk,
 					"def": card.def,
 					"level": card.level,
+					"star": star,
 					"race": getRace(card),
 					"attribute": getAttribute(card),
 					"desc": desc
@@ -109,7 +249,7 @@ function search(){
 					html = html + "</tr>";
 				}
 				html = html + "<tr>";
-				html = html + "<td><img class='thumb' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
+				html = html + "<td><img class='thumbImg' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
 				html = html + "<td width=200px><div class='cardname'>" + card.name + "</div></td>";
 				html = html + "</tr>";
 				if(((i+1)%table_row==0) || (i==result.length)){
@@ -122,92 +262,12 @@ function search(){
 			page_button.style.display = 'block';
 			setPageLabel(current_page, page_num);
 			showPage(current_page);
-			var thumbs = tables.getElementsByClassName("thumb");
+			var thumbs = tables.getElementsByClassName("thumbImg");
 			for (var i=0; i< thumbs.length;i++){
 				makeDraggable(thumbs[i]);
 			}
 		});
 	});
-}
-function initField(){
-	var player, place;
-	for(player=0;player<2;player++){
-		for(place=0;place<5;place++)
-			addField(player,SZONE,place);
-		for(place=0;place<5;place++)
-			addField(player,MZONE,place);
-		addField(player,FIELD,0);
-		addField(player,DECK,0);
-		addField(player,HAND,0);
-		addField(player,GRAVE,0);
-		addField(player,EXTRA,0);
-		addField(player,REMOVED,0);
-	}
-	var fields = document.getElementById("fields").getElementsByTagName("div");
-	for(var i=0; i< fields.length;i++){
-		var card_list = [];
-		$.data(fields[i], 'card_list', card_list);
-		fields[i].onmouseover = function(){
-			if(dragging == false && putting == true){
-				putting = false;
-				var dragImage  = document.getElementById('DragImage');
-				var card_info = $.data(dragImage, 'card_info');
-				addCard(this, card_info);
-			}
-		}
-	}
-	var dragImage  = document.getElementById('DragImage');
-	dragImage.onmouseover = function(){
-		var card_info = $.data(dragImage, 'card_info');
-		var card_id = card_info.card_id;
-		showDetail(card_id);
-	}
-	var download = document.getElementById('download');
-	download.onmouseover = downloadURL;
-	var keyword = document.getElementById('keyword');
-	keyword.onkeypress = function(ev){
-		var ev = ev || window.event;
-		var key = ev.keyCode;
-		if(key == 13){
-			search();
-		}
-	};
-	_popmenu = new PopMenu;
-
-	/*黑羽 for test*/
-	current_page = 1;
-	page_num = 0;
-	html = "";
-	for( var i in default_result){
-	
-		var card = default_result[i];
-		datas[card._id]=card;
-		if(i%table_row==0){
-			page_num ++;
-			html = html + "<table class='page' style='display:none'>";
-			html = html + "<tr>";
-			html = html + "<th width='46px'>卡图</th>";
-			html = html + "<th >卡名</th>";
-			html = html + "</tr>";
-		}
-		html = html + "<tr>";
-		html = html + "<td><img class='thumb' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
-		html = html + "<td width=200px><div class='cardname'>" + card.name + "</div></td>";
-		html = html + "</tr>";
-		if(((i+1)%table_row==0) || (i==default_result.length)){
-			html = html+ "</table>";
-		}
-	}
-	var tables = document.getElementById("result");
-	$(tables).html(html);
-	tablecloth();
-	page_button.style.display = 'block';
-	setPageLabel(current_page, page_num);
-	showPage(current_page);
-	var thumbs = tables.getElementsByClassName("thumb");
-	for (var i=0; i< thumbs.length;i++){
-		makeDraggable(thumbs[i]);
-	}
 }
 function prePage(){ //上一页
 	if(current_page == 1) return false;
@@ -254,7 +314,7 @@ function addField(player, location, place) {//画场地
 	}
 	$('#field-tmpl').tmpl({
 		player: player || 0,
-		location: LOCATION_STRING[location] || 0,
+		location: "location_" + LOCATION_STRING[location] || 0,
 		place: place || 0,
 		top: top,
 		left: left
@@ -264,7 +324,7 @@ function addCard(field, card_info){
 	var tmplItem = $(field).tmplItem().data;
 	var location = tmplItem.location;
 	var card_list = $.data(field, 'card_list');
-	if(location == "szone" || location == "field"){ //魔陷区和场地区最多只能有1张卡
+	if(location == "location_szone" || location == "location_field"|| location == "location_fzone"||location == "location_pzone"){ //魔陷区和场地区最多只能有1张卡
 		card_list = [];
 	}
 	card_list.push(card_info);
@@ -276,10 +336,14 @@ function updateField(field){
 	var tmplItem = $(field).tmplItem().data;
 	var location = tmplItem.location;
 	var card_list = $.data(field, 'card_list');
+	var thumbs = field.getElementsByClassName("thumb");
+	for (var i=0; i<thumbs.length; i++){
+		thumbs[i].removeAllRelation();
+	}
 	$(field).empty();
 	var width = $(field).width();
 	var length = card_list.length;
-	var start = width/2 - 22.5*length;
+	var start = width/2 - 23*length;
 	for(var i in card_list){
 		var card_info = card_list[i];
 		card_info.location = tmplItem.location;
@@ -288,9 +352,9 @@ function updateField(field){
 		card_info.index = i;
 		var top, left, right, bottom;
 		if(45 < (width / length)) 
-			left = start + 45*i ;
+			left = start + 46*i ;
 		else 
-			left = (width-45)/(length-1)*i;
+			left = (width-46)/(length-1)*i;
 		$("#thumb-tmpl").tmpl({
 			card_info: card_info,
 			top: top || 3,
@@ -308,11 +372,11 @@ function updateField(field){
 	if(0 != length){
 		var type;
 		var text = "";
-		if(location == "grave" || location == "deck" || location == "extra" || location == "removed"){
+		if(location == "location_grave" || location == "location_deck" || location == "location_extra" || location == "location_removed"|| location == "location_fzone"||location == "location_pzone"){
 			type = "field_group_count";
 			text = length;
 		}
-		else if(location == "mzone"){
+		else if(location == "location_mzone"){
 			type = "monster_ad";
 			var card_info = card_list[length-1];
 			var data = datas[card_info.card_id];
@@ -335,78 +399,109 @@ function updateCards(thumbs){
 		var card_info = tmplItem.card_info;
 		var location = card_info.location;
 		var card_id = card_info.card_id;
-		if(location == "szone" || location == "field"){ //魔陷区和场地区只分表侧和里侧
+		var thumbImg = thumb.getElementsByTagName("img")[0];
+		thumb.addAllRelation();
+		if(location == "location_szone" || location == "location_field"){ //魔陷区和场地区只分表侧和里侧
 			if(card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENCE")
-				tmplItem.card_info.position = "POS_FACEDOWN_ATTACK";
+				card_info.position = "POS_FACEDOWN_ATTACK";
 			else
-				tmplItem.card_info.position = "POS_FACEUP_ATTACK";
+				card_info.position = "POS_FACEUP_ATTACK";
 		}
-		else if(location == "mzone"){
+		else if(location == "location_mzone"){
 			if(1 < thumbs.length && i < thumbs.length-1){//超量素材
-				tmplItem.card_info.position = "POS_FACEUP_ATTACK";
-				tmplItem.card_info.IsXYZmaterial = true;
+				card_info.position = "POS_FACEUP_ATTACK";
+				card_info.IsXYZmaterial = true;
 			}
 			else {
-				tmplItem.card_info.IsXYZmaterial = false;
+				card_info.IsXYZmaterial = false;
 			}
 		}
-		else if(location != "mzone"){//除魔陷和怪兽区
-			tmplItem.card_info.position = "POS_FACEUP_ATTACK";
+		else if(location != "location_mzone"){//除魔陷和怪兽区
+			card_info.position = "POS_FACEUP_ATTACK";
 		}
-		if(tmplItem.card_info.position == "POS_FACEUP_ATTACK"){
-			if(isIE){
+		if(card_info.position == "POS_FACEUP_ATTACK"){
+			if(isIE && !IE10){
 				thumb.style.top = tmplItem.top + "px";
 				thumb.style.left = tmplItem.left + "px";
 			}
 			else {
 				thumb.style.left = tmplItem.left + "px";
 			}
-			thumb.src = card_img_thumb_url + card_id + ".jpg";
+			thumbImg.src = card_img_thumb_url + card_id + ".jpg";
 			Img.rotate(thumb, 0, true);
 		}
-		else if(tmplItem.card_info.position == "POS_FACEUP_DEFENCE"){
-			if(isIE){
+		else if(card_info.position == "POS_FACEUP_DEFENCE"){
+			if(isIE && !IE10){
 				thumb.style.top = 13 + "px";
 				thumb.style.left = 0 + "px";
 			}
 			else {
 				thumb.style.left = 10 + "px";
 			}
-			thumb.src = card_img_thumb_url + card_id + ".jpg";
+			thumbImg.src = card_img_thumb_url + card_id + ".jpg";
 			Img.rotate(thumb, -90, true);
 		}
-		else if(tmplItem.card_info.position == "POS_FACEDOWN_DEFENCE"){
-			if(isIE){
+		else if(card_info.position == "POS_FACEDOWN_DEFENCE"){
+			if(isIE && !IE10){
 				thumb.style.top = 13 + "px";
 				thumb.style.left = 0 + "px";
 			}
 			else {
 				thumb.style.left = 10 + "px";
 			}
-			thumb.src = "images/unknow.jpg";
+			thumbImg.src = "images/unknow.jpg";
 			Img.rotate(thumb, -90, true);
 		}
-		else if(tmplItem.card_info.position == "POS_FACEDOWN_ATTACK"){
-			if(isIE){
+		else if(card_info.position == "POS_FACEDOWN_ATTACK"){
+			if(isIE && !IE10){
 				thumb.style.top = tmplItem.top + "px";
 				thumb.style.left = tmplItem.left + "px";
 			}
 			else {
 				thumb.style.left = tmplItem.left + "px";
 			}
-			thumb.src = "images/unknow.jpg";
+			thumbImg.src = "images/unknow.jpg";
 			Img.rotate(thumb, 0, true);
 		}
 	}
 }
-
+function GetAllFields(){
+	var fields = [];
+	addToFields(fields, "location_szone");
+	addToFields(fields, "location_mzone");
+	addToFields(fields, "location_field");
+	addToFields(fields, "location_hand");
+	addToFields(fields, "location_deck");
+	addToFields(fields, "location_grave");
+	addToFields(fields, "location_removed");
+	addToFields(fields, "location_extra");
+	addToFields(fields, "location_fzone");
+	addToFields(fields, "location_pzone");
+	return fields;
+}
+function addToFields(fields, classname){
+	var temp = document.getElementsByClassName(classname);
+	for(var i =0; i < temp.length; i++){
+		fields.push(temp[i]);
+	}
+}
 function showDetail(card_id){
 	var img = document.getElementById("detail_image");
 	img.src = card_img_url + card_id + ".jpg";
-	var data = datas[card_id];
-	//$('#detail_label').html($('#detail-tmpl').tmpl({detail: data}));
+	var card = datas[card_id];
 	var textarea = document.getElementById("detail_textarea");
-	textarea.value = data.desc;
+	var text = card.name + "["+ card._id + "]" + "\r\n";
+	text += "[" + card.type + "]   "
+	if(card.race){
+		text += card.race + " / " + card.attribute + "\r\n" ;
+		text += "[" + card.star + "]" + card.level + "\r\n";
+		text += "ATK/" + (card.atk<0?"?":card.atk) + "  DEF/" + (card.def<0?"?":card.def) + "\r\n";
+	}
+	else {
+		text += "\r\n";
+	}
+	text +=  card.desc;
+	textarea.innerText = text;
 }
 function mouseDown(ev){
 	ev         = ev || window.event;
@@ -430,21 +525,34 @@ function mouseUp(ev){
 			up = true;
 		}
 	}
-	if(target.oncontextmenu){
-		return false;
+	else {
+		if(selectingEquip || selectingContinuous || removeContinuous){
+			selectingEquip = false;
+			selectingContinuous = false;
+			removeContinuous = false;
+			$(document).tooltip({track: true});
+			var thumbs = document.getElementsByClassName('thumb');
+			for(var i = 0; i < thumbs.length; i++)
+				thumbs[i].style.border = "none";
+			return false;
+		}
+		else if(target.oncontextmenu){
+			return false;
+		}
 	}
 }
 function mouseMove(ev){
 	ev         = ev || window.event;
 	var target   = ev.target || ev.srcElement;
-	var mousePos = getMousePos(ev);
 	if(dragging){
+		var mousePos = getMousePos(ev);
 		var dragImage  = document.getElementById('DragImage');
 		dragImage.style.position = 'absolute';
 		dragImage.style.left     = mousePos.x - 22 + "px";
 		dragImage.style.top      = mousePos.y - 32 + "px";
 		dragImage.style.display  = "block";
 	}
+	
 	if(!up)
 		putting = false;
 	else 
@@ -489,6 +597,14 @@ function del(array,n){
 	var result = [];
 	for(var i in array){
 		if(i != n)
+			result.push(array[i]);
+	}
+	return result;
+}
+function delElement(array,v){
+	var result = [];
+	for(var i in array){
+		if(array[i] != v)
 			result.push(array[i]);
 	}
 	return result;

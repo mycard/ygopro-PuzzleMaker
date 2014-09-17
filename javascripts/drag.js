@@ -6,15 +6,16 @@ function makeDraggable(thumb){
 	thumb.onmousedown = function(ev){
 		ev = ev || window.event;
 		if(ev.button == 0 || ev.button == 1){
-			if(selectingEquip || selectingContinuous){
+			if(selectingEquip || selectingContinuous || removeContinuous){
 				return false;
 			}
 			dragImage.src  = thumb.src;
-			var x = thumb.src.lastIndexOf('.');
-			var card_id = parseInt(thumb.src.substring(49,x));
+			var x = thumb.src.lastIndexOf('/');
+			var y = thumb.src.lastIndexOf('.');
+			var card_id = parseInt(thumb.src.substring(x+1,y));
 			var card_info = newCard_Info(card_id);
 			$.data(dragImage, 'card_info', card_info);
-			dragging=true;
+			dragging = true;
 			var mousePos = getMousePos(ev);
 			dragImage.style.position = 'absolute';
 			dragImage.style.left     = mousePos.x - 22 + "px";
@@ -23,8 +24,9 @@ function makeDraggable(thumb){
 		}
 	}
 	thumb.onmouseover = function(){
-		var x = thumb.src.lastIndexOf('.');
-		var card_id = parseInt(thumb.src.substring(49,x));
+		var x = thumb.src.lastIndexOf('/');
+		var y = thumb.src.lastIndexOf('.');
+		var card_id = parseInt(thumb.src.substring(x+1,y));
 		showDetail(card_id);
 	}
 	//与图片相邻的表格也可以拖动
@@ -33,29 +35,62 @@ function makeDraggable(thumb){
 }
 function makeMoveable(thumb){
 	var parent = thumb.parentNode;
+	var thumbImg = thumb.getElementsByTagName("img")[0];
+	var equipImg = thumb.getElementsByTagName("img")[1];
+	var targetImg = thumb.getElementsByTagName("img")[2];
+	
+	var card_info = $(thumb).tmplItem().data.card_info;
+	var card_id = card_info.card_id;
+	var card_counters = card_info.card_counters;
+	var continuous_target = card_info.continuous_target;
+	var equip_target = card_info.equip_target;
+	var be_continuous_target = card_info.be_continuous_target;
+	var be_equip_target = card_info.be_equip_target;
 	var dragImage  = document.getElementById('DragImage');
-	thumb.onmousedown = function(ev){
+	$.data(thumb, "degree", 0);
+	thumbImg.onmousedown = function(ev){
 		ev = ev || window.event;
 		if(ev.button == 0 || ev.button == 1){
 			var tmplItem = $(thumb).tmplItem().data;
-			var card_info = tmplItem.card_info;
 			if(selectingEquip && card_info.IsSelectable){
 				createEquipRelation(thumb_equip, thumb);
 				selectingEquip = false;
 				card_info.IsSelectable = false;
+				var thumbs = document.getElementsByClassName('thumb');
+				for(var i = 0; i < thumbs.length; i++)
+					thumbs[i].style.border = "none";
+				$(document).tooltip({track: true});
 				return false;
 			}
 			if(selectingContinuous && card_info.IsSelectable){
 				createContinuousRelation(thumb_continuous, thumb);
 				selectingContinuous = false;
 				card_info.IsSelectable = false;
+				var thumbs = document.getElementsByClassName('thumb');
+				for(var i = 0; i < thumbs.length; i++)
+					thumbs[i].style.border = "none";
+				$(document).tooltip({track: true});
 				return false;
 			}
-			dragImage.src = thumb.src;
+			if(removeContinuous && card_info.IsSelectable){
+				thumbImg.onmouseout();
+				removeContinuousRelation(thumb_continuous, thumb);
+				removeBeContinuousRelation(thumb, thumb_continuous);
+				removeContinuous = false;
+				card_info.IsSelectable = false;
+				var thumbs = document.getElementsByClassName('thumb');
+				for(var i = 0; i < thumbs.length; i++)
+					thumbs[i].style.border = "none";
+				$(document).tooltip({track: true});
+				return false;
+			}
+			else if(selectingEquip || selectingContinuous || removeContinuous)
+				return false;
+			dragImage.src = thumbImg.src;
 			var degree = $.data(thumb, "degree");
 			Img.rotate(dragImage, degree, true);
 			$.data(dragImage, 'card_info', card_info);
-			dragging=true;
+			dragging = true;
 			var mousePos = getMousePos(ev);
 			dragImage.style.position = 'absolute';
 			dragImage.style.left     = mousePos.x - 22 + "px";
@@ -63,24 +98,167 @@ function makeMoveable(thumb){
 			dragImage.style.display  = "block";
 			
 			//remove this card forn field
-		//	parent.onmouseout();
+			thumbImg.onmouseout();
+			thumb.removeAllRelation();
+			$(document).tooltip( "destroy" );
+			$(document).tooltip({track: true});
 			var card_list = $.data(parent, 'card_list');
 			var i = card_info.index;
 			var list = del(card_list,i);
 			$.data(parent, 'card_list', list);
-			parent.removeChild(thumb);
 			updateField(parent);
 		}
 	}
-	thumb.onmouseover = function(){
-		var tmplItem = $(thumb).tmplItem().data;
-		card_id = tmplItem.card_info.card_id;
+	thumbImg.onmouseover = function(){
+	var card_info = $(thumb).tmplItem().data.card_info;
+	var card_id = card_info.card_id;
+	var card_counters = card_info.card_counters;
+	var continuous_target = card_info.continuous_target;
+	var equip_target = card_info.equip_target;
+	var be_continuous_target = card_info.be_continuous_target;
+	var be_equip_target = card_info.be_equip_target;
 		showDetail(card_id);
+	//	equipImg.style.display = "none";
+	//	targetImg.style.display = "none";
+	
+		var str="";
+		if(card_info.attack != undefined){
+			str += "攻击力：" + card_info.attack + "</br>";
+		}
+		if(card_info.base_attack != undefined){
+			str += "原本攻击力：" + card_info.base_attack + "</br>";
+		}
+		if(card_info.defence != undefined){
+			str += "防御力：" + card_info.defence + "</br>";
+		}
+		if(card_info.base_defence != undefined){
+			str += "原本防御力：" + card_info.base_defence + "</br>";
+		}
+		if(card_info.level != undefined){
+			str += "怪兽等级：" + card_info.level + "</br>";
+		}
+		if(card_counters.length){
+			for(var k = 0; k < card_counters.length; k++){
+				str += GetCounterStrByCode(card_counters[k].code) + " ：" + card_counters[k].number + "</br>";
+			}
+		}
+		thumb.title = str;
+		if(continuous_target.length){
+		//	targetImg.style.display = "block";
+			for(var k = 0;k < continuous_target.length; k++){
+				continuous_target[k].getElementsByTagName("img")[2].style.display = "block";
+			}
+		}
+		if(equip_target.length){
+		//	equipImg.style.display = "block";
+			for(var k = 0;k < equip_target.length; k++){
+				equip_target[k].getElementsByTagName("img")[1].style.display = "block";
+			}
+		}
+		if(be_continuous_target.length){
+		//	targetImg.style.display = "block";
+			for(var k = 0;k < be_continuous_target.length; k++){
+				be_continuous_target[k].getElementsByTagName("img")[2].style.display = "block";
+			}
+		}
+		if(be_equip_target.length){
+		//	equipImg.style.display = "block";
+			for(var k = 0;k < be_equip_target.length; k++){
+				be_equip_target[k].getElementsByTagName("img")[1].style.display = "block";
+			}
+		}
 	}
-	$.data(thumb, "degree", 0);
-	thumb.oncontextmenu = function(ev){
+	thumbImg.onmouseout = function(){
+	var card_info = $(thumb).tmplItem().data.card_info;
+	if(card_info == undefined) return ;
+	var card_id = card_info.card_id;
+	var card_counters = card_info.card_counters;
+	var continuous_target = card_info.continuous_target;
+	var equip_target = card_info.equip_target;
+	var be_continuous_target = card_info.be_continuous_target;
+	var be_equip_target = card_info.be_equip_target;
+		if(continuous_target.length){
+			for(var k = 0;k < continuous_target.length; k++){
+				continuous_target[k].getElementsByTagName("img")[2].style.display = "none";
+			}
+		}
+		if(equip_target.length){
+			for(var k = 0;k < equip_target.length; k++){
+				equip_target[k].getElementsByTagName("img")[1].style.display = "none";
+			}
+		}
+		if(be_continuous_target.length){
+			for(var k = 0;k < be_continuous_target.length; k++){
+				be_continuous_target[k].getElementsByTagName("img")[2].style.display = "none";
+			}
+		}
+		if(be_equip_target.length){
+			for(var k = 0;k < be_equip_target.length; k++){
+				be_equip_target[k].getElementsByTagName("img")[1].style.display = "none";
+			}
+		}
+	}
+	thumbImg.oncontextmenu = function(ev){
 		ev = ev || window.event;
 		_popmenu.show(ev);
+	}
+	thumb.removeAllRelation = function (){
+	var card_info = $(thumb).tmplItem().data.card_info;
+	var card_id = card_info.card_id;
+	var card_counters = card_info.card_counters;
+	var continuous_target = card_info.continuous_target;
+	var equip_target = card_info.equip_target;
+	var be_continuous_target = card_info.be_continuous_target;
+	var be_equip_target = card_info.be_equip_target;
+		if(continuous_target.length){
+			for(var k = 0;k < continuous_target.length; k++){
+				removeBeContinuousRelation(continuous_target[k], thumb);
+			}
+		}
+		if(equip_target.length){
+			for(var k = 0;k < equip_target.length; k++){
+				removeBeEquipRelation(equip_target[k], thumb);
+			}
+		}
+		if(be_continuous_target.length){
+			for(var k = 0;k < be_continuous_target.length; k++){
+				removeContinuousRelation(be_continuous_target[k], thumb);
+			}
+		}
+		if(be_equip_target.length){
+			for(var k = 0;k < be_equip_target.length; k++){
+				removeEquipRelation(be_equip_target[k], thumb);
+			}
+		}
+	}
+	thumb.addAllRelation = function (){
+	var card_info = $(thumb).tmplItem().data.card_info;
+	var card_id = card_info.card_id;
+	var card_counters = card_info.card_counters;
+	var continuous_target = card_info.continuous_target;
+	var equip_target = card_info.equip_target;
+	var be_continuous_target = card_info.be_continuous_target;
+	var be_equip_target = card_info.be_equip_target;
+		if(continuous_target.length){
+			for(var k = 0;k < continuous_target.length; k++){
+				addBeContinuousRelation(continuous_target[k], thumb);
+			}
+		}
+		if(equip_target.length){
+			for(var k = 0;k < equip_target.length; k++){
+				addBeEquipRelation(equip_target[k], thumb);
+			}
+		}
+		if(be_continuous_target.length){
+			for(var k = 0;k < be_continuous_target.length; k++){
+				addContinuousRelation(be_continuous_target[k], thumb);
+			}
+		}
+		if(be_equip_target.length){
+			for(var k = 0;k < be_equip_target.length; k++){
+				addEquipRelation(be_equip_target[k], thumb);
+			}
+		}
 	}
 }
 function newCard_Info(card_id){
@@ -88,7 +266,7 @@ function newCard_Info(card_id){
 	card_info.card_id = card_id;
 	card_info.position = "POS_FACEUP_ATTACK";
 	card_info.disable_revivelimit = false;
-	card_info.cn = getC_number();
+	card_info.cn = getCardName();
 	card_info.equip_target = [];
 	card_info.be_equip_target = [];
 	card_info.continuous_target = [];
@@ -97,77 +275,55 @@ function newCard_Info(card_id){
 	return card_info;
 }
 var c_number = 0;
-function getC_number(){
+function getCardName(){
 	c_number++;
 	return "c" + c_number;
 }
-var equip_relation = [];
 function createEquipRelation(thumb_equip, thumb_equip_target){
-	var i;
-	var equip = $(thumb_equip).tmplItem().data.card_info;
-	var equip_target = $(thumb_equip_target).tmplItem().data.card_info;
-	
-	for(i=0; i < equip_relation.length; i++){
-		if(equip_relation[i].equip == equip.cn){
-			equip_relation[i].equip_target = equip_target.cn;
-			break;
-		}
-	}
-	if(i == equip_relation.length){
-		equip_relation[i] = {};
-		equip_relation[i].equip = equip.cn;
-		equip_relation[i].equip_target = equip_target.cn;
-	}
-	alert("equip: " + equip.cn + " -> " + equip_target.cn);
-	equip.equip_target[0] = thumb_equip_target;
-	equip_target.be_equip_target.push(thumb_equip);
+	var pre_equip_target = $(thumb_equip).tmplItem().data.card_info.equip_target[0];
+	removeBeEquipRelation(pre_equip_target, thumb_equip);
+	addEquipRelation(thumb_equip, thumb_equip_target);
+	addBeEquipRelation(thumb_equip_target, thumb_equip);
 }
-function removeEquipRelation(thumb_equip, thumb_equip_target){
-	var i;
-	var equip = $(thumb_equip).tmplItem().data.card_info;
-	var equip_target = $(thumb_equip_target).tmplItem().data.card_info;
-	
-	for(i=0; i < equip_relation.length; i++){
-		if(equip_relation[i].equip == equip.cn && equip_relation[i].equip_target == equip_target.cn){
-			equip_relation = del(equip_relation,i);
-			equip.equip_target.delElement(thumb_equip_target);
-			equip_target.be_equip_target.delElement(thumb_equip);
-			break;
-		}
-	}
-}
-var continuous_relation = [];
 function createContinuousRelation(thumb_continuous, thumb_continuous_target){
-	var i;
+	addContinuousRelation(thumb_continuous, thumb_continuous_target);
+	addBeContinuousRelation(thumb_continuous_target, thumb_continuous);
+}
+function addEquipRelation(thumb_equip, thumb_equip_target){
+	var equip = $(thumb_equip).tmplItem().data.card_info;
+	if(equip) equip.equip_target[0] = thumb_equip_target;
+}
+function addBeEquipRelation(thumb_equip_target, thumb_equip){
+	var equip_target = $(thumb_equip_target).tmplItem().data.card_info;
+	if(equip_target) equip_target.be_equip_target.push(thumb_equip);
+}
+function addContinuousRelation(thumb_continuous, thumb_continuous_target){
 	var continuous = $(thumb_continuous).tmplItem().data.card_info;
+	if(continuous) continuous.continuous_target.push(thumb_continuous_target);
+}
+function addBeContinuousRelation(thumb_continuous_target, thumb_continuous){
 	var continuous_target = $(thumb_continuous_target).tmplItem().data.card_info;
-	
-	for(i=0; i < continuous_relation.length; i++){
-		if(continuous_relation[i].continuous == continuous.cn){
-			continuous_relation[i].continuous_target = continuous_target.cn;
-			break;
-		}
-	}
-	if(i == continuous_relation.length){
-		continuous_relation[i] = {};
-		continuous_relation[i].continuous = continuous.cn;
-		continuous_relation[i].continuous_target = continuous_target.cn;
-	}
-	alert("continuous: " + continuous.cn + " -> " + continuous_target.cn);
-	continuous.continuous_target.push(thumb_continuous_target);
-	continuous_target.be_continuous_target.push(thumb_continuous);
+	if(continuous_target) continuous_target.be_continuous_target.push(thumb_continuous);
 }
 function removeContinuousRelation(thumb_continuous, thumb_continuous_target){
-	var i;
 	var continuous = $(thumb_continuous).tmplItem().data.card_info;
+	if(continuous) continuous.continuous_target = delElement(continuous.continuous_target, thumb_continuous_target);
+}
+function removeBeContinuousRelation(thumb_continuous_target, thumb_continuous){
 	var continuous_target = $(thumb_continuous_target).tmplItem().data.card_info;
-	
-	for(i=0; i < continuous_relation.length; i++){
-		if(continuous_relation[i].continuous == continuous.cn && continuous_relation[i].continuous_target == continuous_target.cn){
-			continuous_relation = del(continuous_relation,i);
-			continuous.continuous_target.delElement(thumb_continuous_target);
-			continuous_target.be_continuous_target.delElement(thumb_continuous);
-			break;
-		}
+	if(continuous_target) continuous_target.be_continuous_target = delElement(continuous_target.be_continuous_target, thumb_continuous);
+}
+function removeEquipRelation(thumb_equip, thumb_equip_target){
+	var equip = $(thumb_equip).tmplItem().data.card_info;
+	if(equip) equip.equip_target = delElement(equip.equip_target, thumb_equip_target);
+}
+function removeBeEquipRelation(thumb_equip_target, thumb_equip){
+	var equip_target = $(thumb_equip_target).tmplItem().data.card_info;
+	if(equip_target) equip_target.be_equip_target = delElement(equip_target.be_equip_target, thumb_equip);
+}
+function GetCounterStrByCode(code){
+	for(var i in counters){
+		if(counters[i].code == code)
+			return counters[i].str;
 	}
 }
