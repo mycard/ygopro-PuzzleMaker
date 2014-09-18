@@ -163,7 +163,7 @@ function loadCards(cards_id,cards){
 					}
 				}
 				var star = "";
-				for(var i=0; i<card.level; i++){
+				for(var i=0; i<(card.level&0xff); i++){
 					star += "★";
 				}
 				var data = {
