@@ -25,26 +25,33 @@ var HAND = 4;
 var GRAVE = 5;
 var EXTRA = 6;
 var REMOVED = 7;
-var LOCATION_STRING = ['mzone','szone','field','deck','hand','grave','extra','removed'];
+var FZONE= 8;
+var PZONE = 9;
+
+var LOCATION_STRING = ['mzone','szone','field','deck','hand','grave','extra','removed','fzone','pzone'];
 var PLAYER_1 = [
 {"top": 138, "left": 71}, //mzone
 {"top": 64, "left": 71},  //szone
-{"top": 99, "left": 408}, //field
-{"top": 20, "left": 8},   //deck
+{"top": 138, "left": 403}, //field
+{"top": -13, "left": 12},   //deck
 {"top": -13, "left": 71}, //hand
-{"top": 99, "left": 8},   //grave
-{"top": 20, "left": 408}, //extra
-{"top": 178, "left": 8},  //removed
+{"top": 138, "left": 12},    //grave
+{"top": -13, "left": 403}, //extra
+{"top": 138, "left": -45},  //removed
+{"top": 64, "left": 12},//fzone
+{"top": 64, "left": 403},//pzone
 ];
 var PLAYER_0 = [
 {"top": 265, "left": 71}, //mzone
 {"top": 339, "left": 71}, //szone
-{"top": 302, "left": 8},  //field
-{"top": 382, "left": 408},//deck
+{"top": 265, "left": 12}, //field
+{"top": 416, "left": 403},//deck
 {"top": 416, "left": 71}, //hand
-{"top": 302, "left": 408},//grave
-{"top": 382, "left": 8},  //extra
-{"top": 222, "left": 408},//removed
+{"top": 265, "left": 403},//grave
+{"top": 416, "left": 12},  //extra
+{"top": 265, "left": 460},//removed
+{"top": 339, "left": 403},//fzone
+{"top": 339, "left": 12},//pzone
 ];
 var COORDINATE = [PLAYER_0,PLAYER_1];
 
@@ -69,6 +76,8 @@ function initField(){
 		addField(player,GRAVE,0);
 		addField(player,EXTRA,0);
 		addField(player,REMOVED,0);
+		addField(player,FZONE,0);
+		addField(player,PZONE,0);
 	}
 	var fields = GetAllFields();
 	for(var i=0; i< fields.length;i++){
@@ -210,7 +219,7 @@ function search(){
 					}
 				}
 				var star = "";
-				for(var i=0; i<card.level; i++){
+				for(var i=0; i<(card.level&0xff); i++){
 					star += "★";
 				}
 				var data = {
@@ -314,7 +323,7 @@ function addCard(field, card_info){
 	var tmplItem = $(field).tmplItem().data;
 	var location = tmplItem.location;
 	var card_list = $.data(field, 'card_list');
-	if(location == "location_szone" || location == "location_field"){ //魔陷区和场地区最多只能有1张卡
+	if(location == "location_szone" || location == "location_field"|| location == "location_fzone"||location == "location_pzone"){ //魔陷区和场地区最多只能有1张卡
 		card_list = [];
 	}
 	card_list.push(card_info);
@@ -465,6 +474,8 @@ function GetAllFields(){
 	addToFields(fields, "location_grave");
 	addToFields(fields, "location_removed");
 	addToFields(fields, "location_extra");
+	addToFields(fields, "location_fzone");
+	addToFields(fields, "location_pzone");
 	return fields;
 }
 function addToFields(fields, classname){
