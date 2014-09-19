@@ -2,6 +2,6 @@
 a puzzle maker for ygopro.<br>
 <br>
 <br>
-local test:
-1.test.bat   (can modfity port)
-2.localhost/test.html
+local test:<br>
+1.test.bat   (can modfity port)<br>
+2.localhost/test.html<br>
