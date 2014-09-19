@@ -9,23 +9,23 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <title>残局编辑器</title>
-<link href="../stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<link href="../stylesheets/jquery-ui-1.9.2.min.css" rel="stylesheet" type="text/css"/>
-<link href="../stylesheets/style.css" rel="stylesheet" type="text/css"/>
-<script src="../javascripts/jquery-1.8.3.min.js" type="text/javascript">></script>
-<script src="../javascripts/bootstrap.min.js" type="text/javascript">></script>
-<script src="../javascripts/jquery.tmpl.min.js" type="text/javascript">></script>
-<script src="../javascripts/jquery-ui-1.9.2.min.js" type="text/javascript">></script>
-<script src="../javascripts/tablecloth.js" type="text/javascript">></script>
-<script src="../javascripts/main.js" type="text/javascript">></script>
-<script src="../javascripts/drag.js" type="text/javascript">></script>
-<script src="../javascripts/download.js" type="text/javascript">></script>
-<script src="../javascripts/upload.js" type="text/javascript">></script>
-<script src="../javascripts/ygo.js" type="text/javascript">></script>
-<script src="../javascripts/popmenu.js" type="text/javascript">></script>
-<script src="../javascripts/setting.js" type="text/javascript">></script>
-<script src="../javascripts/result.js" type="text/javascript">></script>
-<script src="javascripts/test_for_php.js" type="text/javascript">></script>
+<link href="stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheets/jquery-ui-1.9.2.min.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheets/style.css" rel="stylesheet" type="text/css"/>
+<script src="javascripts/jquery-1.8.3.min.js" type="text/javascript">></script>
+<script src="javascripts/bootstrap.min.js" type="text/javascript">></script>
+<script src="javascripts/jquery.tmpl.min.js" type="text/javascript">></script>
+<script src="javascripts/jquery-ui-1.9.2.min.js" type="text/javascript">></script>
+<script src="javascripts/tablecloth.js" type="text/javascript">></script>
+<script src="javascripts/main.js" type="text/javascript">></script>
+<script src="javascripts/drag.js" type="text/javascript">></script>
+<script src="javascripts/download.js" type="text/javascript">></script>
+<script src="javascripts/upload.js" type="text/javascript">></script>
+<script src="javascripts/ygo.js" type="text/javascript">></script>
+<script src="javascripts/popmenu.js" type="text/javascript">></script>
+<script src="javascripts/setting.js" type="text/javascript">></script>
+<script src="javascripts/result.js" type="text/javascript">></script>
+<script src="test/test_for_php.js" type="text/javascript">></script>
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -75,8 +75,8 @@
 <script type="text/x-jquery-tmpl" id="thumb-tmpl">
 	<div class='thumb' style="top:${top}px; left:${left}px; right:${right}px; bottom:${bottom}px;cursor:pointer;" >
 		<img class="thumbImg" src='${card_img_thumb_url}${card_info.card_id}.jpg'/>
-		<img class="equipImg" src='../images/equip.png' style="display: none"/>
-		<img class="targetImg" src='../images/target.png' style="display: none"/>
+		<img class="equipImg" src='images/equip.png' style="display: none"/>
+		<img class="targetImg" src='images/target.png' style="display: none"/>
 	</div>
 </script>
 <script type="text/x-jquery-tmpl" id="label_field-tmpl">
@@ -110,7 +110,7 @@
 </script>
 </head>
 <body>
-	<img id="DragImage" src="../images/unknow.jpg" alt=""/>
+	<img id="DragImage" src="images/unknow.jpg" alt=""/>
 
 	<div id="header">
 		<h1>残局编辑器</h1>
@@ -121,7 +121,7 @@
 		<input id="AI_LP" type="text" placeholder="AILP" maxLength=9 value="8000"  onkeydown="return checkNums()"/>
 	</div>
 
-	<img id="detail_image" src="../images/unknow.jpg" alt=""/>
+	<img id="detail_image" src="images/unknow.jpg" alt=""/>
 	<!--<label id="detail_label"></label>-->
 	<textarea id="detail_textarea" readonly></textarea>
 
@@ -191,13 +191,13 @@
 		<button class="btn" onclick="addCounterSelector()">增加其他种类的指示物</button>
 	</div>
 	
-	<form id="download_form" action="download.php" method="post" style="display: none">
+	<form id="download_form" action="test/download.php" method="post" style="display: none">
 		<input type="hidden" id="single_name" name="name">
 		<input type="hidden" id="single_script" name="script">
 	</form>
-	<img id="downloadButton" title="下载残局" src="../images/download.png"/>
+	<img id="downloadButton" title="下载残局" src="images/download.png"/>
 	
-	<img id="settingButton" title="高级设置" src="../images/setting.png"/>
+	<img id="settingButton" title="高级设置" src="images/setting.png"/>
 	
 	<div id="setting_dialog" title="高级设置">
 	<p>
@@ -221,19 +221,19 @@
 	<div class="box_main">
 		<ul id="menu">
 			<li>
-				<a href="javascript:void(0);"><img src="../images/faq.png"/>使用说明</a>
+				<a href="javascript:void(0);"><img src="images/faq.png"/>使用说明</a>
 				<ul>
 					<li><a href="http://tieba.baidu.com/p/2195212368" target="_black">游戏王ygocore吧</a></li>
 				</ul>
 			</li>
 			<li>
-				<a href="javascript:void(0);"><img src="../images/links.png" />友情链接</a>
+				<a href="javascript:void(0);"><img src="images/links.png" />友情链接</a>
 				<ul>
 					<li><a href="http://ygocore.ys168.com/" target="_black">残局分享地址</a></li>
 				</ul>
 			</li>
 			<li>
-				<a href="javascript:void(0);"><img src="../images/contact.png"/>联系作者</a>
+				<a href="javascript:void(0);"><img src="images/contact.png"/>联系作者</a>
 				<ul>
 					<li>作者QQ：350002947</li>
 					<li>残局交流QQ群：181175613</li>
@@ -242,7 +242,7 @@
 		</ul>
 	</div><!--box_main end-->
 	
-	<div class="box_button"><a style="display:block;" href="#" id="box_link"><img id="box_img" src="../images/qm.png" width="50" height="50" border="0" /></a></div>
+	<div class="box_button"><a style="display:block;" href="#" id="box_link"><img id="box_img" src="images/qm.png" width="50" height="50" border="0" /></a></div>
 	
 </div>
 

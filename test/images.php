@@ -6,7 +6,7 @@ $thumb=false;
 
 $PATH_PICS='pics/';
 $PATH_THUMB='pics/thumbnail/';
-$PATH_DEFAULT="pics/unknown.jpg";
+$PATH_DEFAULT="unknown.jpg";
 
 if(isset($_POST['file'])){
 	$filename=$_POST['file'];

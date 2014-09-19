@@ -1,10 +1,10 @@
 
-cards_url = "cards.php";
-card_img_url = "images.php?file=/";
-card_img_thumb_url = "images.php?thumb=true&file=/";
-img_qm="../images/qm.png";
-img_close="../images/close.png";
-img_unkown="../images/unknow.jpg";
+cards_url = "test/cards.php";
+card_img_url = "test/images.php?file=/";
+card_img_thumb_url = "test/images.php?thumb=true&file=/";
+img_qm="images/qm.png";
+img_close="images/close.png";
+img_unkown="images/unknow.jpg";
 
 function getcarddata(result,card){
 	var star='';
