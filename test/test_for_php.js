@@ -7,22 +7,17 @@ img_close="images/close.png";
 img_unkown="images/unknow.jpg";
 
 function getcarddata(result,card){
-	var star='';
-	var rlevel=card.level&0xff;
-	for(var i=0; i<rlevel; i++){
-		star += "★";
-	}
-	var data={
+	var data = {
 		"_id": card._id,
 		"name": card.name,
-		"type": getType(card),
+		"type": getType(card.type),
 		"atk": card.atk,
 		"def": card.def,
 		"level": card.level,
-		"star": star,
-		"race": getRace(card),
-		"attribute": getAttribute(card),
-		"desc": card.desc,
+		"star": getStars(card.level),
+		"race": getRace(card.race),
+		"attribute": getAttribute(card.attribute),
+		"desc": card.desc
 	};
 	return data;
 }

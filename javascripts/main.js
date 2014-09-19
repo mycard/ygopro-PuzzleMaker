@@ -186,6 +186,7 @@ function search(){
 		});
 	});
 }
+
 function addList(result){
 	current_page = 1;
 	page_num = 0;
@@ -219,18 +220,21 @@ function addList(result){
 		makeDraggable(thumbs[i]);
 	}
 }
+
 function prePage(){ //上一页
 	if(current_page == 1) return false;
 	current_page--;
 	setPageLabel(current_page, page_num);
 	showPage(current_page);
 }
+
 function nextPage(){//下一页
 	if(current_page == page_num) return false;
 	current_page++;
 	setPageLabel(current_page, page_num);
 	showPage(current_page)
 }
+
 function showPage(current_page){//显示current页
 	var tables = document.getElementsByTagName('table');
 	for(var i=0; i<tables.length; i++){
@@ -240,6 +244,7 @@ function showPage(current_page){//显示current页
 			tables[i].style.display = "none";
 	}
 }
+
 function setPageLabel(current_page, page_num) {//显示第X页/共X页
 	var page_label = $('.page_label');
 	var built = $('#page-tmpl').tmpl({
@@ -248,6 +253,7 @@ function setPageLabel(current_page, page_num) {//显示第X页/共X页
 	});
 	page_label.html(built);
 }
+
 function addField(player, location, place) {//画场地
 	var top, left;
 	top = COORDINATE[player][location].top;
@@ -270,6 +276,7 @@ function addField(player, location, place) {//画场地
 		left: left
 	}).appendTo($('#fields'));
 }
+
 function addCard(field, card_info){
 	var tmplItem = $(field).tmplItem().data;
 	var location = tmplItem.location;
@@ -345,6 +352,7 @@ function updateField(field){
 		}).appendTo(field);
 	}
 }
+
 function updateCards(thumbs){	
 	for (var i=0; i<thumbs.length; i++){
 		var thumb = thumbs[i];
@@ -418,6 +426,7 @@ function updateCards(thumbs){
 		}
 	}
 }
+
 function getcarddata(result,card){
 	var name = '';
 	var desc = '';
@@ -428,20 +437,16 @@ function getcarddata(result,card){
 			break;
 		}
 	}
-	var star = "";
-	for(var i=0; i<(card.level&0xff); i++){
-		star += "★";
-	}
 	var data = {
 		"_id": card._id,
 		"name": name,
-		"type": getType(card),
+		"type": getType(card.type),
 		"atk": card.atk,
 		"def": card.def,
 		"level": card.level,
-		"star": star,
-		"race": getRace(card),
-		"attribute": getAttribute(card),
+		"star": getStars(card.level),
+		"race": getRace(card.race),
+		"attribute": getAttribute(card.attribute),
 		"desc": desc
 	};
 	return data;
@@ -454,6 +459,7 @@ function getcardId(src){
 	//console.log(src.substring(y+1,x));
 	return card_id;
 }
+
 function GetAllFields(){
 	var fields = [];
 	addToFields(fields, "location_szone");
@@ -468,12 +474,14 @@ function GetAllFields(){
 	addToFields(fields, "location_pzone_r");
 	return fields;
 }
+
 function addToFields(fields, classname){
 	var temp = document.getElementsByClassName(classname);
 	for(var i =0; i < temp.length; i++){
 		fields.push(temp[i]);
 	}
 }
+
 function unkownCard(id){
 	var data = {
 		"_id": id,
@@ -489,6 +497,7 @@ function unkownCard(id){
 	};
 	return data;
 }
+
 function showDetail(card_id){
 	var textarea = document.getElementById("detail_textarea");
 	var img = document.getElementById("detail_image");
@@ -501,13 +510,7 @@ function showDetail(card_id){
 	text += "[" + card.type + "]   "
 	if(card.race){
 		text += card.race + " / " + card.attribute + "\r\n" ;
-		text += "[" + card.star + "]";
-		if(card.level >= 0xff){
-			text +=(card.level&0xff)+" ["+(card.level>>0x18&0xff)+"/"+(card.level>>0x10&0xff)+"]";
-		}else{
-			text +=card.level
-		}
-		text += "\r\n";
+		text += "[" + card.star + "] "+(card.level&0xff)+"\r\n";
 		text += "ATK/" + (card.atk<0?"?":card.atk) + "  DEF/" + (card.def<0?"?":card.def) + "\r\n";
 	}
 	else {
@@ -516,6 +519,7 @@ function showDetail(card_id){
 	text +=  card.desc;
 	textarea.innerText = text;
 }
+
 function mouseDown(ev){
 	ev         = ev || window.event;
 	var target = ev.target || ev.srcElement;
@@ -524,7 +528,9 @@ function mouseDown(ev){
 		return false;
 	}
 }
+
 var up;
+
 function mouseUp(ev){
 	ev         = ev || window.event;
 	var target = ev.target || ev.srcElement;
@@ -554,6 +560,7 @@ function mouseUp(ev){
 		}
 	}
 }
+
 function mouseMove(ev){
 	ev         = ev || window.event;
 	var target   = ev.target || ev.srcElement;
@@ -571,6 +578,7 @@ function mouseMove(ev){
 	else 
 		up = false;
 }
+
 function getMousePos(ev){
 	ev         = ev || window.event;
 	var target = ev.target || ev.srcElement;
@@ -582,6 +590,7 @@ function getMousePos(ev){
 		y:ev.clientY + document.body.scrollTop  - document.body.clientTop
 	};
 }
+
 function checkNums() {
 	var key = window.event.keyCode;
 	if (key >= 48 && key <= 57 || key == 8) {
@@ -590,6 +599,7 @@ function checkNums() {
 		return false;
 	}
 }
+
 function checkLetter() {
 	var key = window.event.keyCode;
 	if (key >= 65 && key <= 97) {
@@ -603,9 +613,11 @@ function getViewSize(){
 	return {w: window['innerWidth'] || document.documentElement.clientWidth,
 	h: window['innerHeight'] || document.documentElement.clientHeight}
 }
+
 function getFullSize(){
 	return {w: window.screen.width, h: window.screen.height}
 }
+
 function del(array,n){
 	var result = [];
 	for(var i in array){
@@ -614,6 +626,7 @@ function del(array,n){
 	}
 	return result;
 }
+
 function delElement(array,v){
 	var result = [];
 	for(var i in array){
@@ -622,6 +635,7 @@ function delElement(array,v){
 	}
 	return result;
 }
+
 document.onmousemove = mouseMove;
 document.onmousedown = mouseDown;
 document.onmouseup   = mouseUp;
