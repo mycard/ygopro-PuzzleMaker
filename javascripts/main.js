@@ -25,10 +25,10 @@ var HAND = 4;
 var GRAVE = 5;
 var EXTRA = 6;
 var REMOVED = 7;
-var FZONE= 8;
-var PZONE = 9;
+var PZONE_LEFT= 8;
+var PZONE_RIGHT = 9;
 
-var LOCATION_STRING = ['mzone','szone','field','deck','hand','grave','extra','removed','fzone','pzone'];
+var LOCATION_STRING = ['mzone','szone','field','deck','hand','grave','extra','removed','pzone_l','pzone_r'];
 var PLAYER_1 = [
 {"top": 138, "left": 71}, //mzone
 {"top": 64, "left": 71},  //szone
@@ -38,8 +38,8 @@ var PLAYER_1 = [
 {"top": 138, "left": 12},    //grave
 {"top": -13, "left": 403}, //extra
 {"top": 138, "left": -45},  //removed
-{"top": 64, "left": 12},//fzone
-{"top": 64, "left": 403},//pzone
+{"top": 64, "left": 12},//pzone_left
+{"top": 64, "left": 403},//pzone_right
 ];
 var PLAYER_0 = [
 {"top": 265, "left": 71}, //mzone
@@ -50,8 +50,8 @@ var PLAYER_0 = [
 {"top": 265, "left": 403},//grave
 {"top": 416, "left": 12},  //extra
 {"top": 265, "left": 460},//removed
-{"top": 339, "left": 403},//fzone
-{"top": 339, "left": 12},//pzone
+{"top": 339, "left": 403},//pzone_left
+{"top": 339, "left": 12},//pzone2_right
 ];
 var COORDINATE = [PLAYER_0,PLAYER_1];
 
@@ -60,6 +60,10 @@ var cards_url = "http://my-card.in/cards";
 
 var card_img_url = "http://my-card.in/images/cards/ygocore/";
 var card_img_thumb_url = "http://my-card.in/images/cards/ygocore/thumbnail/";
+
+var img_qm="images/qm.png";
+var img_close="images/close.png";
+var img_unkown="images/unknow.jpg";
 
 var datas = new Object();
 
@@ -76,8 +80,8 @@ function initField(){
 		addField(player,GRAVE,0);
 		addField(player,EXTRA,0);
 		addField(player,REMOVED,0);
-		addField(player,FZONE,0);
-		addField(player,PZONE,0);
+		addField(player,PZONE_LEFT,0);
+		addField(player,PZONE_RIGHT,0);
 	}
 	var fields = GetAllFields();
 	for(var i=0; i< fields.length;i++){
@@ -141,50 +145,18 @@ function initField(){
 		$('.box_main').show(function(){
 			$('.box_main').animate({width:'200px'},500);
 		});
-		$('#box_img').attr("src", "images/close.png");
+		$('#box_img').attr("src", img_close);
 	},function(){
 		$('.box_main').hide(function(){
 			$('.box_main').animate({width:'200px'},500);
 		});
-		$('#box_img').attr("src", "images/qm.png");
+		$('#box_img').attr("src", img_qm);
 	});
 //*test 黑羽
-
-	current_page = 1;
-	page_num = 0;
-	html = "";
-	for( var i in default_result){
-	
-		var card = default_result[i];
-		datas[card._id]=card;
-		if(i%table_row==0){
-			page_num ++;
-			html = html + "<table class='page' style='display:none'>";
-			html = html + "<tr>";
-			html = html + "<th width='46px'>卡图</th>";
-			html = html + "<th >卡名</th>";
-			html = html + "</tr>";
-		}
-		html = html + "<tr>";
-		html = html + "<td><img class='thumbImg' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
-		html = html + "<td width=200px><div class='cardname'>" + card.name + "</div></td>";
-		html = html + "</tr>";
-		if(((i+1)%table_row==0) || (i==default_result.length)){
-			html = html+ "</table>";
-		}
-	}
-	var tables = document.getElementById("result");
-	$(tables).html(html);
-	tablecloth();
-	page_button.style.display = 'block';
-	setPageLabel(current_page, page_num);
-	showPage(current_page);
-	var thumbs = tables.getElementsByClassName("thumbImg");
-	for (var i=0; i< thumbs.length;i++){
-		makeDraggable(thumbs[i]);
-	}
+	addList(default_result);
 //*/
 }
+
 function search(){
 	var name = document.getElementById("keyword").value;
 	var page_button = document.getElementById("page_button");
@@ -208,65 +180,44 @@ function search(){
 		}
 		$.getJSON(cards_url + "?q=" + (JSON.stringify({_id: {$in: cards_id}})), function(cards) {
 			for(var i in cards){
-				var card = cards[i];
-				var name = '';
-				var desc = '';
-				for(var j in result){
-					if(result[j]._id == card._id){
-						name = result[j].name;
-						desc = result[j].desc;
-						break;
-					}
-				}
-				var star = "";
-				for(var i=0; i<(card.level&0xff); i++){
-					star += "★";
-				}
-				var data = {
-					"_id": card._id,
-					"name": name,
-					"type": getType(card),
-					"atk": card.atk,
-					"def": card.def,
-					"level": card.level,
-					"star": star,
-					"race": getRace(card),
-					"attribute": getAttribute(card),
-					"desc": desc
-				};
-				datas[card._id]=data;
+				datas[card._id]=getcarddata(result,cards[i]);
 			}
-			current_page = 1;
-			page_num = 0;
-			$.each(result, function(i, card){
-				if(i%table_row==0){
-					page_num ++;
-					html = html + "<table class='page' style='display:none'>";
-					html = html + "<tr>";
-					html = html + "<th width='46px'>卡图</th>";
-					html = html + "<th >卡名</th>";
-					html = html + "</tr>";
-				}
-				html = html + "<tr>";
-				html = html + "<td><img class='thumbImg' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
-				html = html + "<td width=200px><div class='cardname'>" + card.name + "</div></td>";
-				html = html + "</tr>";
-				if(((i+1)%table_row==0) || (i==result.length)){
-					html = html+ "</table>";
-				}
-			});
-			var tables = document.getElementById("result");
-			$(tables).html(html);
-			tablecloth();
-			page_button.style.display = 'block';
-			setPageLabel(current_page, page_num);
-			showPage(current_page);
-			var thumbs = tables.getElementsByClassName("thumbImg");
-			for (var i=0; i< thumbs.length;i++){
-				makeDraggable(thumbs[i]);
-			}
+			addList(result);
 		});
 	});
+}
+function addList(result){
+	current_page = 1;
+	page_num = 0;
+	var html="";
+	$.each(result, function(i, card){
+		//console.log(card.name);
+		if(i%table_row==0){
+			page_num ++;
+			html = html + "<table class='page' style='display:none'>";
+			html = html + "<tr>";
+			html = html + "<th width='46px'>卡图</th>";
+			html = html + "<th >卡名</th>";
+			html = html + "</tr>";
+		}
+		html = html + "<tr>";
+		html = html + "<td><img class='thumbImg' src='" + card_img_thumb_url + card._id + ".jpg' style='cursor:pointer;'>" + "</td>";
+		html = html + "<td width=200px><div class='cardname'>" + card.name + "</div></td>";
+		html = html + "</tr>";
+		if(((i+1)%table_row==0) || (i==result.length)){
+			html = html+ "</table>";
+		}
+	});
+	var tables = document.getElementById("result");
+	$(tables).html(html);
+	tablecloth();
+	page_button.style.display = 'block';
+	setPageLabel(current_page, page_num);
+	showPage(current_page);
+	var thumbs = tables.getElementsByClassName("thumbImg");
+	for (var i=0; i< thumbs.length;i++){
+		makeDraggable(thumbs[i]);
+	}
 }
 function prePage(){ //上一页
 	if(current_page == 1) return false;
@@ -323,7 +274,7 @@ function addCard(field, card_info){
 	var tmplItem = $(field).tmplItem().data;
 	var location = tmplItem.location;
 	var card_list = $.data(field, 'card_list');
-	if(location == "location_szone" || location == "location_field"|| location == "location_fzone"||location == "location_pzone"){ //魔陷区和场地区最多只能有1张卡
+	if(location == "location_szone" || location == "location_field"||location == "location_pzone_r"||location == "location_pzone_l"){ //魔陷区和场地区最多只能有1张卡
 		card_list = [];
 	}
 	card_list.push(card_info);
@@ -379,6 +330,9 @@ function updateField(field){
 			type = "monster_ad";
 			var card_info = card_list[length-1];
 			var data = datas[card_info.card_id];
+			if(typeof(data)=="undefined"){
+				data=unkownCard(card_info.card_id);
+			}
 			var atk = data.atk;
 			var def = data.def;
 			if(atk < 0){atk = "?";}
@@ -400,7 +354,7 @@ function updateCards(thumbs){
 		var card_id = card_info.card_id;
 		var thumbImg = thumb.getElementsByTagName("img")[0];
 		thumb.addAllRelation();
-		if(location == "location_szone" || location == "location_field"){ //魔陷区和场地区只分表侧和里侧
+		if(location == "location_szone" || location == "location_field" || location == "location_pzone_r"|| location == "location_pzone_l"){ //魔陷区和场地区只分表侧和里侧
 			if(card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENCE")
 				card_info.position = "POS_FACEDOWN_ATTACK";
 			else
@@ -448,7 +402,7 @@ function updateCards(thumbs){
 			else {
 				thumb.style.left = 10 + "px";
 			}
-			thumbImg.src = "images/unknow.jpg";
+			thumbImg.src = img_unkown;
 			Img.rotate(thumb, -90, true);
 		}
 		else if(card_info.position == "POS_FACEDOWN_ATTACK"){
@@ -459,10 +413,46 @@ function updateCards(thumbs){
 			else {
 				thumb.style.left = tmplItem.left + "px";
 			}
-			thumbImg.src = "images/unknow.jpg";
+			thumbImg.src = img_unkown;
 			Img.rotate(thumb, 0, true);
 		}
 	}
+}
+function getcarddata(result,card){
+	var name = '';
+	var desc = '';
+	for(var j in result){
+		if(result[j]._id == card._id){
+			name = result[j].name;
+			desc = result[j].desc;
+			break;
+		}
+	}
+	var star = "";
+	for(var i=0; i<(card.level&0xff); i++){
+		star += "★";
+	}
+	var data = {
+		"_id": card._id,
+		"name": name,
+		"type": getType(card),
+		"atk": card.atk,
+		"def": card.def,
+		"level": card.level,
+		"star": star,
+		"race": getRace(card),
+		"attribute": getAttribute(card),
+		"desc": desc
+	};
+	return data;
+}
+
+function getcardId(src){
+	var x = src.lastIndexOf('.');
+	var y = src.lastIndexOf('/');
+	var card_id = parseInt(src.substring(y+1,x));
+	//console.log(src.substring(y+1,x));
+	return card_id;
 }
 function GetAllFields(){
 	var fields = [];
@@ -474,8 +464,8 @@ function GetAllFields(){
 	addToFields(fields, "location_grave");
 	addToFields(fields, "location_removed");
 	addToFields(fields, "location_extra");
-	addToFields(fields, "location_fzone");
-	addToFields(fields, "location_pzone");
+	addToFields(fields, "location_pzone_l");
+	addToFields(fields, "location_pzone_r");
 	return fields;
 }
 function addToFields(fields, classname){
@@ -484,16 +474,40 @@ function addToFields(fields, classname){
 		fields.push(temp[i]);
 	}
 }
+function unkownCard(id){
+	var data = {
+		"_id": id,
+		"name": name,
+		"type": "???",
+		"atk": "???",
+		"def": "???",
+		"level": "??",
+		"star": "???",
+		"race": "???",
+		"attribute": "???",
+		"desc": "???"
+	};
+	return data;
+}
 function showDetail(card_id){
+	var textarea = document.getElementById("detail_textarea");
 	var img = document.getElementById("detail_image");
 	img.src = card_img_url + card_id + ".jpg";
 	var card = datas[card_id];
-	var textarea = document.getElementById("detail_textarea");
+	if(typeof(card)=="undefined"){
+		card=unkownCard(card_id);
+	}
 	var text = card.name + "["+ card._id + "]" + "\r\n";
 	text += "[" + card.type + "]   "
 	if(card.race){
 		text += card.race + " / " + card.attribute + "\r\n" ;
-		text += "[" + card.star + "]" + card.level + "\r\n";
+		text += "[" + card.star + "]";
+		if(card.level >= 0xff){
+			text +=(card.level&0xff)+" ["+(card.level>>0x18&0xff)+"/"+(card.level>>0x10&0xff)+"]";
+		}else{
+			text +=card.level
+		}
+		text += "\r\n";
 		text += "ATK/" + (card.atk<0?"?":card.atk) + "  DEF/" + (card.def<0?"?":card.def) + "\r\n";
 	}
 	else {

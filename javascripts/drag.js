@@ -10,8 +10,7 @@ function makeDraggable(thumb){
 				return false;
 			}
 			dragImage.src  = thumb.src;
-			var x = thumb.src.lastIndexOf('.');
-			var card_id = parseInt(thumb.src.substring(49,x));
+			var card_id = getcardId(thumb.src);
 			var card_info = newCard_Info(card_id);
 			$.data(dragImage, 'card_info', card_info);
 			dragging = true;
@@ -23,9 +22,7 @@ function makeDraggable(thumb){
 		}
 	}
 	thumb.onmouseover = function(){
-		var x = thumb.src.lastIndexOf('.');
-		var card_id = parseInt(thumb.src.substring(49,x));
-		showDetail(card_id);
+		showDetail(getcardId(thumb.src));
 	}
 	//与图片相邻的表格也可以拖动
 	parent.childNodes[1].childNodes[0].onmouseover = thumb.onmouseover;

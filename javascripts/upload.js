@@ -10,8 +10,6 @@ patterns[6] = new RegExp("\\s*Debug\\.ShowHint\\(\\s*\".*\"\\s*\\).*");
 patterns[7] = new RegExp("\\s*aux\\.BeginPuzzle\\(\\s*\\).*");
 
 
-
-
 upload = function(files) {
 	//清空之前的残局
 	hintMsgs = [];
@@ -49,6 +47,7 @@ upload = function(files) {
 	if (files.length) {
 		var file = files[0]; 
 		filename = file.name.split(".")[0];
+		$('#header').children('h1').text(filename);
 		var reader = new FileReader(); 
 		reader.onload = function() {
 			readPuzzle(this.result)
@@ -98,6 +97,15 @@ function readPuzzle(result){
 				location = "LOCATION_FIELD";
 				place = 0;
 			}
+			if(location == "LOCATION_SZONE" && place == 7){
+				location = "LOCATION_PZONE_L";
+				place = 0;
+			}
+			if(location == "LOCATION_SZONE" && place == 6){
+				location = "LOCATION_PZONE_R";
+				place = 0;
+			}
+			
 			if(position == "POS_FACEDOWN"){
 				position = "POS_FACEDOWN_ATTACK";
 			}
@@ -146,39 +154,14 @@ function SetPlayerInfo(player, lp, firstTurnDraw, everyTurnDraw){
 	//	AIEveryTurnDraw = everyTurnDraw;
 	}
 }
+
 function loadCards(cards_id,cards){
 	var locale_url = "http://my-card.in/cards_" + locale;
 	var url = locale_url + '?q=' + JSON.stringify({_id: {$in: cards_id}});
     $.getJSON(url,function(result){
 		$.getJSON(cards_url + "?q=" + (JSON.stringify({_id: {$in: cards_id}})), function(_cards) {
 			for(var i in _cards){
-				var card = _cards[i];
-				var name = '';
-				var desc = '';
-				for(var j in result){
-					if(result[j]._id == card._id){
-						name = result[j].name;
-						desc = result[j].desc;
-						break;
-					}
-				}
-				var star = "";
-				for(var i=0; i<(card.level&0xff); i++){
-					star += "★";
-				}
-				var data = {
-					"_id": card._id,
-					"name": name,
-					"type": getType(card),
-					"atk": card.atk,
-					"def": card.def,
-					"level": card.level,
-					"star": star,
-					"race": getRace(card),
-					"attribute": getAttribute(card),
-					"desc": desc
-				};
-				datas[card._id]=data;
+				datas[card._id]=getcarddata(result,_cards[i]);
 			}
 			for(var i in cards){
 				loadCard(cards[i]);

@@ -30,6 +30,14 @@ function downloadURL(){
 			location = "LOCATION_SZONE";
 			place = 5;
 		}
+		if(location == "LOCATION_PZONE_L"){
+			location = "LOCATION_SZONE";
+			place = 7;
+		}
+		if(location == "LOCATION_PZONE_R"){
+			location = "LOCATION_SZONE";
+			place = 6;
+		}
 		var thumbs = fields[i].getElementsByClassName("thumb");
 		for(var j=0; j < thumbs.length; j++){
 			var index;
