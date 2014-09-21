@@ -1,250 +1,79 @@
-<!--[if lt IE 9]>
-<p class="chromeframe">浏览器太旧了亲~. 请 <a href="http://browsehappy.com/">升级/更换您的浏览器</a> 或者 <a href="http://www.google.com/chromeframe/?redirect=true">激活 Google Chrome 浏览器内嵌框架</a>.</p>
-<![endif]-->
+<!DOCTYPE html>
+<html>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Ygopro-puzzlemaker : a puzzle maker for ygopro.">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>残局编辑器</title>
-<link href="stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<link href="stylesheets/jquery-ui-1.9.2.min.css" rel="stylesheet" type="text/css"/>
-<link href="stylesheets/style.css" rel="stylesheet" type="text/css"/>
-<script src="javascripts/jquery-1.8.3.min.js" type="text/javascript">></script>
-<script src="javascripts/bootstrap.min.js" type="text/javascript">></script>
-<script src="javascripts/jquery.tmpl.min.js" type="text/javascript">></script>
-<script src="javascripts/jquery-ui-1.9.2.min.js" type="text/javascript">></script>
-<script src="javascripts/tablecloth.js" type="text/javascript">></script>
-<script src="javascripts/main.js" type="text/javascript">></script>
-<script src="javascripts/drag.js" type="text/javascript">></script>
-<script src="javascripts/download.js" type="text/javascript">></script>
-<script src="javascripts/upload.js" type="text/javascript">></script>
-<script src="javascripts/ygo.js" type="text/javascript">></script>
-<script src="javascripts/popmenu.js" type="text/javascript">></script>
-<script src="javascripts/setting.js" type="text/javascript">></script>
-<script src="javascripts/result.js" type="text/javascript">></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-<script type="text/javascript">
-	$(document).ready(function(){
-		setPageLabel();
-		document.getElementById('keyword').focus();
-		var dragImage  = document.getElementById('DragImage');
-		dragImage.style.display = "none";
-		var download = document.getElementById('downloadButton');
-		download.onclick = downloadURL;
-		var setting = document.getElementById('settingButton');
-		setting.onclick = settings;
-		initField();
-		search();
-	});
-</script>
+    <title>Ygopro-puzzlemaker</title>
+  </head>
 
-<script language="javascript">
+  <body>
 
-	if(window.navigator.userAgent.toLowerCase().indexOf("firefox")>0){ //firefox innerText define
-		HTMLElement.prototype.__defineGetter__( "innerText",
-		function(){
-			var anyString = "";
-			var childS = this.childNodes;
-			for(var i=0; i <childS.length; i++) {
-				if(childS[i].nodeType==1)
-					anyString += childS[i].tagName=="BR" ? '\n' : childS[i].innerText;
-					else if(childS[i].nodeType==3)
-					anyString += childS[i].nodeValue;
-				}
-				return anyString;
-			}
-		);
-		HTMLElement.prototype.__defineSetter__( "innerText",
-			function(sText){
-				this.textContent=sText;
-			}
-		);
-	}
-</script>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/247321453/ygopro-PuzzleMaker">View on GitHub</a>
 
-<script type="text/x-jquery-tmpl" id="page-tmpl">
-	第 ${current_page} 页 / 共 ${page_num} 页
-</script>
-<script type="text/x-jquery-tmpl" id="field-tmpl">
-	<div class="${location}" id="${player}_${location}_${place}" style="top:${top}px; left:${left}px;"></div>
-</script>
-<script type="text/x-jquery-tmpl" id="thumb-tmpl">
-	<div class='thumb' style="top:${top}px; left:${left}px; right:${right}px; bottom:${bottom}px;cursor:pointer;" >
-		<img class="thumbImg" src='${card_img_thumb_url}${card_info.card_id}.jpg'/>
-		<img class="equipImg" src='images/equip.png' style="display: none"/>
-		<img class="targetImg" src='images/target.png' style="display: none"/>
-	</div>
-</script>
-<script type="text/x-jquery-tmpl" id="label_field-tmpl">
-	<label class=${type} >${text}</label>
-</script>
-<script type="text/x-jquery-tmpl" id="sortable-tmpl">
-	<li class="ui-state-default"><img class='thumbImg' style='cursor:move;' src='${card_img_thumb_url}${card_info.card_id}.jpg' onmouseover="showDetail(${card_info.card_id})"/></li>
-</script>
-<script type="text/x-jquery-tmpl" id="CounterSelector-tmpl">
-	<div class="CounterSelector">
-		种类：
-		<select class="select">
-		{{each counters}}
-			{{if $value.code==_code}}
-				<option value="${$value.code}" selected="selected">${$value.str}</option>
-			{{else}}
-				<option value="${$value.code}">${$value.str}</option>
-			{{/if}}
-		{{/each}}
-		</select>
-		数量：
-		<input class="spinner" onkeydown="return checkNums()" value="${_number}"/>
-		<button class="btn btn-danger" onclick="delCounterSelector()">删除</button>
-	</div>
-</script>
-<script type="text/x-jquery-tmpl" id="HintMsg-tmpl">
-	<div class="HintMsg">
-		<input type="text" class="text ui-widget-content ui-corner-all"  value="${msg}"/>
-		<button class="btn btn-danger" onclick="delHintMsg()">删除</button>
-	</div>
-</script>
-</head>
-<body>
-	<img id="DragImage" src="images/unknow.jpg" alt=""/>
+          <h1 id="project_title">Ygopro-puzzlemaker</h1>
+          <h2 id="project_tagline">a puzzle maker for ygopro.</h2>
 
-	<div id="header">
-		<h1>残局编辑器</h1>
-	</div>
-	<div id="LPbar">
-		<input id="Player_LP" type="text" placeholder="PlayerLP" maxLength=9 value="8000" onkeydown="return checkNums()"/>
-		
-		<input id="AI_LP" type="text" placeholder="AILP" maxLength=9 value="8000"  onkeydown="return checkNums()"/>
-	</div>
-
-	<img id="detail_image" src="images/unknow.jpg" alt=""/>
-	<!--<label id="detail_label"></label>-->
-	<textarea id="detail_textarea" readonly></textarea>
-
-	<div id="fields"></div>
-	<div id="radio">
-		<input type="radio" id="radio1" name="radio" onclick="locale = 'zh'" checked="checked" /><label for="radio1">简体中文</label>
-		<input type="radio" id="radio2" name="radio" onclick="locale = 'zh-TW'" /><label for="radio2" >繁体中文</label>
-	</div>
-	
-	<div id="search_bar">
-		<input class="textfield" id="keyword" type="text" placeholder="请输入关键字" value="黑羽"/>
-		<button class="button" id="search" onmouseup="search()">搜索</button>
-		<div id="content">
-			<div id="result"></div>
-		</div>
-		<label class="page_label">第0页/共0页</label>
-		<div id="page_button" style="display:none">
-			<button class="btn" id="prePage" onclick="prePage()">上一页</button>
-			<button class="btn" id="nextPage" onclick="nextPage()">下一页</button>
-		</div>
-	</div>
-	
-	<div id="popMenu">
-		<ul>
-			<li>更改表示形式
-				<ul>
-					<li>表侧攻击表示</li>
-					<li>表侧守备表示</li>
-					<li>里侧守备表示</li>
-					<li>里侧攻击表示</li>
-				</ul>
-			</li>
-			<li>不解除苏生限制</li>
-			<li>解除苏生限制</li>
-			<li>添加永续效果对象</li>
-			<li>删除永续效果对象</li>
-			<li>设置装备对象</li>
-			<li>删除装备对象</li>
-			<li>放置指示物</li>
-			<li>更改数值
-				<ul>
-				<li>更改攻击力
-					<ul>
-						<li>设置攻击力</li>
-						<li>设置原本攻击力</li>
-					</ul>
-				</li>
-				<li>更改防御力
-					<ul>
-						<li>设置防御力</li>
-						<li>设置原本防御力</li>
-					</ul>
-				</li>
-				<li>设置怪兽等级</li>
-				</ul>
-			</li>
-			<li>调整顺序</li>
-		</ul>
-	</div>
-	<div id="show_list_dialog" title="调整顺序">
-		<ul id="sortable"></ul>
-	</div>
-	
-	
-	<div id="add_counter_dialog" title="放置指示物">
-		<div id="counterSelectors"></div>
-		<button class="btn" onclick="addCounterSelector()">增加其他种类的指示物</button>
-	</div>
-	
-	<form id="download_form" action="http://my-card.in/singles/new.lua" method="post" style="display: none">
-		<input type="hidden" id="single_name" name="name">
-		<input type="hidden" id="single_script" name="script">
-	</form>
-	<img id="downloadButton" title="下载残局" src="images/download.png"/>
-	
-	<img id="settingButton" title="高级设置" src="images/setting.png"/>
-	
-	<div id="setting_dialog" title="高级设置">
-	<p>
-		<label for="name">AI 名字</label>
-		<input type="text" id="AI_name" class="text ui-widget-content ui-corner-all"/>
-		<label >消息提示</label>
-		<div id="HintMsg"></div>
-		<button class="btn" onclick="addHintMsg()">增加消息</button></br>
-	</p>
-		<input type="checkbox" id="check_shuffle" /> 勾选此项则游戏中的洗牌不改变原本顺序
-	</div>
-	
-	<div id="upload_div" title="上传残局">
-		<input type="file" id="upload" onchange="upload(this.files)" />
-		<div id="test" style="display:none"></div>
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/247321453/ygopro-PuzzleMaker/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/247321453/ygopro-PuzzleMaker/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
     </div>
-	
-	
-<div class="box_wrap">
 
-	<div class="box_main">
-		<ul id="menu">
-			<li>
-				<a href="javascript:void(0);"><img src="images/faq.png"/>使用说明</a>
-				<ul>
-					<li><a href="http://tieba.baidu.com/p/2195212368" target="_black">游戏王ygocore吧</a></li>
-				</ul>
-			</li>
-			<li>
-				<a href="javascript:void(0);"><img src="images/links.png" />友情链接</a>
-				<ul>
-					<li><a href="http://ygocore.ys168.com/" target="_black">残局分享地址</a></li>
-				</ul>
-			</li>
-			<li>
-				<a href="javascript:void(0);"><img src="images/contact.png"/>联系作者</a>
-				<ul>
-					<li>作者QQ：350002947</li>
-					<li>残局交流QQ群：181175613</li>
-				</ul>
-			</li>
-		</ul>
-	</div><!--box_main end-->
-	
-	<div class="box_button"><a style="display:block;" href="#" id="box_link"><img id="box_img" src="images/qm.png" width="50" height="50" border="0" /></a></div>
-	
-</div>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
+<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
 
-</body>
+<pre><code>$ cd your_repo_root/repo_name
+$ git fetch origin
+$ git checkout gh-pages
+</code></pre>
+
+<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+
+<h3>
+<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+
+<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+
+<h3>
+<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+
+<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+
+<h3>
+<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+
+<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+
+<h3>
+<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+
+<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Ygopro-puzzlemaker maintained by <a href="https://github.com/247321453">247321453</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
 </html>
