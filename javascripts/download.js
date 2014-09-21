@@ -110,6 +110,7 @@ function downloadURL(){
 	document.getElementById("single_script").value = str;
 	document.getElementById("download_form").submit();
 }
+
 function set_attack(cn, attack){
 	return set_value(cn, "EFFECT_SET_ATTACK", attack);
 }
