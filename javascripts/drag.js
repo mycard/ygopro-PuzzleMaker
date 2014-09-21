@@ -9,9 +9,9 @@ function makeDraggable(thumb){
 			if(selectingEquip || selectingContinuous || removeContinuous){
 				return false;
 			}
-			dragImage.src  = thumb.src;
-			var x = thumb.src.lastIndexOf('.');
-			var card_id = parseInt(thumb.src.substring(49,x));
+			dragImage.src = thumb.src;
+			dragImage.alt = thumb.alt;
+			var card_id = parseInt(thumb.alt);
 			var card_info = newCard_Info(card_id);
 			$.data(dragImage, 'card_info', card_info);
 			dragging = true;
@@ -23,14 +23,23 @@ function makeDraggable(thumb){
 		}
 	}
 	thumb.onmouseover = function(){
-		var x = thumb.src.lastIndexOf('.');
-		var card_id = parseInt(thumb.src.substring(49,x));
-		showDetail(card_id);
+		showDetail(parseInt(thumb.alt));
 	}
+	thumb.onerror =function(){
+		noimage(this);
+	};
 	//与图片相邻的表格也可以拖动
 	parent.childNodes[1].childNodes[0].onmouseover = thumb.onmouseover;
 	parent.childNodes[1].childNodes[0].onmousedown = thumb.onmousedown;
 }
+/*
+function getcardId(src){
+	var x = src.lastIndexOf('.');
+	var y = src.lastIndexOf('/');
+	var card_id = parseInt(src.substring(y+1,x));
+	//console.log(src.substring(y+1,x));
+	return card_id;
+}*/
 function makeMoveable(thumb){
 	var parent = thumb.parentNode;
 	var thumbImg = thumb.getElementsByTagName("img")[0];
@@ -46,6 +55,9 @@ function makeMoveable(thumb){
 	var be_equip_target = card_info.be_equip_target;
 	var dragImage  = document.getElementById('DragImage');
 	$.data(thumb, "degree", 0);
+	thumbImg.onerror =function(){
+		noimage(this);
+	};
 	thumbImg.onmousedown = function(ev){
 		ev = ev || window.event;
 		if(ev.button == 0 || ev.button == 1){
@@ -85,6 +97,7 @@ function makeMoveable(thumb){
 			else if(selectingEquip || selectingContinuous || removeContinuous)
 				return false;
 			dragImage.src = thumbImg.src;
+			dragImage.alt=thumbImg.alt;
 			var degree = $.data(thumb, "degree");
 			Img.rotate(dragImage, degree, true);
 			$.data(dragImage, 'card_info', card_info);
