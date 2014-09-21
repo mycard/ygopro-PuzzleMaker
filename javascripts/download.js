@@ -30,6 +30,14 @@ function downloadURL(){
 			location = "LOCATION_SZONE";
 			place = 5;
 		}
+		if(location == "LOCATION_PZONE_L"){
+			location = "LOCATION_SZONE";
+			place = 7;
+		}
+		if(location == "LOCATION_PZONE_R"){
+			location = "LOCATION_SZONE";
+			place = 6;
+		}
 		var thumbs = fields[i].getElementsByClassName("thumb");
 		for(var j=0; j < thumbs.length; j++){
 			var index;
@@ -102,6 +110,7 @@ function downloadURL(){
 	document.getElementById("single_script").value = str;
 	document.getElementById("download_form").submit();
 }
+
 function set_attack(cn, attack){
 	return set_value(cn, "EFFECT_SET_ATTACK", attack);
 }

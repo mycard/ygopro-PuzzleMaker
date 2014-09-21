@@ -1,0 +1,7 @@
+#################
+## Windows
+#################
+
+Thumbs.db
+pics/*.jpg
+pics/thumbnail/*.jpg

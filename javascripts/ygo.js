@@ -1,14 +1,14 @@
 
 var types_zh = [
   '怪兽','魔法','陷阱',null,'通常','效果','融合','仪式','陷阱怪兽','灵魂','同盟','二重','调整','同调', null,'衍生物',
-  '速攻','永续','装备','场地','反击','翻转','卡通','超量'
+  '速攻','永续','装备','场地','反击','翻转','卡通','超量','摇摆'
 ];
 var attributes_zh = [
   '地','水','炎','风','光','暗','神'
 ];	  
 var races_zh = [
   '战士族','魔法师族','天使族','恶魔族','不死族','机械族','水族','炎族','岩石族','鸟兽族','植物族','昆虫族','雷族',
-  '龙族','兽族','兽战士族','恐龙族','鱼族','海龙族','爬虫族','念动力族','幻神兽族','创造神族'
+  '龙族','兽族','兽战士族','恐龙族','鱼族','海龙族','爬虫族','念动力族','幻神兽族','创造神族','幻龙族'
 ];
 
 var counters = [
@@ -55,11 +55,23 @@ var counters = [
 {"code" : "0x29" ,	"str" : "指示物（气球蜥蜴）"},
 {"code" : "0x2a" ,	"str" : "指示物（魔法防护器）"},
 {"code" : "0x302b" ,"str" : "命运指示物"},
-{"code" : "0x2c" ,	"str" : "遵命指示物"}
+{"code" : "0x2c" ,	"str" : "遵命指示物"},
+{"code" : "0x2d" ,	"str" : "指示物（踢火）"},
+{"code" : "0x2e" ,	"str" : "鲨指示物"},
+{"code" : "0x2f" ,	"str" : "南瓜指示物"},
+{"code" : "0x30" ,	"str" : "毅飞冲天指示物"},
+{"code" : "0x31" ,	"str" : "希望剑指示物"},
+{"code" : "0x32" ,	"str" : "气球指示物"},
+{"code" : "0x90" ,	"str" : "少女指示物"},
+{"code" : "0x91" ,	"str" : "速度指示物"},
+{"code" : "0x92" ,	"str" : "血指示物"},
+{"code" : "0x93" ,	"str" : "幻魔指示物"},
+{"code" : "0x94" ,	"str" : "地缚神指示物"},
+{"code" : "0x95" ,	"str" : "纹章指示物"},
+
 ];
-function getType(card){
+function getType(type){
 	var result='';
-	var type = card.type;
 	for(var i in types_zh){
 		if(type & (0x1<<i)){
 			if(result=='')
@@ -70,21 +82,26 @@ function getType(card){
 	}
 	return result;
 }
-function getRace(card){
+function getRace(race){
 	var result;
-	var race = card.race;
 	for(var i in races_zh){
 		if(race & (1<<i)){
 			return races_zh[i];
 		}
 	}
 }
-function getAttribute(card){
+function getAttribute(attribute){
 	var result;
-	var attribute = card.attribute;
 	for(var i in races_zh){
 		if(attribute & (1<<i)){
 			return attributes_zh[i];
 		}
 	}
+}
+function getStars(level){
+	var star = "";
+	for(var i=0; i<(level&0xff); i++){
+		star += "★";
+	}
+	return star;
 }
