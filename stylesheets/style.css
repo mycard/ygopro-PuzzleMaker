@@ -218,6 +218,15 @@ header p {
   top: 50px;
   position: absolute;
 }
+#cdblist{
+	z-index: 100;
+	left: 930px;
+	top: 48px;
+	font-size:medium;
+	color:#ffffff;
+	position: absolute;
+	margin-bottom:4px;
+}
 #search_bar {
   z-index: 100;
   left: 930px;

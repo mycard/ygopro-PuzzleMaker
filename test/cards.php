@@ -1,106 +1,77 @@
 <?php
 header('Content-Type: text/html;charset=UTF-8');
 set_time_limit(0);
-$cdbfile="cards.cdb";
-function getjson(){
-	global $cdbfile;
-	if(isset($_GET['cdb'])){
-		$cdb='cdbs/'+urldecode($_GET['cdb']);
-		if(file_exists($cdb)){
-			$cdbfile=$cdb;
-		}
-	}
-    $cards=array();
-    if(file_exists($cdbfile)){
-        $db=new PDO("sqlite:$cdbfile");
-		$sql="SELECT * FROM datas,texts WHERE datas.id=texts.id";
-        if(isset($_GET['name'])){
-            $name=str_replace("'","''",urldecode($_GET['name']));
-			$sql.=" AND texts.name LIKE '%$name%'";
-		}
-		if(isset($_GET['desc'])){
-            $desc=str_replace("'","''",urldecode($_GET['desc']));
-			$sql.=" AND texts.desc LIKE '%$desc%'";
-		}
-		if(isset($_GET['id'])){
-			$id=(int)$_GET['id'];
-			$sql.= " AND datas.id=$id";
-		}
-		if(isset($_GET['alias'])){
-			$alias=(int)$_GET['alias'];
-			$sql.= " AND (datas.alias=$alias OR datas.id=$alias)";
-		}
-		if(isset($_GET['atk'])){
-			$atk=(int)$_GET['atk'];
-			$sql.= " AND datas.atk=$atk";
-		}
-		if(isset($_GET['def'])){
-			$def=(int)$_GET['def'];
-			$sql.= " AND datas.def=$def";
-		}
-		if(isset($_GET['attribute'])){
-			$attribute=(int)$_GET['attribute'];
-			$sql.= " AND datas.attribute=$attribute";
-		}
-		if(isset($_GET['ot'])){
-			$ot=(int)$_GET['ot'];
-			$sql.= " AND datas.ot=$ot";
-		}
-		if(isset($_GET['race'])){
-			$race=(int)$_GET['race'];
-			$sql.= " AND datas.race=$race";
-		}
-		if(isset($_GET['type'])){
-			$type=(int)$_GET['type'];
-			$sql.= " AND datas.type & $type = $type ";
-		}
-		if(isset($_GET['setcode'])){
-			//1000100010001000
-			//1152939097061330944
-			/*$setcode=(int)$_GET['setcode'];
-			$setcode=$setcode&0xffff;
-			$setcode1=(int)($setcode<<0x30);
-			$setcode2=(int)($setcode<<0x20);
-			$setcode3=(int)($setcode<<0x10);
-			$setcode4=(int)($setcode);
-			$sql.= " AND ( datas.setcode & $setcode1 = $setcode1 
-			OR datas.setcode & $setcode2 = $setcode2 
-			OR datas.setcode & $setcode3 = $setcode3
-			OR datas.setcode & $setcode4 = $setcode4
-			)";*/
-		}
-		if(isset($_GET['level'])){
-			$level=(int)$_GET['level'];
-			$sql.= " AND datas.level=$level";
-		}
-		
-		$rs=$db->query($sql);
-		if($rs){
-			$reader=$rs->fetchAll();
-			foreach ($reader as $key => $value) {
-				$temp=array();
-				$temp['_id']=(int)$value['id'];
-				$temp['ot']=(int)$value['ot'];
-				$temp['alias']=(int)$value['alias'];
-				$temp['setcode']=(int)$value['setcode'];
-				$temp['type']=(int)$value['type'];
-				$temp['atk']=(int)$value['atk'];
-				$temp['def']=(int)$value['def'];
-				$temp['level']=(int)$value['level'];
-				$temp['race']=(int)$value['race'];
-				$temp['attribute']=(int)$value['attribute'];
-				$temp['category']=(int)$value['category'];
-				$temp['name']=$value['name'];
-				$temp['desc']=$value['desc'];
-				for($i=1;$i<=16;$i++){
-					$temp['str'.$i]=$value['str'.$i];
-				}
-				$cards[]=$temp;
-			}
-        }
-    }
-    return $cards;
-}
-$cards=getjson();
-echo json_encode($cards);
+include_once('lib.php');
 
+$cdb=getValue('cdb',$CDBNAME);
+if(strlen($cdb)==0)
+	$cdb=$CDBNAME;
+$cdbfile=$CDBPATH."/".$cdb;
+$decdbfile=$CDBPATH."/".$CDBNAME;
+$merge=getValue('merge',false);
+$is_full=getValue('full',false);
+
+$cards=array();
+if(file_exists($cdbfile)){
+	$sql="SELECT * FROM datas,texts WHERE datas.id=texts.id";
+	$name=getValue('name','');
+	$name=str_replace("'","''",urldecode($name));
+	$sql.=" AND texts.name LIKE '%$name%'";
+	
+	$desc=getValue('desc','');
+	$desc=str_replace("'","''",urldecode($desc));
+	$sql.=" AND texts.desc LIKE '%$desc%'";
+	
+	$id=(int)getValue('id','0');
+	if($id>0)
+		$sql.= " AND datas.id=$id";
+		
+	$alias=(int)getValue('alias','0');
+	if($alias>0)
+		$sql.= " AND (datas.alias=$alias OR datas.id=$alias)";
+		
+	$atk=(int)getValue('atk','-10');
+	if($atk>=-2)
+		$sql.= " AND datas.atk=$atk";
+		
+	$def=(int)getValue('def','-10');
+	if($def>=-2)
+		$sql.= " AND datas.def=$def";
+	
+	if(isset($_GET['attribute'])){
+		$attribute=(int)getValue('attribute','0');
+		if($attribute>0)
+			$sql.= " AND datas.attribute=$attribute";
+	}
+
+	$ot=(int)getValue('ot','0');
+	if($ot>0)
+		$sql.= " AND datas.ot=$ot";
+		
+	$race=(int)getValue('race','0');
+	if($race>0)
+		$sql.= " AND datas.race=$race";
+
+	$type=(int)getValue('type','0');
+	if($type>0)
+		$sql.= " AND datas.type & $type = $type ";
+
+	$level=(int)getValue('level','-1');
+	if($level>=0)
+		$sql.= " AND datas.level=$level";
+
+	//category
+	$category=(float)getValue('category','0');
+
+	//setcode
+	$setcode=(float)getValue('setcode','0');
+	
+	if($cdbfile!=$decdbfile && $merge!='false'){
+		$cards=array_merge($cards, getCards($decdbfile,$sql, $is_full));
+		$cards=array_merge($cards, getCards($cdbfile, $sql, $is_full));
+	}
+	else{
+		$cards=getCards($cdbfile, $sql, $is_full);
+	}
+}   
+echo json_encode($cards);

@@ -25,7 +25,7 @@
 <script src="javascripts/popmenu.js" type="text/javascript">></script>
 <script src="javascripts/setting.js" type="text/javascript">></script>
 <script src="javascripts/result.js" type="text/javascript">></script>
-<script src="test/test_for_php.js" type="text/javascript">></script>
+<script src="test/js/puzzlemaker.js" type="text/javascript">></script>
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -39,6 +39,7 @@
 		setting.onclick = settings;
 		initField();
 		search();
+		addcdblist();
 	});
 </script>
 
@@ -126,10 +127,16 @@
 	<textarea id="detail_textarea" readonly></textarea>
 
 	<div id="fields"></div>
+	<div id="cdblist">
+		<SELECT id="cdbs" NAME="cdbs" SIZE="1" style="margin-bottom:4px;width:178px;">
+		</SELECT>
+		<input  class="btn" style="margin-bottom:4px;"type="button" onclick="addcdblist()" value="刷新数据库列表"/>
+	</div>
+	<!--
 	<div id="radio">
 		<input type="radio" id="radio1" name="radio" onclick="locale = 'zh'" checked="checked" /><label for="radio1">简体中文</label>
 		<input type="radio" id="radio2" name="radio" onclick="locale = 'zh-TW'" /><label for="radio2" >繁体中文</label>
-	</div>
+	</div>-->
 	
 	<div id="search_bar">
 		<input class="textfield" id="keyword" type="text" placeholder="请输入关键字" value="黑羽"/>
@@ -191,7 +198,7 @@
 		<button class="btn" onclick="addCounterSelector()">增加其他种类的指示物</button>
 	</div>
 	
-	<form id="download_form" action="test/download.php" method="post" style="display: none">
+	<form id="download_form" action="test/download.php?type=lua" method="post" style="display: none">
 		<input type="hidden" id="single_name" name="name">
 		<input type="hidden" id="single_script" name="script">
 	</form>
