@@ -12,6 +12,7 @@ function getcarddata(result,card){
 		"_id": card._id,
 		"name": card.name,
 		"type": getType(card.type),
+		"typecode": card.type,
 		"atk": card.atk,
 		"def": card.def,
 		"level": card.level,

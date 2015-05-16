@@ -360,6 +360,7 @@ function updateCards(thumbs){
 		var card_info = tmplItem.card_info;
 		var location = card_info.location;
 		var card_id = card_info.card_id;
+		var card = datas[card_id];
 		var thumbImg = thumb.getElementsByTagName("img")[0];
 		thumb.addAllRelation();
 		if(location == "location_szone" || location == "location_field" || location == "location_pzone_r"|| location == "location_pzone_l"){ //魔陷区和场地区只分表侧和里侧
@@ -375,6 +376,14 @@ function updateCards(thumbs){
 			}
 			else {
 				card_info.IsXYZmaterial = false;
+			}
+		}
+		else if(location == "location_extra"){
+			if((card.typecode & 0x1000000) == 0x1000000){
+				//console.log(card.name+","+card.typecode.toString(16));
+				card_info.position = "POS_FACEUP_ATTACK";
+			}else{
+				card_info.position = "POS_FACEDOWN_ATTACK";
 			}
 		}
 		else if(location != "location_mzone"){//除魔陷和怪兽区
@@ -444,6 +453,7 @@ function getcarddata(result,card){
 		"_id": card._id,
 		"name": name,
 		"type": getType(card.type),
+		"typecode": card.type,
 		"atk": card.atk,
 		"def": card.def,
 		"level": card.level,
@@ -482,6 +492,7 @@ function unkownCard(id){
 		"_id": id,
 		"name": name,
 		"type": "???",
+		"typecode":0,
 		"atk": "???",
 		"def": "???",
 		"level": "??",
