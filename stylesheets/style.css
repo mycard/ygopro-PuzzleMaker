@@ -460,8 +460,8 @@ td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
   background-size:100% 100%; 
 }
 #upload {
-  width:80px;
-  height:80px;
+  width:60px;
+  height:60px;
   opacity: 0;
   cursor: pointer;
 }
