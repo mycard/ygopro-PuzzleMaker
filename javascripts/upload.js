@@ -1,6 +1,5 @@
 
 var patterns = [];
-patterns[0] = new RegExp("\\s*--.*");
 patterns[1] = new RegExp("\\s*Debug\\.SetAIName\\(\\s*\".*\"\\s*\\).*");
 patterns[2] = new RegExp("\\s*Debug\\.ReloadFieldBegin\\(DUEL_ATTACK_FIRST_TURN(\\+DUEL_SIMPLE_AI)?\\).*");
 patterns[3] = new RegExp("\\s*Debug\\.SetPlayerInfo\\(\\s*[01]\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*\\).*");
@@ -8,6 +7,7 @@ patterns[4] = new RegExp("\\s*(\\w+\\s*=\\s*)?Debug\\.AddCard\\(\\d+,[01],[01],\
 patterns[5] = new RegExp("\\s*Debug\\.ReloadFieldEnd\\(\\s*\\).*");
 patterns[6] = new RegExp("\\s*Debug\\.ShowHint\\(\\s*\".*\"\\s*\\).*");
 patterns[7] = new RegExp("\\s*aux\\.BeginPuzzle\\(\\s*\\).*");
+patterns[8] = new RegExp("\\s*--.*");
 
 
 upload = function(files) {
@@ -64,8 +64,6 @@ function readPuzzle(result){
 		var type = getRegType(tempString);
 	//	alert(tempString + '\n' + "type: " + type);
 		switch(type){
-		case 0:
-			break;
 		case 1://SetAIName
 			AI_name = tempString.split("\"")[1];
 			break;
@@ -125,12 +123,14 @@ function readPuzzle(result){
 		case 7://BeginPuzzle
 		//	PuzzleMaker.BeginPuzzle = true;
 			break;
+		case 8:
+			break;
 		}
 	}
 	loadCards(cards_id,cards);
 }
 function getRegType(String){
-	for(var i = 0; i < patterns.length; i++){
+	for(var i = 1; i < patterns.length; i++){
 		if(String.match(patterns[i]))
 			return i;
 	}
@@ -171,7 +171,9 @@ function loadCards(cards_id,cards){
 }
 function loadCard(card){
 	var card_info = new Object();
+	var data = datas[card.card_id];
 	card_info.card_id = card.card_id;
+	card_info.name = data.name
 	card_info.position = card.position;
 	card_info.disable_revivelimit = card.disable_revivelimit;
 	card_info.cn = getCardName();

@@ -92,10 +92,10 @@ function downloadURL(){
 				action += change_level(card_info.cn, card_info.level);
 			}
 			if(card_info.disable_revivelimit){
-				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
+				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")--" + card_info.name + "\r\n";
 			}
 			else {
-				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + ")\r\n";
+				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + ")--" + card_info.name + "\r\n";
 			}
 		}
 	}
