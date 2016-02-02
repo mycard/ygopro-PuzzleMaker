@@ -9,14 +9,18 @@ function downloadURL(){
 	var player_LP = document.getElementById("Player_LP").value;
 	var AI_LP = document.getElementById("AI_LP").value;
 	var DUEL_PSEUDO_SHUFFLE = document.getElementById("check_shuffle").checked;
+	var use_simple_ai = document.getElementById("use_simple_ai").checked;
+	var non_puzzle = document.getElementById("non_puzzle").checked;
 	var str = "--created by ygopro puzzle maker (web) \r\n";
 	str += "Debug.SetAIName(\"" + AI_name + "\")\r\n";
+	var opstr = "DUEL_ATTACK_FIRST_TURN";
 	if(DUEL_PSEUDO_SHUFFLE){
-		str += "Debug.ReloadFieldBegin(DUEL_ATTACK_FIRST_TURN+DUEL_SIMPLE_AI+DUEL_PSEUDO_SHUFFLE)\r\n";
+		opstr += "+DUEL_PSEUDO_SHUFFLE";
 	}
-	else {
-		str += "Debug.ReloadFieldBegin(DUEL_ATTACK_FIRST_TURN+DUEL_SIMPLE_AI)\r\n";
+	if(use_simple_ai) {
+		opstr += "+DUEL_SIMPLE_AI"
 	}
+	str += "Debug.ReloadFieldBegin(" + opstr + ")\r\n";
 	str += "Debug.SetPlayerInfo(0," + player_LP + ",0,0)\r\n";
 	str += "Debug.SetPlayerInfo(1," + AI_LP + ",0,0)\r\n" ;
 	var action = "";//包括addCounter、Equip、setTarget等等
@@ -103,7 +107,9 @@ function downloadURL(){
 	for(var i = 0; i < hintMsgs.length; i++){
 		str += "Debug.ShowHint(\"" + hintMsgs[i] + "\")\r\n" ;
 	}
-	str += "aux.BeginPuzzle()\r\n";
+	if(!non_puzzle){
+		str += "aux.BeginPuzzle()\r\n";
+	}
 	str += action;
 	//this.href = "http://my-card.in/singles/new.lua?name=Untitled&script=" + encodeURIComponent(str);
 	document.getElementById("single_name").value = filename;

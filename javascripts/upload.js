@@ -1,7 +1,7 @@
 
 var patterns = [];
 patterns[1] = new RegExp("\\s*Debug\\.SetAIName\\(\\s*\".*\"\\s*\\).*");
-patterns[2] = new RegExp("\\s*Debug\\.ReloadFieldBegin\\(DUEL_ATTACK_FIRST_TURN(\\+DUEL_SIMPLE_AI)?\\).*");
+patterns[2] = new RegExp("\\s*Debug\\.ReloadFieldBegin\\(.*\\).*");
 patterns[3] = new RegExp("\\s*Debug\\.SetPlayerInfo\\(\\s*[01]\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*\\).*");
 patterns[4] = new RegExp("\\s*(\\w+\\s*=\\s*)?Debug\\.AddCard\\(\\d+,[01],[01],\\w+,\\d,\\w+(,\\w+)?\\).*");
 patterns[5] = new RegExp("\\s*Debug\\.ReloadFieldEnd\\(\\s*\\).*");
@@ -59,6 +59,9 @@ function readPuzzle(result){
 	var results = result.split('\n'); 
 	var cards = [];
 	var cards_id = [];
+	var non_puzzle = true;
+	var use_simple_ai = false;
+	var psudo_shuffle = false;
 	for(var i =0; i < results.length; i++){
 		var tempString = results[i];
 		var type = getRegType(tempString);
@@ -68,7 +71,8 @@ function readPuzzle(result){
 			AI_name = tempString.split("\"")[1];
 			break;
 		case 2://ReloadFieldBegin(DUEL_ATTACK_FIRST_TURN+DUEL_SIMPLE_AI)
-			//Use_Simple_AI = tempString.contains("DUEL_SIMPLE_AI");
+			use_simple_ai = tempString.indexOf("DUEL_SIMPLE_AI") >= 0;
+			psudo_shuffle = tempString.indexOf("DUEL_PSEUDO_SHUFFLE") >= 0;
 			break;
 		case 3://SetPlayerInfo(0,8000,0,0)
 			var params = getFuncParams(tempString);
@@ -121,12 +125,15 @@ function readPuzzle(result){
 			hintMsgs.push(strings[1]);
 			break;
 		case 7://BeginPuzzle
-		//	PuzzleMaker.BeginPuzzle = true;
+			non_puzzle = false;
 			break;
 		case 8:
 			break;
 		}
 	}
+	document.getElementById("check_shuffle").checked = psudo_shuffle;
+	document.getElementById("use_simple_ai").checked = use_simple_ai;
+	document.getElementById("non_puzzle").checked = non_puzzle;
 	loadCards(cards_id,cards);
 }
 function getRegType(String){
