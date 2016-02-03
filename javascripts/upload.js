@@ -107,12 +107,8 @@ function readPuzzle(result){
 				location = "LOCATION_PZONE_R";
 				place = 0;
 			}
-			
-			if(position == "POS_FACEDOWN"){
-				position = "POS_FACEDOWN_ATTACK";
-			}
-			if(position == "POS_FACEUP"){
-				position = "POS_FACEUP_ATTACK";
+			if(position == 0){
+				position = "POS_FACEUP"
 			}
 			cards.push({"card_id":card_id, "owner":owner, "controler":controler, "location":location, "place":place, "position":position, "disable_revivelimit":disable_revivelimit});
 			cards_id.push(card_id);

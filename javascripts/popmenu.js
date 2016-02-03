@@ -1,5 +1,7 @@
 var menu_index = 0;
 var menu_position = 1 << menu_index++;
+var menu_pos_faceup = 1 << menu_index++;
+var menu_pos_facedown = 1 << menu_index++;
 var menu_pos_faceup_attack = 1 << menu_index++;
 var menu_pos_faceup_defence = 1 << menu_index++;
 var menu_pos_facedown_defence = 1 << menu_index++;
@@ -77,7 +79,35 @@ var PopMenu = function createPopMenu(){
 	}
 	
 	//各菜单项的响应事件
-	aLi[1].onmousedown = function(event){//表侧攻击表示
+	aLi[1].onmousedown = function(event){//表侧表示
+		var tmplItem = $(thumb).tmplItem().data;
+		var card_id = tmplItem.card_info.card_id;
+		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
+		tmplItem.card_info.position = "POS_FACEUP";
+		if(isIE && !IE10){
+			thumb.style.top = tmplItem.top + "px";
+			thumb.style.left = tmplItem.left + "px";
+		}
+		else {
+			thumb.style.left = tmplItem.left + "px";
+		}
+		Img.rotate(thumb, 0);
+	}
+	aLi[2].onmousedown = function(event){//里侧表示
+		var tmplItem = $(thumb).tmplItem().data;
+		var card_id = tmplItem.card_info.card_id;
+		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
+		tmplItem.card_info.position = "POS_FACEDOWN";
+		if(isIE && !IE10){
+			thumb.style.top = tmplItem.top + "px";
+			thumb.style.left = tmplItem.left + "px";
+		}
+		else {
+			thumb.style.left = tmplItem.left + "px";
+		}
+		Img.rotate(thumb, 0);
+	}
+	aLi[3].onmousedown = function(event){//表侧攻击表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
@@ -91,7 +121,7 @@ var PopMenu = function createPopMenu(){
 		}
 		Img.rotate(thumb, 0);
 	}
-	aLi[2].onmousedown = function(event){//表侧守备表示
+	aLi[4].onmousedown = function(event){//表侧守备表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
@@ -105,7 +135,7 @@ var PopMenu = function createPopMenu(){
 		}
 		Img.rotate(thumb, -90);
 	}
-	aLi[3].onmousedown = function(event){//里侧守备表示
+	aLi[5].onmousedown = function(event){//里侧守备表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		thumbImg.src = "images/unknow.jpg";
@@ -119,7 +149,7 @@ var PopMenu = function createPopMenu(){
 		}
 		Img.rotate(thumb, -90);
 	}
-	aLi[4].onmousedown = function(event){//里侧攻击表示
+	aLi[6].onmousedown = function(event){//里侧攻击表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		thumbImg.src = "images/unknow.jpg";
@@ -133,15 +163,15 @@ var PopMenu = function createPopMenu(){
 		}
 		Img.rotate(thumb, 0);
 	}
-	aLi[5].onmousedown = function(event){//不解除苏生限制
+	aLi[7].onmousedown = function(event){//不解除苏生限制
 		var tmplItem = $(thumb).tmplItem().data;
 		tmplItem.card_info.disable_revivelimit = false;
 	}
-	aLi[6].onmousedown = function(event){//解除苏生限制
+	aLi[8].onmousedown = function(event){//解除苏生限制
 		var tmplItem = $(thumb).tmplItem().data;
 		tmplItem.card_info.disable_revivelimit = true;
 	}
-	aLi[7].onmousedown = function(event){//添加永续效果对象
+	aLi[9].onmousedown = function(event){//添加永续效果对象
 		thumb_continuous = thumb;
 		var fields = GetAllFields();
 		for(var i=0; i< fields.length;i++){
@@ -164,7 +194,7 @@ var PopMenu = function createPopMenu(){
 			alert("场上不存在合适的永续效果对象！");
 		}
 	}
-	aLi[8].onmousedown = function(event){//删除永续效果对象
+	aLi[10].onmousedown = function(event){//删除永续效果对象
 		thumb_continuous = thumb;
 		var card_info = $(thumb).tmplItem().data.card_info;
 		var thumbs = card_info.continuous_target;
@@ -179,7 +209,7 @@ var PopMenu = function createPopMenu(){
 			$(document).tooltip({track: true});
 		}
 	}
-	aLi[9].onmousedown = function(event){//设置装备对象
+	aLi[11].onmousedown = function(event){//设置装备对象
 		thumb_equip = thumb;
 		var fields = GetAllFields();
 		for(var i=0; i< fields.length;i++){
@@ -205,13 +235,13 @@ var PopMenu = function createPopMenu(){
 			alert("场上不存在合适的装备对象！");
 		}
 	}
-	aLi[10].onmousedown = function(event){//删除装备对象
+	aLi[12].onmousedown = function(event){//删除装备对象
 		var card_info = $(thumb).tmplItem().data.card_info;
 		var equip_target = card_info.equip_target[0];
 		removeEquipRelation(thumb, equip_target);
 		removeBeEquipRelation(equip_target, thumb);
 	}
-	aLi[11].onmousedown = function(event){//放置指示物
+	aLi[13].onmousedown = function(event){//放置指示物
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_counters = tmplItem.card_info.card_counters;
 		var counterSelectors = $('#counterSelectors');
@@ -227,42 +257,42 @@ var PopMenu = function createPopMenu(){
 		$('#add_counter_dialog').dialog('open');
 		return false;
 	}
-	aLi[14].onmousedown = function(event){//设置攻击力
+	aLi[16].onmousedown = function(event){//设置攻击力
 		var card_info = $(thumb).tmplItem().data.card_info;
 		var attack = prompt("输入攻击力！", card_info.attack || 0);
 		if(attack != undefined && !isNaN(attack)){
 			card_info.attack = attack;
 		}
 	}
-	aLi[15].onmousedown = function(event){//设置原本攻击力
+	aLi[17].onmousedown = function(event){//设置原本攻击力
 		var card_info = $(thumb).tmplItem().data.card_info;
 		var base_attack = prompt("输入原本攻击力！", card_info.base_attack || 0);
 		if(base_attack != undefined && !isNaN(base_attack)){
 			card_info.base_attack = base_attack;
 		}
 	}
-	aLi[17].onmousedown = function(event){//设置防御力
+	aLi[19].onmousedown = function(event){//设置防御力
 		var card_info = $(thumb).tmplItem().data.card_info;
 		var defence = prompt("输入防御力！", card_info.defence || 0);
 		if(defence != undefined && !isNaN(defence)){
 			card_info.defence = defence;
 		}
 	}
-	aLi[18].onmousedown = function(event){//设置原本防御力
+	aLi[20].onmousedown = function(event){//设置原本防御力
 		var card_info = $(thumb).tmplItem().data.card_info;
 		var base_defence = prompt("输入原本防御力！", card_info.base_defence || 0);
 		if(base_defence != undefined && !isNaN(base_defence)){
 			card_info.base_defence = base_defence;
 		}
 	}
-	aLi[19].onmousedown = function(event){//设置等级
+	aLi[21].onmousedown = function(event){//设置等级
 		var card_info = $(thumb).tmplItem().data.card_info;
 		var level = prompt("输入等级！", card_info.level || 0);
 		if(level != undefined && !isNaN(level)){
 			card_info.level = level;
 		}
 	}
-	aLi[20].onmousedown = function(event){//调整顺序
+	aLi[22].onmousedown = function(event){//调整顺序
 		var field = thumb.parentNode;
 		var sortable = $('#sortable');
 		sortable.empty();
@@ -304,7 +334,7 @@ var PopMenu = function createPopMenu(){
 			menuItems += menu_show_list;
 		}
 		else if(location == 'location_szone'){
-			menuItems = menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_add_target + menu_add_equip + menu_counter;
+			menuItems = menu_position + menu_pos_faceup + menu_pos_facedown + menu_add_target + menu_add_equip + menu_counter;
 			if(card_info.disable_revivelimit){
 				menuItems += menu_enable_revivelimit;
 			}
@@ -331,7 +361,7 @@ var PopMenu = function createPopMenu(){
 			}
 		}
 		else if(location == 'location_field'){
-			menuItems += menu_position + menu_pos_faceup_attack + menu_pos_facedown_attack + menu_add_target + menu_counter;
+			menuItems += menu_position + menu_pos_faceup + menu_pos_facedown + menu_add_target + menu_counter;
 			if(card_info.continuous_target.length){
 				menuItems += menu_remove_target;
 			}
@@ -352,9 +382,19 @@ var PopMenu = function createPopMenu(){
 			menuItems += menu_show_list;
 		}
 		else if(location == 'location_extra'){
+			menuItems += menu_position + menu_pos_faceup + menu_pos_facedown;
+			if(card_info.position == "POS_FACEUP" || card_info.position == "POS_FACEUP_ATTACK" || card_info.position == "POS_FACEUP_DEFENCE"){
+				if(card_info.disable_revivelimit){
+					menuItems += menu_enable_revivelimit;
+				}
+				else {
+					menuItems += menu_disable_revivelimit;
+				}
+			}
 			menuItems += menu_show_list;
 		}
 		else if(location == 'location_removed'){
+			menuItems += menu_position + menu_pos_faceup + menu_pos_facedown;
 			if(card_info.disable_revivelimit){
 				menuItems += menu_enable_revivelimit;
 			}
@@ -365,20 +405,30 @@ var PopMenu = function createPopMenu(){
 		}
 		if(menuItems == 0) return false;
 		setMenu(menuItems);
-		for(var i=1;i<5;i++){
+		for(var i=1;i<7;i++){
 			aLi[i].className = aLi[i].className.replace(/\s?check/,"");
 		}
-		if(card_info.position == "POS_FACEUP_ATTACK"){
+		if(card_info.position == "POS_FACEUP"){
+			aLi[1].className += " check";
+		}
+		else if(card_info.position == "POS_FACEDOWN"){
+			aLi[2].className += " check";
+		}
+		else if(card_info.position == "POS_FACEUP_ATTACK"){
+			aLi[3].className += " check";
 			aLi[1].className += " check";
 		}
 		else if(card_info.position == "POS_FACEUP_DEFENCE"){
-			aLi[2].className += " check";
+			aLi[4].className += " check";
+			aLi[1].className += " check";
 		}
 		else if(card_info.position == "POS_FACEDOWN_DEFENCE"){
-			aLi[3].className += " check";
+			aLi[5].className += " check";
+			aLi[2].className += " check";
 		}
 		else if(card_info.position == "POS_FACEDOWN_ATTACK"){
-			aLi[4].className += " check";
+			aLi[6].className += " check";
+			aLi[2].className += " check";
 		}
 		
 		popMenu.style.display = "block";
