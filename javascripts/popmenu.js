@@ -147,7 +147,7 @@ var PopMenu = function createPopMenu(){
 		for(var i=0; i< fields.length;i++){
 			var tmplItem = $(fields[i]).tmplItem().data;
 			var location = tmplItem.location;
-			if(location == 'location_mzone' || location == 'location_szone' || location == 'location_field'){
+			if(location == 'location_mzone' || location == 'location_szone' || location == 'location_field' || location == 'location_pzone_r' || location == 'location_pzone_l'){
 				var thumbs = fields[i].getElementsByClassName("thumb");
 				if(thumbs.length != 0){
 					var temp = thumbs[thumbs.length-1];
@@ -316,6 +316,18 @@ var PopMenu = function createPopMenu(){
 			}
 			if(card_info.equip_target.length){
 				menuItems += menu_remove_equip;
+			}
+		}
+		else if(location == "location_pzone_r"|| location == "location_pzone_l"){
+			menuItems = menu_add_target + menu_counter;
+			if(card_info.disable_revivelimit){
+				menuItems += menu_enable_revivelimit;
+			}
+			else {
+				menuItems += menu_disable_revivelimit;
+			}
+			if(card_info.continuous_target.length){
+				menuItems += menu_remove_target;
 			}
 		}
 		else if(location == 'location_field'){

@@ -162,7 +162,7 @@ header p {
   width: 327px;
   height: 72px;
 }
-#fields .location_hand:hover,.location_extra:hover,.location_grave:hover,.location_removed:hover,.location_pzone:hover,.location_fzone:hover{
+#fields .location_hand:hover,.location_extra:hover,.location_grave:hover,.location_removed:hover,.location_pzone_l:hover,.location_pzone_r:hover,.location_fzone:hover{
   border: 1px solid #ff0000;
 }
 #fields .location_deck:hover{
