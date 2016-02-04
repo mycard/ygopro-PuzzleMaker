@@ -171,7 +171,7 @@ function search(){
 			setPageLabel();
 			page_button.style.display = 'none';
 			$("#result").html(html);
-			alert("未找到相关卡片");
+			console.log("未找到相关卡片");
 			return false;
 		}
 		var cards_id = [];
