@@ -46,7 +46,7 @@ upload = function(files) {
 	}
 	if (files.length) {
 		var file = files[0]; 
-		filename = file.name.split(".")[0];
+		filename = file.name.slice(0,-4);
 		$('#header').children('h1').text(filename);
 		var reader = new FileReader(); 
 		reader.onload = function() {
