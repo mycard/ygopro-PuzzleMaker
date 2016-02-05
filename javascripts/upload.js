@@ -3,7 +3,7 @@ var patterns = [];
 patterns[1] = new RegExp("\\s*Debug\\.SetAIName\\(\\s*\".*\"\\s*\\).*");
 patterns[2] = new RegExp("\\s*Debug\\.ReloadFieldBegin\\(.*\\).*");
 patterns[3] = new RegExp("\\s*Debug\\.SetPlayerInfo\\(\\s*[01]\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*\\).*");
-patterns[4] = new RegExp("\\s*(\\w+\\s*=\\s*)?Debug\\.AddCard\\(\\d+,[01],[01],\\w+,\\d,\\w+(,\\w+)?\\).*");
+patterns[4] = new RegExp("\\s*(\\w+\\s*=\\s*)?Debug\\.AddCard\\(\\s*\\d+\\s*,\\s*[01]\\s*,\\s*[01]\\s*,\\s*\\w+\\s*,\\s*\\d\\s*,\\s*\\w+(\\s*,\\s*\\w+)?\\s*\\).*");
 patterns[5] = new RegExp("\\s*Debug\\.ReloadFieldEnd\\(\\s*\\).*");
 patterns[6] = new RegExp("\\s*Debug\\.ShowHint\\(\\s*\".*\"\\s*\\).*");
 patterns[7] = new RegExp("\\s*aux\\.BeginPuzzle\\(\\s*\\).*");
@@ -90,7 +90,7 @@ function readPuzzle(result){
 			var location = params[3];
 			var place = parseInt(params[4]);
 			var position = params[5];
-			var disable_revivelimit = params[6];
+			var disable_revivelimit = (params[6] == "true") ? true : false;
 			if(location == "LOCATION_DECK"||location =="LOCATION_GRAVE"||location =="LOCATION_REMOVED"
 				||location =="LOCATION_EXTRA"||location =="LOCATION_HAND"){
 				place = 0;
@@ -144,9 +144,9 @@ function getRegType(String){
 	return -1;
 }
 function getFuncParams(str){
-	var params = str.split("\(");
-	params = params[1].split("\)");
-	params = params[0].split(",");
+	var params = str.split(/\(\s*/);
+	params = params[1].split(/\s*\)/);
+	params = params[0].split(/\s*,\s*/);
 	return params;
 }
 function SetPlayerInfo(player, lp, firstTurnDraw, everyTurnDraw){
