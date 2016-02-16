@@ -84,7 +84,7 @@
 	<label class=${type} >${text}</label>
 </script>
 <script type="text/x-jquery-tmpl" id="sortable-tmpl">
-	<li class="ui-state-default"><img class='thumbImg' style='cursor:move;' src='${card_img_thumb_url}${card_info.card_id}.jpg' onmouseover="showDetail(${card_info.card_id})"/></li>
+	<li class="ui-state-default"><img class='thumbImg' style='cursor:move;' src='${card_img_thumb_url}${card_info.card_id}.jpg' onmouseover="showDetail(${card_info.card_id})" onerror='noimage(this)' /></li>
 </script>
 <script type="text/x-jquery-tmpl" id="CounterSelector-tmpl">
 	<div class="CounterSelector">
@@ -139,7 +139,7 @@
 	</div>-->
 	
 	<div id="search_bar">
-		<input class="textfield" id="keyword" type="text" placeholder="请输入关键字" value="黑羽"/>
+		<input class="textfield" id="keyword" type="text" placeholder="请输入关键字" value=""/>
 		<button class="button" id="search" onmouseup="search()">搜索</button>
 		<div id="content">
 			<div id="result"></div>
@@ -155,6 +155,8 @@
 		<ul>
 			<li>更改表示形式
 				<ul>
+					<li>表侧表示</li>
+					<li>里侧表示</li>
 					<li>表侧攻击表示</li>
 					<li>表侧守备表示</li>
 					<li>里侧守备表示</li>
@@ -215,10 +217,14 @@
 		<button class="btn" onclick="addHintMsg()">增加消息</button></br>
 	</p>
 		<input type="checkbox" id="check_shuffle" /> 勾选此项则游戏中的洗牌不改变原本顺序
+		<br />
+		<input type="checkbox" id="non_puzzle" />  勾选此项则可以进行下个回合
+		<br />
+		<input type="checkbox" id="use_simple_ai" checked=true />  使用残局AI
 	</div>
 	
 	<div id="upload_div" title="上传残局">
-		<input type="file" id="upload" onchange="upload(this.files)" />
+		<input type="file" id="upload" accept=".lua" onchange="upload(this.files)" />
 		<div id="test" style="display:none"></div>
     </div>
 	

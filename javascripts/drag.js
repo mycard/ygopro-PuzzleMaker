@@ -274,8 +274,10 @@ function makeMoveable(thumb){
 }
 function newCard_Info(card_id){
 	var card_info = new Object();
+	var data = datas[card_id];
 	card_info.card_id = card_id;
-	card_info.position = "POS_FACEUP_ATTACK";
+	card_info.name = data.name
+	card_info.position = undefined;
 	card_info.disable_revivelimit = false;
 	card_info.cn = getCardName();
 	card_info.equip_target = [];

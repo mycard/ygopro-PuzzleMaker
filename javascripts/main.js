@@ -152,9 +152,9 @@ function initField(){
 		});
 		$('#box_img').attr("src", img_qm);
 	});
-//*test 黑羽
+/*test 黑羽
 	addList(default_result);
-//*/
+*/
 }
 
 function search(){
@@ -171,7 +171,7 @@ function search(){
 			setPageLabel();
 			page_button.style.display = 'none';
 			$("#result").html(html);
-			alert("未找到相关卡片");
+			console.log("未找到相关卡片");
 			return false;
 		}
 		var cards_id = [];
@@ -363,11 +363,11 @@ function updateCards(thumbs){
 		var card = datas[card_id];
 		var thumbImg = thumb.getElementsByTagName("img")[0];
 		thumb.addAllRelation();
-		if(location == "location_szone" || location == "location_field" || location == "location_pzone_r"|| location == "location_pzone_l"){ //魔陷区和场地区只分表侧和里侧
+		if(location == "location_szone" || location == "location_field" || location == "location_pzone_r" || location == "location_pzone_l"){ //魔陷区和场地区只分表侧和里侧
 			if(card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENCE")
-				card_info.position = "POS_FACEDOWN_ATTACK";
+				card_info.position = "POS_FACEDOWN";
 			else
-				card_info.position = "POS_FACEUP_ATTACK";
+				card_info.position = "POS_FACEUP";
 		}
 		else if(location == "location_mzone"){
 			if(1 < thumbs.length && i < thumbs.length-1){//超量素材
@@ -375,24 +375,59 @@ function updateCards(thumbs){
 				card_info.IsXYZmaterial = true;
 			}
 			else {
+				if(card_info.position == undefined){
+					card_info.position = "POS_FACEUP_ATTACK";
+				}
 				card_info.IsXYZmaterial = false;
 			}
 		}
-		else if(location == "location_extra"){
-			if((card.typecode & 0x1000000) == 0x1000000){
-				//console.log(card.name+","+card.typecode.toString(16));
-				card_info.position = "POS_FACEUP_ATTACK";
-			}else{
-				card_info.position = "POS_FACEDOWN_ATTACK";
+		else if(location == "location_extra"){//额外卡组分表侧与里侧
+			if(card_info.position == undefined){//调整顺序不改变表里侧的设置
+				if(card.typecode & 0x802040){//融合·同调·超量默认为里侧
+					card_info.position = "POS_FACEDOWN";
+				}
+				else{
+					card_info.position = "POS_FACEUP"
+				}
 			}
 		}
-		else if(location != "location_mzone"){//除魔陷和怪兽区
-			card_info.position = "POS_FACEUP_ATTACK";
+		else if(location == "location_removed"){
+			if(card_info.position == undefined){//调整顺序不改变表里侧的设置
+				card_info.position = "POS_FACEUP"
+			}
+		}
+		else if(location == "location_hand"){//手卡非公开，否则会自动洗牌
+			card_info.position = "POS_FACEDOWN"
+		}
+		else{
+			card_info.position = "POS_FACEUP";
 		}
 		
 		thumbImg.alt=card_id;
 		
-		if(card_info.position == "POS_FACEUP_ATTACK"){
+		if(location == "location_mzone" && card_info.position == "POS_FACEUP_DEFENCE"){
+			if(isIE && !IE10){
+				thumb.style.top = 13 + "px";
+				thumb.style.left = 0 + "px";
+			}
+			else {
+				thumb.style.left = 10 + "px";
+			}
+			thumbImg.src = card_img_thumb_url + card_id + ".jpg";
+			Img.rotate(thumb, -90, true);
+		}
+		else if(location == "location_mzone" && card_info.position == "POS_FACEDOWN_DEFENCE"){
+			if(isIE && !IE10){
+				thumb.style.top = 13 + "px";
+				thumb.style.left = 0 + "px";
+			}
+			else {
+				thumb.style.left = 10 + "px";
+			}
+			thumbImg.src = img_unkown;
+			Img.rotate(thumb, -90, true);
+		}
+		else if((card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENCE" || card_info.position == "POS_FACEDOWN") && location != "location_hand" ){
 			if(isIE && !IE10){
 				thumb.style.top = tmplItem.top + "px";
 				thumb.style.left = tmplItem.left + "px";
@@ -400,32 +435,10 @@ function updateCards(thumbs){
 			else {
 				thumb.style.left = tmplItem.left + "px";
 			}
-			thumbImg.src = card_img_thumb_url + card_id + ".jpg";
+			thumbImg.src = img_unkown;
 			Img.rotate(thumb, 0, true);
 		}
-		else if(card_info.position == "POS_FACEUP_DEFENCE"){
-			if(isIE && !IE10){
-				thumb.style.top = 13 + "px";
-				thumb.style.left = 0 + "px";
-			}
-			else {
-				thumb.style.left = 10 + "px";
-			}
-			thumbImg.src = card_img_thumb_url + card_id + ".jpg";
-			Img.rotate(thumb, -90, true);
-		}
-		else if(card_info.position == "POS_FACEDOWN_DEFENCE"){
-			if(isIE && !IE10){
-				thumb.style.top = 13 + "px";
-				thumb.style.left = 0 + "px";
-			}
-			else {
-				thumb.style.left = 10 + "px";
-			}
-			thumbImg.src = img_unkown;
-			Img.rotate(thumb, -90, true);
-		}
-		else if(card_info.position == "POS_FACEDOWN_ATTACK"){
+		else if(card_info.position == "POS_FACEUP_ATTACK" || card_info.position == "POS_FACEUP_DEFENCE" || card_info.position == "POS_FACEUP"){
 			if(isIE && !IE10){
 				thumb.style.top = tmplItem.top + "px";
 				thumb.style.left = tmplItem.left + "px";
@@ -433,7 +446,7 @@ function updateCards(thumbs){
 			else {
 				thumb.style.left = tmplItem.left + "px";
 			}
-			thumbImg.src = img_unkown;
+			thumbImg.src = card_img_thumb_url + card_id + ".jpg";
 			Img.rotate(thumb, 0, true);
 		}
 	}
