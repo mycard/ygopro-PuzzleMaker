@@ -148,6 +148,11 @@ function makeMoveable(thumb){
 		if(card_info.level != undefined){
 			str += "怪兽等级：" + card_info.level + "</br>";
 		}
+		if(card_info.summon_type != ""){
+			str += "召唤方式：" + GetSummonTypeStr(card_info.summon_type) + "</br>";
+			if(card_info.summon_location != "")
+				str += "召唤位置：" + GetLocationStr(card_info.summon_location) + "</br>";
+		}
 		if(card_counters.length){
 			for(var k = 0; k < card_counters.length; k++){
 				str += GetCounterStrByCode(card_counters[k].code) + " ：" + card_counters[k].number + "</br>";
@@ -280,6 +285,8 @@ function newCard_Info(card_id){
 	card_info.position = undefined;
 	card_info.disable_revivelimit = false;
 	card_info.cn = getCardName();
+	card_info.summon_type = "";
+	card_info.summon_location = "";
 	card_info.equip_target = [];
 	card_info.be_equip_target = [];
 	card_info.continuous_target = [];
@@ -340,3 +347,16 @@ function GetCounterStrByCode(code){
 			return counters[i].str;
 	}
 }
+function GetSummonTypeStr(summon_type){
+	for(var i in summon_types){
+		if(summon_types[i].type == summon_type)
+			return summon_types[i].str;
+	}
+}
+function GetLocationStr(loc){
+	for(var i in locations){
+		if(locations[i].location == loc)
+			return locations[i].str;
+	}
+}
+

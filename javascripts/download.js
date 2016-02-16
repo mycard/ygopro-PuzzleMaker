@@ -58,9 +58,8 @@ function downloadURL(){
 			var be_continuous_target = card_info.be_continuous_target;
 			var be_equip_target = card_info.be_equip_target;
 			if(card_counters.length || continuous_target.length || equip_target.length || be_continuous_target.length || be_equip_target.length
-				||card_info.attack != undefined ||card_info.base_attack != undefined ||card_info.defence != undefined ||card_info.base_defence != undefined
-				||card_info.level != undefined
-				){
+				|| card_info.attack != undefined || card_info.base_attack != undefined || card_info.defence != undefined || card_info.base_defence != undefined
+				|| card_info.level != undefined || card_info.summon_type != ""){
 				str += card_info.cn + "=";
 			}
 			if(card_counters.length){
@@ -94,6 +93,9 @@ function downloadURL(){
 			}
 			if(card_info.level != undefined){
 				action += change_level(card_info.cn, card_info.level);
+			}
+			if(card_info.summon_type != ""){
+				action += set_summon_info(card_info.cn, card_info.summon_type, card_info.summon_location);
 			}
 			if(card_info.disable_revivelimit){
 				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")--" + card_info.name + "\r\n";
@@ -133,9 +135,13 @@ function change_level(cn, level){
 	return set_value(cn, "EFFECT_CHANGE_LEVEL", level);
 }
 function set_value(cn, code, value){
-	return "e=Effect.CreateEffect("+ cn +") \r\n" +
+	return "e=Effect.CreateEffect(" + cn + ") \r\n" +
 			"e:SetType(EFFECT_TYPE_SINGLE) \r\n" +
-			"e:SetCode("+ code +") \r\n" +
-			"e:SetValue("+ value +") \r\n" +
-			""+ cn +":RegisterEffect(e)\r\n";
+			"e:SetCode(" + code + ") \r\n" +
+			"e:SetValue(" + value + ") \r\n" +
+			"" + cn + ":RegisterEffect(e)\r\n";
+}
+function set_summon_info(cn, summon_type, summon_location){
+	return "Debug.PreSummon(" + cn + "," + summon_type +
+		((summon_location == "") ? ")" : ("," + summon_location + ")"));
 }
