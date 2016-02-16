@@ -96,7 +96,7 @@ var PopMenu = function createPopMenu(){
 	aLi[2].onmousedown = function(event){//里侧表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
+		thumbImg.src = "images/unknow.jpg";
 		tmplItem.card_info.position = "POS_FACEDOWN";
 		if(isIE && !IE10){
 			thumb.style.top = tmplItem.top + "px";

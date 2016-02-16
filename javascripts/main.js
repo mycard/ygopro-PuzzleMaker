@@ -375,9 +375,7 @@ function updateCards(thumbs){
 				card_info.IsXYZmaterial = true;
 			}
 			else {
-				if(card_info.position == undefined){
-					card_info.position = "POS_FACEUP_ATTACK";
-				}
+				card_info.position = "POS_FACEUP_ATTACK";
 				card_info.IsXYZmaterial = false;
 			}
 		}
