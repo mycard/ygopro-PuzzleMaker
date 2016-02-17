@@ -21,6 +21,7 @@ var menu_change_defence = 1 << menu_index++;
 var menu_set_defence = 1 << menu_index++;
 var menu_set_base_defence = 1 << menu_index++;
 var menu_change_level = 1 << menu_index++;
+var menu_set_summon_info = 1 << menu_index++;
 var menu_show_list = 1 << menu_index++;
 
 var PopMenu = function createPopMenu(){
@@ -96,7 +97,7 @@ var PopMenu = function createPopMenu(){
 	aLi[2].onmousedown = function(event){//里侧表示
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
-		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
+		thumbImg.src = "images/unknow.jpg";
 		tmplItem.card_info.position = "POS_FACEDOWN";
 		if(isIE && !IE10){
 			thumb.style.top = tmplItem.top + "px";
@@ -292,7 +293,16 @@ var PopMenu = function createPopMenu(){
 			card_info.level = level;
 		}
 	}
-	aLi[22].onmousedown = function(event){//调整顺序
+	aLi[22].onmousedown = function(event){//设置召唤信息
+		var tmplItem = $(thumb).tmplItem().data;
+		var summon_type = tmplItem.card_info.summon_type;
+		var summon_location = tmplItem.card_info.summon_location;
+		$('#summon_info').empty();
+		setSummonInfo(summon_type, summon_location);
+		$('#set_summon_info_dialog').dialog('open');
+		return false;
+	}
+	aLi[23].onmousedown = function(event){//调整顺序
 		var field = thumb.parentNode;
 		var sortable = $('#sortable');
 		sortable.empty();
@@ -320,7 +330,7 @@ var PopMenu = function createPopMenu(){
 		if(location == 'location_mzone'){
 			if(!card_info.IsXYZmaterial){
 				menuItems = menu_position + menu_pos_faceup_attack + menu_pos_faceup_defence + menu_pos_facedown_defence + menu_pos_facedown_attack
-				+ menu_add_target + menu_counter + menu_change_value + menu_change_attack + menu_set_attack + menu_set_base_attack + menu_change_defence + menu_set_defence + menu_set_base_defence + menu_change_level;
+				+ menu_add_target + menu_counter + menu_change_value + menu_change_attack + menu_set_attack + menu_set_base_attack + menu_change_defence + menu_set_defence + menu_set_base_defence + menu_change_level + menu_set_summon_info;
 			}
 			if(card_info.disable_revivelimit){
 				menuItems += menu_enable_revivelimit;
@@ -490,6 +500,24 @@ var PopMenu = function createPopMenu(){
 			}
 		}
 	});
+	$("#set_summon_info_dialog").dialog({
+		autoOpen: false,
+		resizable: false,
+		hide: "puff",
+		modal: true,
+		width: 450,
+		buttons: {
+			"确定": function() {
+				addSummonInfo(this, thumb);
+				$( this ).dialog({hide: "clip"});
+				$( this ).dialog( "close" );
+				$( this ).dialog({hide: "puff"});
+			},
+			"取消": function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
 	$("#show_list_dialog").dialog({
 		autoOpen: false,
 		resizable: false,
@@ -541,6 +569,21 @@ function addCounter(dialog, thumb){//根据dialog的内容更新thumb
 		if(number > 0)
 			card_info.card_counters.push({code : code , number : number});
 	}
+}
+function setSummonInfo(summon_type, summon_location){
+	$("#SetSummonInfo-tmpl").tmpl({
+		summmon_types: summon_types,
+		_type: summon_type || "",
+		_location: summon_location || ""
+	}).appendTo($('#summon_info'));
+}
+function addSummonInfo(dialog, thumb){
+	var card_info = $(thumb).tmplItem().data.card_info;
+	var SetSummonInfo = dialog.getElementsByClassName("SetSummonInfo")[0];
+	var summon_type = SetSummonInfo.getElementsByTagName("select")[0].value;
+	var summon_location = SetSummonInfo.getElementsByTagName("select")[1].value;
+	card_info.summon_type = summon_type;
+	card_info.summon_location = summon_location;
 }
 function sort(dialog, field){//根据dialog的顺序更新field
 	var thumbs = dialog.getElementsByClassName("thumbImg");

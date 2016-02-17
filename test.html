@@ -109,6 +109,30 @@
 		<button class="btn btn-danger" onclick="delHintMsg()">删除</button>
 	</div>
 </script>
+<script type="text/x-jquery-tmpl" id="SetSummonInfo-tmpl">
+	<div class="SetSummonInfo">
+		召唤类型：
+		<select class="select" style="width: 150px">
+		{{each summon_types}}
+			{{if $value.type==_type}}
+				<option value="${$value.type}" selected="selected">${$value.str}</option>
+			{{else}}
+				<option value="${$value.type}">${$value.str}</option>
+			{{/if}}
+		{{/each}}
+		</select>
+		召唤位置：
+		<select class="select" style="width: 80px">
+		{{each locations}}
+			{{if $value.location==_location}}
+				<option value="${$value.location}" selected="selected">${$value.str}</option>
+			{{else}}
+				<option value="${$value.location}">${$value.str}</option>
+			{{/if}}
+		{{/each}}
+		</select>
+	</div>
+</script>
 </head>
 <body>
 	<img id="DragImage" src="images/unknow.jpg" alt=""/>
@@ -187,6 +211,7 @@
 				<li>设置怪兽等级</li>
 				</ul>
 			</li>
+			<li>设置召唤信息</li>
 			<li>调整顺序</li>
 		</ul>
 	</div>
@@ -198,6 +223,10 @@
 	<div id="add_counter_dialog" title="放置指示物">
 		<div id="counterSelectors"></div>
 		<button class="btn" onclick="addCounterSelector()">增加其他种类的指示物</button>
+	</div>
+	
+	<div id="set_summon_info_dialog" title="设置召唤信息">
+		<div id="summon_info"></div>
 	</div>
 	
 	<form id="download_form" action="test/download.php?type=lua" method="post" style="display: none">

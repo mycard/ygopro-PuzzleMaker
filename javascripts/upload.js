@@ -180,6 +180,8 @@ function loadCard(card){
 	card_info.position = card.position;
 	card_info.disable_revivelimit = card.disable_revivelimit;
 	card_info.cn = getCardName();
+	card_info.summon_type = "";
+	card_info.summon_location = "";
 	card_info.equip_target = [];
 	card_info.be_equip_target = [];
 	card_info.continuous_target = [];

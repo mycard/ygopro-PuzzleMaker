@@ -375,9 +375,7 @@ function updateCards(thumbs){
 				card_info.IsXYZmaterial = true;
 			}
 			else {
-				if(card_info.position == undefined){
-					card_info.position = "POS_FACEUP_ATTACK";
-				}
+				card_info.position = "POS_FACEUP_ATTACK";
 				card_info.IsXYZmaterial = false;
 			}
 		}
@@ -398,6 +396,14 @@ function updateCards(thumbs){
 		}
 		else if(location == "location_hand"){//手卡非公开，否则会自动洗牌
 			card_info.position = "POS_FACEDOWN"
+		}
+		else if(location == "location_deck"){//放到卡组时清除数值设置
+			card_info.attack = undefined;
+			card_info.base_attack = undefined;
+			card_info.defence = undefined;
+			card_info.base_defence = undefined;
+			card_info.level = undefined;
+			card_info.position = "POS_FACEUP";
 		}
 		else{
 			card_info.position = "POS_FACEUP";

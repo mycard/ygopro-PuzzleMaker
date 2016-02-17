@@ -11,6 +11,29 @@ var races_zh = [
   '龙族','兽族','兽战士族','恐龙族','鱼族','海龙族','爬虫类族','念动力族','幻神兽族','创造神族','幻龙族'
 ];
 
+var summon_types = [
+{"type" : "", "str" : ""},
+{"type" : "SUMMON_TYPE_SPECIAL", "str" : "特殊召唤"},
+{"type" : "SUMMON_TYPE_FUSION", "str" : "融合召唤"},
+{"type" : "SUMMON_TYPE_RITUAL", "str" : "仪式召唤"},
+{"type" : "SUMMON_TYPE_SYNCHRO", "str" : "同调召唤"},
+{"type" : "SUMMON_TYPE_XYZ", "str" : "超量召唤"},
+{"type" : "SUMMON_TYPE_PENDULUM", "str" : "灵摆召唤"},
+{"type" : "SUMMON_TYPE_NORMAL", "str" : "通常召唤"},
+{"type" : "SUMMON_TYPE_ADVANCE", "str" : "上级召唤"},
+{"type" : "SUMMON_TYPE_DUAL", "str" : "再度召唤"},
+{"type" : "SUMMON_TYPE_FLIP", "str" : "反转召唤"},
+];
+var locations = [
+{"location" : "", "str": ""},
+{"location" : "LOCATION_DECK", "str": "卡组"},
+{"location" : "LOCATION_HAND", "str": "手卡"},
+{"location" : "LOCATION_GRAVE", "str": "墓地"},
+{"location" : "LOCATION_REMOVED", "str": "除外"},
+{"location" : "LOCATION_EXTRA", "str": "额外"},
+{"location" : "LOCATION_SZONE", "str": "魔陷区"},
+{"location" : "LOCATION_MZONE", "str": "怪兽区"},
+];
 var counters = [
 {"code" : "0x3001" ,"str" : "魔力指示物"},
 {"code" : "0x2" ,	"str" : "楔指示物"},
