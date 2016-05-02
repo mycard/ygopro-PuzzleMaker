@@ -366,7 +366,7 @@ function updateCards(thumbs){
 		if(location == "location_szone" || location == "location_field" || location == "location_pzone_r" || location == "location_pzone_l"){ //魔陷区和场地区只分表侧和里侧
 			if(card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENCE")
 				card_info.position = "POS_FACEDOWN";
-			else
+			else if(card_info.position == undefined || card_info.position == "POS_FACEUP_ATTACK" || card_info.position == "POS_FACEUP_DEFENCE")
 				card_info.position = "POS_FACEUP";
 		}
 		else if(location == "location_mzone"){
