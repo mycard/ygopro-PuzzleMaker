@@ -364,9 +364,9 @@ function updateCards(thumbs){
 		var thumbImg = thumb.getElementsByTagName("img")[0];
 		thumb.addAllRelation();
 		if(location == "location_szone" || location == "location_field" || location == "location_pzone_r" || location == "location_pzone_l"){ //魔陷区和场地区只分表侧和里侧
-			if(card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENCE")
+			if(card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENSE")
 				card_info.position = "POS_FACEDOWN";
-			else if(card_info.position == undefined || card_info.position == "POS_FACEUP_ATTACK" || card_info.position == "POS_FACEUP_DEFENCE")
+			else if(card_info.position == undefined || card_info.position == "POS_FACEUP_ATTACK" || card_info.position == "POS_FACEUP_DEFENSE")
 				card_info.position = "POS_FACEUP";
 		}
 		else if(location == "location_mzone"){
@@ -411,7 +411,7 @@ function updateCards(thumbs){
 		
 		thumbImg.alt=card_id;
 		
-		if(location == "location_mzone" && card_info.position == "POS_FACEUP_DEFENCE"){
+		if(location == "location_mzone" && card_info.position == "POS_FACEUP_DEFENSE"){
 			if(isIE && !IE10){
 				thumb.style.top = 13 + "px";
 				thumb.style.left = 0 + "px";
@@ -422,7 +422,7 @@ function updateCards(thumbs){
 			thumbImg.src = card_img_thumb_url + card_id + ".jpg";
 			Img.rotate(thumb, -90, true);
 		}
-		else if(location == "location_mzone" && card_info.position == "POS_FACEDOWN_DEFENCE"){
+		else if(location == "location_mzone" && card_info.position == "POS_FACEDOWN_DEFENSE"){
 			if(isIE && !IE10){
 				thumb.style.top = 13 + "px";
 				thumb.style.left = 0 + "px";
@@ -433,7 +433,7 @@ function updateCards(thumbs){
 			thumbImg.src = img_unkown;
 			Img.rotate(thumb, -90, true);
 		}
-		else if((card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENCE" || card_info.position == "POS_FACEDOWN") && location != "location_hand" ){
+		else if((card_info.position == "POS_FACEDOWN_ATTACK" || card_info.position == "POS_FACEDOWN_DEFENSE" || card_info.position == "POS_FACEDOWN") && location != "location_hand" ){
 			if(isIE && !IE10){
 				thumb.style.top = tmplItem.top + "px";
 				thumb.style.left = tmplItem.left + "px";
@@ -444,7 +444,7 @@ function updateCards(thumbs){
 			thumbImg.src = img_unkown;
 			Img.rotate(thumb, 0, true);
 		}
-		else if(card_info.position == "POS_FACEUP_ATTACK" || card_info.position == "POS_FACEUP_DEFENCE" || card_info.position == "POS_FACEUP"){
+		else if(card_info.position == "POS_FACEUP_ATTACK" || card_info.position == "POS_FACEUP_DEFENSE" || card_info.position == "POS_FACEUP"){
 			if(isIE && !IE10){
 				thumb.style.top = tmplItem.top + "px";
 				thumb.style.left = tmplItem.left + "px";

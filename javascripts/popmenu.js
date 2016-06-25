@@ -126,7 +126,7 @@ var PopMenu = function createPopMenu(){
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		thumbImg.src = card_img_thumb_url + card_id + ".jpg";
-		tmplItem.card_info.position = "POS_FACEUP_DEFENCE";
+		tmplItem.card_info.position = "POS_FACEUP_DEFENSE";
 		if(isIE && !IE10){
 			thumb.style.top = 13 + "px";
 			thumb.style.left = 0 + "px";
@@ -140,7 +140,7 @@ var PopMenu = function createPopMenu(){
 		var tmplItem = $(thumb).tmplItem().data;
 		var card_id = tmplItem.card_info.card_id;
 		thumbImg.src = "images/unknow.jpg";
-		tmplItem.card_info.position = "POS_FACEDOWN_DEFENCE";
+		tmplItem.card_info.position = "POS_FACEDOWN_DEFENSE";
 		if(isIE && !IE10){
 			thumb.style.top = 13 + "px";
 			thumb.style.left = 0 + "px";
@@ -393,7 +393,7 @@ var PopMenu = function createPopMenu(){
 		}
 		else if(location == 'location_extra'){
 			menuItems += menu_position + menu_pos_faceup + menu_pos_facedown;
-			if(card_info.position == "POS_FACEUP" || card_info.position == "POS_FACEUP_ATTACK" || card_info.position == "POS_FACEUP_DEFENCE"){
+			if(card_info.position == "POS_FACEUP" || card_info.position == "POS_FACEUP_ATTACK" || card_info.position == "POS_FACEUP_DEFENSE"){
 				if(card_info.disable_revivelimit){
 					menuItems += menu_enable_revivelimit;
 				}
@@ -428,11 +428,11 @@ var PopMenu = function createPopMenu(){
 			aLi[3].className += " check";
 			aLi[1].className += " check";
 		}
-		else if(card_info.position == "POS_FACEUP_DEFENCE"){
+		else if(card_info.position == "POS_FACEUP_DEFENSE"){
 			aLi[4].className += " check";
 			aLi[1].className += " check";
 		}
-		else if(card_info.position == "POS_FACEDOWN_DEFENCE"){
+		else if(card_info.position == "POS_FACEDOWN_DEFENSE"){
 			aLi[5].className += " check";
 			aLi[2].className += " check";
 		}
