@@ -126,10 +126,10 @@ function set_base_attack(cn, base_attack){
 	return set_value(cn, "EFFECT_SET_BASE_ATTACK", base_attack);
 }
 function set_defence(cn, defence){
-	return set_value(cn, "EFFECT_SET_DEFENCE", defence);
+	return set_value(cn, "EFFECT_SET_DEFENSE", defence);
 }
 function set_base_defence(cn, base_defence){
-	return set_value(cn, "EFFECT_SET_BASE_DEFENCE", base_defence);
+	return set_value(cn, "EFFECT_SET_BASE_DEFENSE", base_defence);
 }
 function change_level(cn, level){
 	return set_value(cn, "EFFECT_CHANGE_LEVEL", level);
