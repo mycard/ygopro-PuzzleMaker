@@ -9,14 +9,18 @@ function downloadURL(){
 	var player_LP = document.getElementById("Player_LP").value;
 	var AI_LP = document.getElementById("AI_LP").value;
 	var DUEL_PSEUDO_SHUFFLE = document.getElementById("check_shuffle").checked;
+	var use_simple_ai = document.getElementById("use_simple_ai").checked;
+	var non_puzzle = document.getElementById("non_puzzle").checked;
 	var str = "--created by ygopro puzzle maker (web) \r\n";
 	str += "Debug.SetAIName(\"" + AI_name + "\")\r\n";
+	var opstr = "DUEL_ATTACK_FIRST_TURN";
 	if(DUEL_PSEUDO_SHUFFLE){
-		str += "Debug.ReloadFieldBegin(DUEL_ATTACK_FIRST_TURN+DUEL_SIMPLE_AI+DUEL_PSEUDO_SHUFFLE)\r\n";
+		opstr += "+DUEL_PSEUDO_SHUFFLE";
 	}
-	else {
-		str += "Debug.ReloadFieldBegin(DUEL_ATTACK_FIRST_TURN+DUEL_SIMPLE_AI)\r\n";
+	if(use_simple_ai) {
+		opstr += "+DUEL_SIMPLE_AI"
 	}
+	str += "Debug.ReloadFieldBegin(" + opstr + ")\r\n";
 	str += "Debug.SetPlayerInfo(0," + player_LP + ",0,0)\r\n";
 	str += "Debug.SetPlayerInfo(1," + AI_LP + ",0,0)\r\n" ;
 	var action = "";//包括addCounter、Equip、setTarget等等
@@ -29,6 +33,14 @@ function downloadURL(){
 		if(location == "LOCATION_FIELD"){
 			location = "LOCATION_SZONE";
 			place = 5;
+		}
+		if(location == "LOCATION_PZONE_L"){
+			location = "LOCATION_SZONE";
+			place = 7;
+		}
+		if(location == "LOCATION_PZONE_R"){
+			location = "LOCATION_SZONE";
+			place = 6;
 		}
 		var thumbs = fields[i].getElementsByClassName("thumb");
 		for(var j=0; j < thumbs.length; j++){
@@ -46,9 +58,8 @@ function downloadURL(){
 			var be_continuous_target = card_info.be_continuous_target;
 			var be_equip_target = card_info.be_equip_target;
 			if(card_counters.length || continuous_target.length || equip_target.length || be_continuous_target.length || be_equip_target.length
-				||card_info.attack != undefined ||card_info.base_attack != undefined ||card_info.defence != undefined ||card_info.base_defence != undefined
-				||card_info.level != undefined
-				){
+				|| card_info.attack != undefined || card_info.base_attack != undefined || card_info.defence != undefined || card_info.base_defence != undefined
+				|| card_info.level != undefined || card_info.summon_type != ""){
 				str += card_info.cn + "=";
 			}
 			if(card_counters.length){
@@ -83,11 +94,14 @@ function downloadURL(){
 			if(card_info.level != undefined){
 				action += change_level(card_info.cn, card_info.level);
 			}
+			if(card_info.summon_type != ""){
+				action += set_summon_info(card_info.cn, card_info.summon_type, card_info.summon_location);
+			}
 			if(card_info.disable_revivelimit){
-				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")\r\n";
+				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + "," + card_info.disable_revivelimit + ")--" + card_info.name + "\r\n";
 			}
 			else {
-				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + ")\r\n";
+				str += "Debug.AddCard(" + card_info.card_id + "," + player + "," + player + "," + location + "," + place + "," + card_info.position + ")--" + card_info.name + "\r\n";
 			}
 		}
 	}
@@ -95,13 +109,16 @@ function downloadURL(){
 	for(var i = 0; i < hintMsgs.length; i++){
 		str += "Debug.ShowHint(\"" + hintMsgs[i] + "\")\r\n" ;
 	}
-	str += "aux.BeginPuzzle()\r\n";
+	if(!non_puzzle){
+		str += "aux.BeginPuzzle()\r\n";
+	}
 	str += action;
 	//this.href = "http://my-card.in/singles/new.lua?name=Untitled&script=" + encodeURIComponent(str);
 	document.getElementById("single_name").value = filename;
 	document.getElementById("single_script").value = str;
 	document.getElementById("download_form").submit();
 }
+
 function set_attack(cn, attack){
 	return set_value(cn, "EFFECT_SET_ATTACK", attack);
 }
@@ -109,18 +126,22 @@ function set_base_attack(cn, base_attack){
 	return set_value(cn, "EFFECT_SET_BASE_ATTACK", base_attack);
 }
 function set_defence(cn, defence){
-	return set_value(cn, "EFFECT_SET_DEFENCE", defence);
+	return set_value(cn, "EFFECT_SET_DEFENSE", defence);
 }
 function set_base_defence(cn, base_defence){
-	return set_value(cn, "EFFECT_SET_BASE_DEFENCE", base_defence);
+	return set_value(cn, "EFFECT_SET_BASE_DEFENSE", base_defence);
 }
 function change_level(cn, level){
 	return set_value(cn, "EFFECT_CHANGE_LEVEL", level);
 }
 function set_value(cn, code, value){
-	return "e=Effect.CreateEffect("+ cn +") \r\n" +
+	return "e=Effect.CreateEffect(" + cn + ") \r\n" +
 			"e:SetType(EFFECT_TYPE_SINGLE) \r\n" +
-			"e:SetCode("+ code +") \r\n" +
-			"e:SetValue("+ value +") \r\n" +
-			""+ cn +":RegisterEffect(e)\r\n";
+			"e:SetCode(" + code + ") \r\n" +
+			"e:SetValue(" + value + ") \r\n" +
+			"" + cn + ":RegisterEffect(e)\r\n";
+}
+function set_summon_info(cn, summon_type, summon_location){
+	return "Debug.PreSummon(" + cn + "," + summon_type +
+		((summon_location == "") ? ")" : ("," + summon_location + ")"));
 }

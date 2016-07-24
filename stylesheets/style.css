@@ -30,7 +30,7 @@ input[type="submit"] {
 }
 #header h1 {
   top: 15px;
-  left: 400px;
+  left: 420px;
   width:478px;
   text-align:center;
   position: absolute;
@@ -53,7 +53,7 @@ header p {
 #LPbar{
   z-index: 500;
   position: absolute;
-  left: 450px;
+  left: 460px;
   top: 65px;
 }
 #Player_LP{
@@ -95,8 +95,8 @@ header p {
   position: absolute;
   left: 120px;
   top: 340px;
-  width: 200px;
-  height: 250px;
+  width: 220px;
+  height: 270px;
   cursor:text;
   border: 1px solid #00ffff;
   background: #dddddd;
@@ -106,9 +106,9 @@ header p {
 #fields{
   z-index: 100;
   position: absolute;
-  left: 400px;
+  left: 410px;
   top: 135px;
-  width: 478px;
+  width: 500px;
   height: 478px;
 }
 #fields .location_mzone ,.location_szone{
@@ -119,7 +119,7 @@ header p {
   height: 72px;
   background: #888888;
 }
-#fields .location_deck ,.location_extra,.location_grave,.location_removed,.location_field,.location_fzone,.location_pzone{
+#fields .location_deck ,.location_extra,.location_grave,.location_removed,.location_field,.location_pzone_l,.location_pzone_r{
   position: absolute;
   display: inline-block;
   border: 1px solid #00ffff;
@@ -139,12 +139,12 @@ header p {
 	background-image: url(../images/extra.png);
 	background-size:100% 100%; 
 }
-#fields .location_fzone{
-	background-image: url(../images/fzone.png);
+#fields .location_pzone_l{
+	background-image: url(../images/pzone_l.png);
 	background-size:100% 100%; 
 }
-#fields .location_pzone{
-	background-image: url(../images/pzone.png);
+#fields .location_pzone_r{
+	background-image: url(../images/pzone_r.png);
 	background-size:100% 100%; 
 }
 #fields .location_removed{
@@ -162,7 +162,7 @@ header p {
   width: 327px;
   height: 72px;
 }
-#fields .location_hand:hover,.location_extra:hover,.location_grave:hover,.location_removed:hover,.location_pzone:hover,.location_fzone:hover{
+#fields .location_hand:hover,.location_extra:hover,.location_grave:hover,.location_removed:hover,.location_pzone_l:hover,.location_pzone_r:hover,.location_fzone:hover{
   border: 1px solid #ff0000;
 }
 #fields .location_deck:hover{
@@ -214,14 +214,23 @@ header p {
 }
 #radio{
   z-index: 100;
-  left: 920px;
-  top: 25px;
+  left: 930px;
+  top: 50px;
   position: absolute;
+}
+#cdblist{
+	z-index: 100;
+	left: 930px;
+	top: 48px;
+	font-size:medium;
+	color:#ffffff;
+	position: absolute;
+	margin-bottom:4px;
 }
 #search_bar {
   z-index: 100;
-  left: 920px;
-  top: 55px;
+  left: 930px;
+  top: 80px;
   position: absolute;
   background: #bbbbbb;
   -moz-border-radius: 5px;
@@ -420,7 +429,7 @@ td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
 
 #downloadButton{
   z-index: 1000;
-  top: 150px;
+  top: 160px;
   left: 270px;
   cursor: pointer;
   width:60px;
@@ -430,7 +439,7 @@ td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
 }
 #settingButton{
   z-index: 1000;
-  top: 210px;
+  top: 270px;
   left: 270px;
   cursor: pointer;
   width:60px;
@@ -440,7 +449,7 @@ td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
 }
 #upload_div{
   z-index: 1000;
-  top: 90px;
+  top: 100px;
   left: 270px;
   cursor: pointer;
   width:60px;
@@ -451,8 +460,8 @@ td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
   background-size:100% 100%; 
 }
 #upload {
-  width:80px;
-  height:80px;
+  width:60px;
+  height:60px;
   opacity: 0;
   cursor: pointer;
 }
